@@ -4,6 +4,11 @@ export const SITE = {
   description:
     "Relax, reconnect, and create unforgettable moments at Reset Life — a peaceful retreat surrounded by nature and tranquility.",
   email: "resetlifefarmhouse@gmail.com",
+  emailMailto: "mailto:resetlifefarmhouse@gmail.com",
+  whatsappNumber: "923145156162",
+  whatsappDisplay: "03145156162",
+  whatsappUrl:
+    "https://wa.me/923145156162?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20know%20more%20about%20availability%20and%20bookings.",
   instagram: "https://www.instagram.com/resetlifefarmhouse/",
   instagramHandle: "@resetlifefarmhouse",
   instagramLabel: "Reset Life Farmhouse",

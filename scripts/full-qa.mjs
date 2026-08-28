@@ -8,6 +8,11 @@ const VIEWPORTS = [
   { width: 1440, height: 900, label: "1440px" },
 ];
 
+const EXPECTED_EMAIL_HREF = "mailto:resetlifefarmhouse@gmail.com";
+const EXPECTED_WHATSAPP_HREF =
+  "https://wa.me/923145156162?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20know%20more%20about%20availability%20and%20bookings.";
+const EXPECTED_INSTAGRAM_HREF = "https://www.instagram.com/resetlifefarmhouse/";
+
 async function run() {
   const browser = await chromium.launch({ headless: false, slowMo: 250 });
   const results = [];
@@ -16,6 +21,7 @@ async function run() {
     for (const viewport of VIEWPORTS) {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: "no-preference",
       });
       const page = await context.newPage();
       const issues = [];
@@ -77,7 +83,12 @@ async function run() {
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
-      await page.waitForTimeout(1200);
+      const galleryBefore = await page.evaluate(() => {
+        const row = document.querySelector(".gallery-carousel-track");
+        return row instanceof HTMLElement ? row.scrollLeft : -1;
+      });
+
+      await page.waitForTimeout(1800);
 
       const eventsAfter = await page.evaluate(() => {
         const row = document
@@ -93,6 +104,11 @@ async function run() {
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
+      const galleryAfter = await page.evaluate(() => {
+        const row = document.querySelector(".gallery-carousel-track");
+        return row instanceof HTMLElement ? row.scrollLeft : -1;
+      });
+
       if (eventsBefore >= 0 && eventsAfter <= eventsBefore) {
         issues.push("events auto-scroll stalled");
       }
@@ -101,18 +117,68 @@ async function run() {
         issues.push("testimonial auto-scroll stalled");
       }
 
-      const emailOk = (await page.locator("footer").textContent())?.includes(
-        "resetlifefarmhouse@gmail.com",
-      );
-      if (!emailOk) {
-        issues.push("email incorrect");
+      if (galleryBefore >= 0) {
+        const galleryDelta = Math.abs(galleryAfter - galleryBefore);
+        const galleryWrapped =
+          galleryAfter < galleryBefore && galleryAfter < galleryBefore * 0.35;
+
+        if (galleryDelta < 2 && !galleryWrapped) {
+          const galleryScrollable = await page.evaluate(() => {
+            const row = document.querySelector(".gallery-carousel-track");
+            if (!(row instanceof HTMLElement)) {
+              return false;
+            }
+
+            return row.scrollWidth > row.clientWidth + 1;
+          });
+
+          if (galleryScrollable) {
+            issues.push("gallery auto-scroll stalled");
+          }
+        }
       }
 
-      const instagramHref = await page
-        .locator('footer a[aria-label*="Instagram"]')
-        .getAttribute("href");
-      if (instagramHref !== "https://www.instagram.com/resetlifefarmhouse/") {
+      const footerData = await page.evaluate(() => {
+        const footer = document.querySelector("footer");
+        return {
+          emailHref: footer?.querySelector(".footer-email")?.getAttribute("href") ?? null,
+          whatsappHref:
+            footer?.querySelector(".footer-whatsapp")?.getAttribute("href") ?? null,
+          whatsappTarget:
+            footer?.querySelector(".footer-whatsapp")?.getAttribute("target") ?? null,
+          instagramHref:
+            footer
+              ?.querySelector('a[aria-label*="Instagram"]')
+              ?.getAttribute("href") ?? null,
+          emailText: footer?.textContent?.includes("resetlifefarmhouse@gmail.com") ?? false,
+        };
+      });
+
+      if (footerData.emailHref !== EXPECTED_EMAIL_HREF) {
+        issues.push(`email href incorrect: ${footerData.emailHref}`);
+      }
+
+      if (footerData.whatsappHref !== EXPECTED_WHATSAPP_HREF) {
+        issues.push(`whatsapp href incorrect: ${footerData.whatsappHref}`);
+      }
+
+      if (footerData.whatsappTarget !== "_blank") {
+        issues.push("whatsapp target missing");
+      }
+
+      if (footerData.instagramHref !== EXPECTED_INSTAGRAM_HREF) {
         issues.push("instagram incorrect");
+      }
+
+      if (!footerData.emailText) {
+        issues.push("email text incorrect");
+      }
+
+      const aboutHeadline = await page.evaluate(
+        () => document.querySelector(".about-section__headline")?.textContent ?? "",
+      );
+      if (!aboutHeadline.includes("A Place to Slow Down")) {
+        issues.push("about headline missing");
       }
 
       const faviconHref = await page

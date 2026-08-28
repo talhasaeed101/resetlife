@@ -33,7 +33,7 @@ export default function PrivacyPage() {
           </p>
           <p>
             For privacy-related questions, contact us at{" "}
-            <a href={`mailto:${SITE.email}`} className="text-white">
+            <a href={SITE.emailMailto} className="text-white">
               {SITE.email}
             </a>
             .

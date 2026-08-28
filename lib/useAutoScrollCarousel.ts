@@ -5,11 +5,13 @@ import { useCallback, useEffect, useRef } from "react";
 type AutoScrollOptions = {
   speed?: number;
   resumeDelay?: number;
+  loopAtHalf?: boolean;
 };
 
 export function useAutoScrollCarousel({
   speed = 0.6,
   resumeDelay = 2500,
+  loopAtHalf = false,
 }: AutoScrollOptions = {}) {
   const ref = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
@@ -47,7 +49,12 @@ export function useAutoScrollCarousel({
         if (maxScroll > 0) {
           element.scrollLeft += speed;
 
-          if (element.scrollLeft >= maxScroll - 1) {
+          if (loopAtHalf) {
+            const halfWidth = element.scrollWidth / 2;
+            if (halfWidth > 0 && element.scrollLeft >= halfWidth) {
+              element.scrollLeft -= halfWidth;
+            }
+          } else if (element.scrollLeft >= maxScroll - 1) {
             element.scrollLeft = 0;
           }
         }
@@ -65,7 +72,7 @@ export function useAutoScrollCarousel({
         window.clearTimeout(resumeTimerRef.current);
       }
     };
-  }, [speed]);
+  }, [speed, loopAtHalf]);
 
   const handlers = {
     onMouseEnter: pause,

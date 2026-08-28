@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import { SITE } from "@/lib/site";
@@ -11,20 +14,41 @@ const galleryImages = [
   assets.gallery.image5,
 ] as const;
 
+const loopedImages = [...galleryImages, ...galleryImages];
+
 export default function Gallery() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    let frame = 0;
+    const tick = () => {
+      track.scrollLeft += 0.5;
+      const half = track.scrollWidth / 2;
+      if (half > 0 && track.scrollLeft >= half) {
+        track.scrollLeft -= half;
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <section
-      id="gallery"
-      className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[578px] xl:px-20 xl:py-0"
-    >
-      <div className="flex w-full max-w-[1280px] flex-col gap-10 sm:gap-12 xl:gap-[70px]">
-        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+    <section id="gallery" className="gallery-section">
+      <div className="gallery-section__inner">
+        <div className="gallery-section__header">
           <SectionHeading label="GALLERY" title="Find us on Instagram" />
           <a
             href={SITE.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-surface shrink-0 rounded-[12px] px-5 py-3 sm:px-6 sm:py-4"
+            className="gallery-instagram-cta"
             aria-label={`${SITE.instagramLabel} on Instagram`}
           >
             <span className="text-gradient-farm font-['BaskervvilleSC'] text-[16px] font-semibold sm:text-[18px]">
@@ -33,21 +57,28 @@ export default function Gallery() {
           </a>
         </div>
 
-        <div className="-mx-5 flex gap-4 overflow-x-auto px-5 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:mx-0 xl:px-0 [&::-webkit-scrollbar]:hidden">
-          {galleryImages.map((image, index) => (
-            <div
-              key={image}
-              className="relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-[20px] sm:h-[210px] sm:w-[210px] sm:rounded-[22px] xl:h-[240px] xl:w-[240px] xl:rounded-[24px]"
-            >
-              <Image
-                src={image}
-                alt={`Reset Life gallery image ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="240px"
-              />
-            </div>
-          ))}
+        <div className="gallery-carousel-viewport">
+          <div ref={trackRef} className="gallery-carousel-track overflow-x-auto">
+            {loopedImages.map((image, index) => (
+              <article
+                key={`${image}-${index}`}
+                data-gallery-card
+                className="gallery-card"
+                aria-hidden={index >= galleryImages.length}
+              >
+                <div className="gallery-card__media">
+                  <Image
+                    src={image}
+                    alt={`Reset Life gallery image ${(index % galleryImages.length) + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 82vw, (max-width: 1024px) 44vw, (max-width: 1280px) 30vw, 22vw"
+                    draggable={false}
+                  />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

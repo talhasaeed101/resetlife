@@ -33,7 +33,7 @@ export default function TermsPage() {
           </p>
           <p>
             For questions about these terms, contact us at{" "}
-            <a href={`mailto:${SITE.email}`} className="text-white">
+            <a href={SITE.emailMailto} className="text-white">
               {SITE.email}
             </a>
             .
