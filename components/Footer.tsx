@@ -1,15 +1,16 @@
-import type { ReactNode } from "react";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/assets";
-
-const navigationLinks = ["Home", "About", "Villa", "Gallery"] as const;
-const eventLinks = [
-  "Nikkah",
-  "Photography",
-  "Birthday",
-  "Corporate Events",
-] as const;
+import {
+  EVENT_LINKS,
+  NAV_LINKS,
+  SECTION_IDS,
+  SITE,
+} from "@/lib/site";
+import { scrollToSection } from "@/lib/scroll";
+import type { ReactNode } from "react";
 
 function InstagramIcon() {
   return (
@@ -84,14 +85,40 @@ function FooterColumn({
   );
 }
 
+function SectionLink({
+  label,
+  sectionId,
+}: {
+  label: string;
+  sectionId: (typeof SECTION_IDS)[keyof typeof SECTION_IDS];
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => scrollToSection(sectionId)}
+      className="text-left font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] transition-colors hover:text-white sm:text-[16px]"
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-[#050b08] px-5 sm:px-8 md:px-10 lg:px-16 xl:px-20">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col pt-12 sm:pt-16 xl:h-[729px] xl:pt-[100px]">
-        <div className="mb-10 flex items-end gap-[9px] sm:mb-12 xl:mb-[60px]">
+        <Link
+          href="#hero"
+          onClick={(event) => {
+            event.preventDefault();
+            scrollToSection("hero");
+          }}
+          className="mb-10 flex w-fit items-end gap-[9px] sm:mb-12 xl:mb-[60px]"
+          aria-label="Reset Life home"
+        >
           <Image
             src={assets.hero.logoIcon}
-            alt="Reset Life"
+            alt=""
             width={28}
             height={40}
             className="h-8 w-[22px] sm:h-10 sm:w-[27.922px]"
@@ -99,28 +126,25 @@ export default function Footer() {
           <span className="text-gradient-farm font-['BaskervvilleSC'] text-[20px] font-normal uppercase leading-none tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
             Reset life
           </span>
-        </div>
+        </Link>
 
         <div className="mb-10 grid grid-cols-1 gap-10 sm:mb-12 md:grid-cols-2 md:gap-x-12 md:gap-y-10 xl:mb-auto xl:grid-cols-3 xl:gap-0">
           <FooterColumn
             topHeading={<FooterColumnHeading>Location</FooterColumnHeading>}
             topContent={
               <p className="max-w-[320px] font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">
-                Reset Life Retreat, Plot 12, Street 8, Block C, Gulberg Greens,
-                Islamabad, Pakistan
+                {SITE.address}
               </p>
             }
             bottomHeading={<FooterColumnHeading>Navigation</FooterColumnHeading>}
             bottomContent={
               <nav className="flex flex-col gap-3 sm:gap-4">
-                {navigationLinks.map((link) => (
-                  <Link
-                    key={link}
-                    href="#"
-                    className="font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]"
-                  >
-                    {link}
-                  </Link>
+                {NAV_LINKS.map((link) => (
+                  <SectionLink
+                    key={link.label}
+                    label={link.label}
+                    sectionId={link.sectionId}
+                  />
                 ))}
               </nav>
             }
@@ -130,23 +154,21 @@ export default function Footer() {
             topHeading={<FooterColumnHeading>Contact</FooterColumnHeading>}
             topContent={
               <a
-                href="tel:+921234567890"
+                href={`tel:${SITE.phone}`}
                 className="font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]"
               >
-                +92 123 4567890
+                {SITE.phoneDisplay}
               </a>
             }
             bottomHeading={<FooterColumnHeading>Events</FooterColumnHeading>}
             bottomContent={
               <nav className="flex flex-col gap-3 sm:gap-4">
-                {eventLinks.map((link) => (
-                  <Link
-                    key={link}
-                    href="#"
-                    className="font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]"
-                  >
-                    {link}
-                  </Link>
+                {EVENT_LINKS.map((link) => (
+                  <SectionLink
+                    key={link.label}
+                    label={link.label}
+                    sectionId={SECTION_IDS.events}
+                  />
                 ))}
               </nav>
             }
@@ -156,22 +178,38 @@ export default function Footer() {
             topHeading={<FooterColumnHeading>Email</FooterColumnHeading>}
             topContent={
               <a
-                href="mailto:resetlife@gmail.com"
+                href={`mailto:${SITE.email}`}
                 className="break-all font-['Raleway'] text-[15px] font-normal leading-normal text-[#8e8e8e] sm:break-normal sm:text-[16px]"
               >
-                resetlife@gmail.com
+                {SITE.email}
               </a>
             }
             bottomHeading={<FooterColumnHeading>Follow Us On</FooterColumnHeading>}
             bottomContent={
               <div className="flex items-center gap-5 sm:gap-6">
-                <a href="#" aria-label="Instagram">
+                <a
+                  href={SITE.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${SITE.instagramLabel} on Instagram`}
+                  title={SITE.instagramHandle}
+                >
                   <InstagramIcon />
                 </a>
-                <a href="#" aria-label="TikTok">
+                <a
+                  href="#"
+                  aria-label="TikTok"
+                  title="Social link not configured"
+                  onClick={(event) => event.preventDefault()}
+                >
                   <TikTokIcon />
                 </a>
-                <a href="#" aria-label="Facebook">
+                <a
+                  href="#"
+                  aria-label="Facebook"
+                  title="Social link not configured"
+                  onClick={(event) => event.preventDefault()}
+                >
                   <FacebookIcon />
                 </a>
               </div>
@@ -185,13 +223,13 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap items-center gap-6 sm:gap-10">
             <Link
-              href="#"
+              href="/privacy"
               className="font-['Raleway'] text-[13px] font-normal leading-normal text-[#8e8e8e] sm:text-[14px]"
             >
               Privacy Policy
             </Link>
             <Link
-              href="#"
+              href="/terms"
               className="font-['Raleway'] text-[13px] font-normal leading-normal text-[#8e8e8e] sm:text-[14px]"
             >
               Terms of Service

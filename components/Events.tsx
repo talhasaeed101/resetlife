@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { assets } from "@/lib/assets";
-import { GoldButton } from "@/components/ui/GoldButton";
+import { BookNowButton } from "@/components/BookNowButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const eventDescription =
@@ -8,7 +8,10 @@ const eventDescription =
 
 export default function Events() {
   return (
-    <section className="w-full overflow-hidden bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[838px] xl:px-20 xl:pt-[100px] xl:pb-0">
+    <section
+      id="events"
+      className="w-full overflow-hidden bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[838px] xl:px-20 xl:pt-[100px] xl:pb-0"
+    >
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 sm:gap-12 xl:gap-[70px]">
         <SectionHeading
           label="EVENTS"
@@ -33,7 +36,7 @@ export default function Events() {
             <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">
               {eventDescription}
             </p>
-            <GoldButton className="w-full sm:w-auto">BOOK NOW</GoldButton>
+            <BookNowButton eventType="Photography" className="w-full sm:w-auto" />
           </div>
 
           <div className="flex h-[380px] w-[280px] shrink-0 flex-col items-end gap-4 sm:w-[300px] xl:h-[420px] xl:w-[310px] xl:gap-5">
@@ -75,7 +78,7 @@ export default function Events() {
             <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">
               {eventDescription}
             </p>
-            <GoldButton className="w-full sm:w-auto">BOOK NOW</GoldButton>
+            <BookNowButton eventType="Nikkah" className="w-full sm:w-auto" />
           </div>
 
           <div className="flex h-[420px] w-[280px] shrink-0 flex-col items-start justify-center gap-5 sm:h-[460px] sm:w-[300px] sm:gap-6 xl:h-[500px] xl:w-[313px] xl:items-end xl:text-right">
@@ -85,7 +88,7 @@ export default function Events() {
             <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">
               {eventDescription}
             </p>
-            <GoldButton className="w-full sm:w-auto">BOOK NOW</GoldButton>
+            <BookNowButton eventType="Birthday" className="w-full sm:w-auto" />
           </div>
 
           <div className="relative h-[420px] w-[280px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[300px] xl:h-[500px] xl:w-[313px] xl:rounded-[30px]">
@@ -105,7 +108,10 @@ export default function Events() {
             <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">
               {eventDescription}
             </p>
-            <GoldButton className="w-full sm:w-auto">BOOK NOW</GoldButton>
+            <BookNowButton
+              eventType="Corporate Events"
+              className="w-full sm:w-auto"
+            />
           </div>
 
           <div className="relative h-[420px] w-[280px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[300px] xl:h-[500px] xl:w-[313px] xl:rounded-[30px]">

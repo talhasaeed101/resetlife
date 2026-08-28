@@ -59,7 +59,10 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(9);
 
   return (
-    <section className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[781px] xl:px-20 xl:py-0">
+    <section
+      id="faq"
+      className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[781px] xl:px-20 xl:py-0"
+    >
       <div className="flex w-full max-w-[1280px] flex-col gap-10 sm:gap-12 xl:gap-16">
         <SectionHeading label="FAQ" title="Most Asked Questions" />
 
