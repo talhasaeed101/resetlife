@@ -6,7 +6,10 @@ const aboutCopy =
 
 export default function About() {
   return (
-    <section className="w-full bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:flex xl:h-[1024px] xl:items-center xl:justify-center xl:px-20 xl:py-0">
+    <section
+      id="about"
+      className="w-full bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:flex xl:h-[1024px] xl:items-center xl:justify-center xl:px-20 xl:py-0"
+    >
       {/* Mobile / tablet layout */}
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 xl:hidden">
         <div className="flex flex-col items-center gap-5 text-center">

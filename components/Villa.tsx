@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { scrollToSection } from "@/lib/scroll";
 
 const villaThumbs = [
   assets.villa.thumb1,
@@ -9,8 +12,13 @@ const villaThumbs = [
 ] as const;
 
 export default function Villa() {
+  const handleExplore = () => {
+    scrollToSection("contact");
+  };
+
   return (
-    <section className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[960px] xl:px-20 xl:py-0">
+    <section
+      id="villa" className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[960px] xl:px-20 xl:py-0">
       <div className="relative w-full max-w-[1280px] overflow-hidden rounded-[24px] md:rounded-[32px] xl:h-[760px] xl:rounded-[40px]">
         <div className="relative min-h-[480px] w-full sm:min-h-[560px] md:min-h-[640px] xl:absolute xl:inset-0 xl:min-h-0">
           <Image
@@ -51,7 +59,13 @@ export default function Villa() {
             <h2 className="font-['dtnightingale'] text-[32px] font-light leading-[1.05] text-white sm:text-[40px] md:text-[48px]">
               Luxurious & Opulent Ambiance.
             </h2>
-            <GoldButton className="w-full sm:w-auto">EXPLORE</GoldButton>
+            <GoldButton
+              type="button"
+              className="w-full sm:w-auto"
+              onClick={handleExplore}
+            >
+              EXPLORE
+            </GoldButton>
           </div>
         </div>
 
@@ -84,7 +98,11 @@ export default function Villa() {
             Luxurious & Opulent Ambiance.
           </h2>
 
-          <GoldButton className="absolute bottom-[60px] right-[60px]">
+          <GoldButton
+            type="button"
+            className="absolute bottom-[60px] right-[60px]"
+            onClick={handleExplore}
+          >
             EXPLORE
           </GoldButton>
         </div>

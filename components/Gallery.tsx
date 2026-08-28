@@ -12,7 +12,10 @@ const galleryImages = [
 
 export default function Gallery() {
   return (
-    <section className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[578px] xl:px-20 xl:py-0">
+    <section
+      id="gallery"
+      className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[578px] xl:px-20 xl:py-0"
+    >
       <div className="flex w-full max-w-[1280px] flex-col gap-10 sm:gap-12 xl:gap-[70px]">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading label="GALLERY" title="Find us on Instagram" />

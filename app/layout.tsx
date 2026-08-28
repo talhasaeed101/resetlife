@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { getSiteUrl, SITE } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +14,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reset Life | Escape to Nature. Stay in Luxury.",
-  description:
-    "Relax, reconnect, and create unforgettable moments at Reset Life — a peaceful retreat surrounded by nature and tranquility.",
+  metadataBase: new URL(getSiteUrl()),
+  title: SITE.title,
+  description: SITE.description,
+  openGraph: {
+    title: SITE.title,
+    description: SITE.description,
+    url: getSiteUrl(),
+    siteName: SITE.name,
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

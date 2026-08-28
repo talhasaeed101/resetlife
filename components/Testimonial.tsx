@@ -14,7 +14,10 @@ function StarIcon() {
 
 export default function Testimonial() {
   return (
-    <section className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[452px] xl:px-20 xl:py-0">
+    <section
+      id="testimonial"
+      className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[452px] xl:px-20 xl:py-0"
+    >
       <div className="flex w-full max-w-[900px] flex-col items-center gap-5 text-center sm:gap-6">
         <div className="relative h-16 w-16 overflow-hidden rounded-full sm:h-20 sm:w-20">
           <Image
