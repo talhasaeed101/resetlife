@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import { EVENT_TYPES, GUEST_OPTIONS } from "@/lib/site";
@@ -10,11 +10,11 @@ import { scrollToSection, storeBookingPrefill, readBookingPrefill, clearBookingP
 import { validateBookingForm, type FieldErrors } from "@/lib/validation";
 
 const fieldClassName =
-  "w-full bg-transparent font-['Raleway'] text-[14px] font-medium text-white outline-none sm:text-[16px]";
+  "booking-control-input";
 
-const selectClassName = `${fieldClassName} appearance-none cursor-pointer`;
+const selectClassName = `${fieldClassName} booking-select`;
 
-const dateClassName = `${fieldClassName} [color-scheme:dark]`;
+const dateClassName = `${fieldClassName} booking-date-input`;
 
 type BookingState = {
   eventType: string;
@@ -39,8 +39,11 @@ export default function Hero() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.documentElement.style.overflowX = menuOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflowX = "";
     };
   }, [menuOpen]);
 
@@ -72,6 +75,25 @@ export default function Hero() {
       delete next[field];
       return next;
     });
+  };
+
+  const checkInRef = useRef<HTMLInputElement>(null);
+  const checkOutRef = useRef<HTMLInputElement>(null);
+
+  const openDatePicker = (input: HTMLInputElement | null) => {
+    if (!input) {
+      return;
+    }
+
+    input.focus();
+
+    if (typeof input.showPicker === "function") {
+      try {
+        input.showPicker();
+      } catch {
+        input.click();
+      }
+    }
   };
 
   const handleBookingSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -157,32 +179,34 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 z-[1] bg-black/60" aria-hidden />
 
-      <header
-        className={`site-header-layer flex w-full max-w-[1440px] items-start justify-between self-center px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:left-0 xl:right-0 xl:top-10 xl:mx-auto xl:px-20 xl:py-0 ${
-          menuOpen ? "site-header-layer--menu-open" : ""
-        }`}
+      <div
+        className={`site-header-fixed ${menuOpen ? "site-header-layer--menu-open" : ""}`}
       >
-        <SiteLogoLink />
+        <header className="site-header-inner site-header-layer mx-auto flex w-full max-w-[1440px] items-start justify-between px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-0">
+          <SiteLogoLink />
 
-        <button
-          type="button"
-          className="glass-surface pointer-events-auto flex items-center gap-[6px] rounded-[12px] px-3 py-2"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span className="font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
-            Menu
-          </span>
-          <Image
-            src={assets.hero.menuIcon}
-            alt=""
-            width={28}
-            height={28}
-            className="h-6 w-6 sm:h-7 sm:w-7"
-          />
-        </button>
-      </header>
+          <button
+            type="button"
+            className="glass-surface flex items-center gap-[6px] rounded-[12px] px-3 py-2"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
+              Menu
+            </span>
+            <Image
+              src={assets.hero.menuIcon}
+              alt=""
+              width={28}
+              height={28}
+              className="h-6 w-6 sm:h-7 sm:w-7"
+            />
+          </button>
+        </header>
+      </div>
+
+      <div className="h-[76px] w-full shrink-0 xl:hidden" aria-hidden />
 
       <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
 
@@ -201,26 +225,23 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-[1280px] self-center px-5 pb-8 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:bottom-[63px] xl:left-1/2 xl:-translate-x-1/2 xl:px-0 xl:pb-0">
         <form
           onSubmit={handleBookingSubmit}
-          className="glass-surface overflow-hidden rounded-[16px] p-4 sm:p-5 xl:p-6"
+          className="booking-card overflow-hidden rounded-[16px] p-4 sm:p-5 xl:p-6"
           noValidate
         >
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:gap-6">
-              <div className="flex min-w-0 flex-col gap-3 px-0 sm:gap-4 lg:flex-1 lg:px-4">
-                <label
-                  htmlFor="event-type"
-                  className="font-['BaskervvilleSC'] text-[16px] font-semibold text-white sm:text-[18px]"
-                >
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:gap-0">
+              <div className="booking-field">
+                <label htmlFor="event-type" className="booking-field-label">
                   Event Type
                 </label>
-                <div className="flex items-center justify-between gap-3">
+                <div className="booking-control-row">
                   <select
                     id="event-type"
                     value={booking.eventType}
                     onChange={(event) =>
                       updateBooking("eventType", event.target.value)
                     }
-                    className={`${selectClassName} min-w-0 flex-1 ${!booking.eventType ? "text-[#8e8e8e]" : ""}`}
+                    className={`${selectClassName} ${!booking.eventType ? "is-placeholder" : ""}`}
                   >
                     <option value="">Choose</option>
                     {EVENT_TYPES.map((option) => (
@@ -234,31 +255,26 @@ export default function Hero() {
                     alt=""
                     width={20}
                     height={20}
-                    className="pointer-events-none h-5 w-5 shrink-0"
+                    className="booking-control-icon"
                   />
                 </div>
                 {errors.eventType ? (
-                  <p className="font-['Raleway'] text-[12px] text-[#dfcba2]">
-                    {errors.eventType}
-                  </p>
+                  <p className="booking-field-error">{errors.eventType}</p>
                 ) : null}
               </div>
 
-              <div className="flex min-w-0 flex-col gap-3 px-0 sm:gap-4 lg:flex-1 lg:px-4">
-                <label
-                  htmlFor="guests"
-                  className="font-['BaskervvilleSC'] text-[16px] font-semibold text-white sm:text-[18px]"
-                >
+              <div className="booking-field">
+                <label htmlFor="guests" className="booking-field-label">
                   Guest(s)
                 </label>
-                <div className="flex items-center justify-between gap-3">
+                <div className="booking-control-row">
                   <select
                     id="guests"
                     value={booking.guests}
                     onChange={(event) =>
                       updateBooking("guests", event.target.value)
                     }
-                    className={`${selectClassName} min-w-0 flex-1 ${!booking.guests ? "text-[#8e8e8e]" : ""}`}
+                    className={`${selectClassName} ${!booking.guests ? "is-placeholder" : ""}`}
                   >
                     <option value="">Choose</option>
                     {GUEST_OPTIONS.map((option) => (
@@ -272,57 +288,69 @@ export default function Hero() {
                     alt=""
                     width={20}
                     height={20}
-                    className="pointer-events-none h-5 w-5 shrink-0"
+                    className="booking-control-icon"
                   />
                 </div>
                 {errors.guests ? (
-                  <p className="font-['Raleway'] text-[12px] text-[#dfcba2]">
-                    {errors.guests}
-                  </p>
+                  <p className="booking-field-error">{errors.guests}</p>
                 ) : null}
               </div>
 
-              <div className="flex min-w-0 flex-col gap-3 px-0 sm:gap-4 lg:flex-1 lg:px-4">
-                <label
-                  htmlFor="check-in"
-                  className="font-['BaskervvilleSC'] text-[16px] font-semibold text-white sm:text-[18px]"
-                >
+              <div className="booking-field">
+                <label htmlFor="check-in" className="booking-field-label">
                   Check-In Date
                 </label>
-                <div className="flex items-center justify-between gap-3">
+                <div
+                  className="booking-control-row"
+                  onClick={() => openDatePicker(checkInRef.current)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openDatePicker(checkInRef.current);
+                    }
+                  }}
+                  role="presentation"
+                >
                   <input
+                    ref={checkInRef}
                     id="check-in"
                     type="date"
                     value={booking.checkIn}
                     onChange={(event) =>
                       updateBooking("checkIn", event.target.value)
                     }
-                    className={`${dateClassName} min-w-0 flex-1 ${!booking.checkIn ? "text-[#8e8e8e]" : ""}`}
+                    className={`${dateClassName} ${!booking.checkIn ? "is-placeholder" : ""}`}
                   />
                   <Image
                     src={assets.hero.calendar}
                     alt=""
                     width={20}
                     height={20}
-                    className="pointer-events-none h-5 w-5 shrink-0"
+                    className="booking-control-icon"
                   />
                 </div>
                 {errors.checkIn ? (
-                  <p className="font-['Raleway'] text-[12px] text-[#dfcba2]">
-                    {errors.checkIn}
-                  </p>
+                  <p className="booking-field-error">{errors.checkIn}</p>
                 ) : null}
               </div>
 
-              <div className="flex min-w-0 flex-col gap-3 px-0 sm:gap-4 lg:flex-1 lg:px-4">
-                <label
-                  htmlFor="check-out"
-                  className="font-['BaskervvilleSC'] text-[16px] font-semibold text-white sm:text-[18px]"
-                >
+              <div className="booking-field">
+                <label htmlFor="check-out" className="booking-field-label">
                   Check-Out Date
                 </label>
-                <div className="flex items-center justify-between gap-3">
+                <div
+                  className="booking-control-row"
+                  onClick={() => openDatePicker(checkOutRef.current)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openDatePicker(checkOutRef.current);
+                    }
+                  }}
+                  role="presentation"
+                >
                   <input
+                    ref={checkOutRef}
                     id="check-out"
                     type="date"
                     value={booking.checkOut}
@@ -330,20 +358,18 @@ export default function Hero() {
                     onChange={(event) =>
                       updateBooking("checkOut", event.target.value)
                     }
-                    className={`${dateClassName} min-w-0 flex-1 ${!booking.checkOut ? "text-[#8e8e8e]" : ""}`}
+                    className={`${dateClassName} ${!booking.checkOut ? "is-placeholder" : ""}`}
                   />
                   <Image
                     src={assets.hero.calendar}
                     alt=""
                     width={20}
                     height={20}
-                    className="pointer-events-none h-5 w-5 shrink-0"
+                    className="booking-control-icon"
                   />
                 </div>
                 {errors.checkOut ? (
-                  <p className="font-['Raleway'] text-[12px] text-[#dfcba2]">
-                    {errors.checkOut}
-                  </p>
+                  <p className="booking-field-error">{errors.checkOut}</p>
                 ) : null}
               </div>
             </div>

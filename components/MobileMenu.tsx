@@ -50,7 +50,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   return createPortal(
     <div
-      className="mobile-menu-root xl:hidden"
+      className="mobile-menu-root"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
@@ -62,7 +62,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         onClick={onClose}
       />
 
-      <div className="pointer-events-none absolute inset-0 flex justify-end px-5 pt-6 sm:px-8">
+      <div className="pointer-events-none absolute inset-0 flex justify-end px-5 pt-6 sm:px-8 xl:px-20 xl:pt-10">
         <div className="pointer-events-auto w-[min(320px,calc(100vw-2.5rem))]">
           <div className="mobile-menu-panel rounded-[16px] p-6">
             <div className="mb-6 flex items-center justify-between">
@@ -81,7 +81,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-[8px] border border-white/15 bg-white/5 px-3 py-1.5 font-['Raleway'] text-[14px] text-white transition-colors hover:bg-white/10"
+                className="mobile-menu-close"
                 aria-label="Close menu"
               >
                 Close
@@ -94,7 +94,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   key={link.label}
                   type="button"
                   onClick={() => handleNavClick(link.sectionId)}
-                  className="text-left font-['Raleway'] text-[16px] text-[#8e8e8e] transition-colors hover:text-white"
+                  className="mobile-menu-link"
                 >
                   {link.label}
                 </button>

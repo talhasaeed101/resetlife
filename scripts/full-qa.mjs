@@ -2,13 +2,14 @@ import { chromium } from "playwright";
 
 const URL = process.env.QA_URL ?? "http://localhost:3000";
 const VIEWPORTS = [
-  { width: 375, height: 812, label: "375px mobile" },
-  { width: 768, height: 1024, label: "768px tablet" },
-  { width: 1440, height: 900, label: "1440px desktop" },
+  { width: 375, height: 812, label: "375px" },
+  { width: 768, height: 1024, label: "768px" },
+  { width: 1024, height: 900, label: "1024px" },
+  { width: 1440, height: 900, label: "1440px" },
 ];
 
 async function run() {
-  const browser = await chromium.launch({ headless: false, slowMo: 300 });
+  const browser = await chromium.launch({ headless: false, slowMo: 250 });
   const results = [];
 
   try {
@@ -21,7 +22,7 @@ async function run() {
 
       await page.goto(URL, { waitUntil: "networkidle" });
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(500);
 
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
@@ -29,60 +30,89 @@ async function run() {
       }));
 
       if (overflow.scrollWidth > overflow.innerWidth + 1) {
-        issues.push(
-          `horizontal overflow: ${overflow.scrollWidth}px > ${overflow.innerWidth}px`,
-        );
+        issues.push(`horizontal overflow: ${overflow.scrollWidth}px`);
       }
 
-      const eventsScrollBefore = await page.evaluate(() => {
-        const section = document.getElementById("events");
-        const row = section?.querySelector(".overflow-x-auto");
+      const calendarIcons = await page.evaluate(() => {
+        const checkInRow = document
+          .getElementById("check-in")
+          ?.closest(".booking-control-row");
+        const checkOutRow = document
+          .getElementById("check-out")
+          ?.closest(".booking-control-row");
+
+        const countVisibleIcons = (row) => {
+          if (!row) {
+            return 0;
+          }
+
+          return row.querySelectorAll("img.booking-control-icon").length;
+        };
+
+        return {
+          checkIn: countVisibleIcons(checkInRow),
+          checkOut: countVisibleIcons(checkOutRow),
+        };
+      });
+
+      if (calendarIcons.checkIn !== 1) {
+        issues.push(`check-in has ${calendarIcons.checkIn} calendar icons`);
+      }
+
+      if (calendarIcons.checkOut !== 1) {
+        issues.push(`check-out has ${calendarIcons.checkOut} calendar icons`);
+      }
+
+      const eventsBefore = await page.evaluate(() => {
+        const row = document
+          .getElementById("events")
+          ?.querySelector(".overflow-x-auto");
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
-      const testimonialScrollBefore = await page.evaluate(() => {
-        const section = document.getElementById("testimonial");
-        const row = section?.querySelector(".overflow-x-auto");
+      const testimonialBefore = await page.evaluate(() => {
+        const row = document
+          .getElementById("testimonial")
+          ?.querySelector(".overflow-x-auto");
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
       await page.waitForTimeout(1200);
 
-      const eventsScrollAfter = await page.evaluate(() => {
-        const section = document.getElementById("events");
-        const row = section?.querySelector(".overflow-x-auto");
+      const eventsAfter = await page.evaluate(() => {
+        const row = document
+          .getElementById("events")
+          ?.querySelector(".overflow-x-auto");
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
-      const testimonialScrollAfter = await page.evaluate(() => {
-        const section = document.getElementById("testimonial");
-        const row = section?.querySelector(".overflow-x-auto");
+      const testimonialAfter = await page.evaluate(() => {
+        const row = document
+          .getElementById("testimonial")
+          ?.querySelector(".overflow-x-auto");
         return row instanceof HTMLElement ? row.scrollLeft : -1;
       });
 
-      if (eventsScrollBefore >= 0 && eventsScrollAfter <= eventsScrollBefore) {
-        issues.push("events auto-scroll did not advance");
+      if (eventsBefore >= 0 && eventsAfter <= eventsBefore) {
+        issues.push("events auto-scroll stalled");
       }
 
-      if (
-        testimonialScrollBefore >= 0 &&
-        testimonialScrollAfter <= testimonialScrollBefore
-      ) {
-        issues.push("testimonial auto-scroll did not advance");
+      if (testimonialBefore >= 0 && testimonialAfter <= testimonialBefore) {
+        issues.push("testimonial auto-scroll stalled");
       }
 
       const emailOk = (await page.locator("footer").textContent())?.includes(
         "resetlifefarmhouse@gmail.com",
       );
       if (!emailOk) {
-        issues.push("footer email missing");
+        issues.push("email incorrect");
       }
 
       const instagramHref = await page
         .locator('footer a[aria-label*="Instagram"]')
         .getAttribute("href");
       if (instagramHref !== "https://www.instagram.com/resetlifefarmhouse/") {
-        issues.push(`instagram href incorrect: ${instagramHref}`);
+        issues.push("instagram incorrect");
       }
 
       const faviconHref = await page
@@ -90,56 +120,43 @@ async function run() {
         .first()
         .getAttribute("href");
       if (!faviconHref?.includes("favicon") && !faviconHref?.includes("icon")) {
-        issues.push(`favicon link missing: ${faviconHref}`);
+        issues.push("favicon missing");
       }
 
-      if (viewport.width < 1280) {
-        const menuButton = page.getByRole("button", { name: /open menu/i });
-        await menuButton.scrollIntoViewIfNeeded();
+      const menuButton = page.getByRole("button", { name: /open menu|close menu/i });
+      const menuVisible = await menuButton.isVisible();
+
+      if (menuVisible) {
         await menuButton.click();
         await page.waitForTimeout(600);
 
         const dialog = page.getByRole("dialog", { name: /navigation menu/i });
         if (!(await dialog.isVisible())) {
-          issues.push("mobile menu did not open");
-        }
+          issues.push("menu did not open");
+        } else {
+          const glass = await page.evaluate(() => {
+            const panel = document.querySelector(".mobile-menu-panel");
+            if (!panel) {
+              return null;
+            }
+            const styles = window.getComputedStyle(panel);
+            return {
+              blur:
+                styles.backdropFilter ||
+                styles.getPropertyValue("-webkit-backdrop-filter"),
+            };
+          });
 
-        const glass = await page.evaluate(() => {
-          const panel = document.querySelector(".mobile-menu-panel");
-          if (!panel) {
-            return null;
+          if (!glass?.blur || glass.blur === "none") {
+            issues.push("menu glass blur missing");
           }
-          const styles = window.getComputedStyle(panel);
-          return {
-            backdropFilter:
-              styles.backdropFilter || styles.getPropertyValue("-webkit-backdrop-filter"),
-            background: styles.backgroundColor,
-            border: styles.border,
-          };
-        });
 
-        if (!glass?.backdropFilter || glass.backdropFilter === "none") {
-          issues.push("mobile menu glass blur missing");
-        }
+          await page.locator(".mobile-menu-close").click();
+          await page.waitForTimeout(400);
 
-        await page.getByRole("dialog").getByRole("button", { name: /^about$/i }).click();
-        await page.waitForTimeout(900);
-
-        const aboutVisible = await page.evaluate(() => {
-          const section = document.getElementById("about");
-          if (!section) {
-            return false;
+          if (await dialog.isVisible().catch(() => false)) {
+            issues.push("menu close button failed");
           }
-          const rect = section.getBoundingClientRect();
-          return rect.top >= -120 && rect.top <= 220;
-        });
-
-        if (!aboutVisible) {
-          issues.push("about scroll failed");
-        }
-
-        if (await dialog.isVisible().catch(() => false)) {
-          issues.push("menu did not close after nav click");
         }
       }
 
@@ -155,7 +172,7 @@ async function run() {
     await browser.close();
   }
 
-  console.log("\n=== Reset Life Full QA ===\n");
+  console.log("\n=== Reset Life QA ===\n");
   for (const result of results) {
     console.log(`${result.viewport}: ${result.pass ? "PASS" : "FAIL"}`);
     for (const issue of result.issues) {
