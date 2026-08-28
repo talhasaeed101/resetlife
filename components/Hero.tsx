@@ -66,6 +66,7 @@ const Hero = () => {
             backgroundImage: "url('/Images/homePage/ssq.png')",
           }}
         >
+          
           <div className="flex-1 w-full flex flex-col gap-2 md:pr-8">
             <span className="text-white text-[18px] font-semibold tracking-[0.15em] font-['BaskervvilleSC']">
               Event Type
