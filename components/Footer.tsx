@@ -188,10 +188,11 @@ export default function Footer() {
             bottomContent={
               <div className="flex items-center gap-5 sm:gap-6">
                 <a
-                  href="#"
-                  aria-label="Instagram"
-                  title="Social link not configured"
-                  onClick={(event) => event.preventDefault()}
+                  href={SITE.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${SITE.instagramLabel} on Instagram`}
+                  title={SITE.instagramHandle}
                 >
                   <InstagramIcon />
                 </a>

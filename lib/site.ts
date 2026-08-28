@@ -3,7 +3,10 @@ export const SITE = {
   title: "Reset Life | Escape to Nature. Stay in Luxury.",
   description:
     "Relax, reconnect, and create unforgettable moments at Reset Life — a peaceful retreat surrounded by nature and tranquility.",
-  email: "resetlife@gmail.com",
+  email: "resetlifefarmhouse@gmail.com",
+  instagram: "https://www.instagram.com/resetlifefarmhouse/",
+  instagramHandle: "@resetlifefarmhouse",
+  instagramLabel: "Reset Life Farmhouse",
   phone: "+921234567890",
   phoneDisplay: "+92 123 4567890",
   address:

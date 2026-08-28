@@ -154,12 +154,16 @@ export default function Hero() {
       />
       <div className="absolute inset-0 bg-black/60" aria-hidden />
 
-      <header className="relative z-10 flex w-full max-w-[1440px] items-start justify-between self-center px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:left-0 xl:right-0 xl:top-10 xl:mx-auto xl:px-20 xl:py-0">
+      <header
+        className={`relative flex w-full max-w-[1440px] items-start justify-between self-center px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:left-0 xl:right-0 xl:top-10 xl:mx-auto xl:px-20 xl:py-0 ${
+          menuOpen ? "z-[10001]" : "z-[100]"
+        }`}
+      >
         <SiteLogoLink />
 
         <button
           type="button"
-          className="glass-surface flex items-center gap-[6px] rounded-[12px] px-3 py-2"
+          className="glass-surface pointer-events-auto flex items-center gap-[6px] rounded-[12px] px-3 py-2"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}

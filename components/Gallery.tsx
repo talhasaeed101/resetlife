@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { assets } from "@/lib/assets";
+import { SITE } from "@/lib/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const galleryImages = [
@@ -19,14 +20,17 @@ export default function Gallery() {
       <div className="flex w-full max-w-[1280px] flex-col gap-10 sm:gap-12 xl:gap-[70px]">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading label="GALLERY" title="Find us on Instagram" />
-          <button
-            type="button"
+          <a
+            href={SITE.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
             className="glass-surface shrink-0 rounded-[12px] px-5 py-3 sm:px-6 sm:py-4"
+            aria-label={`${SITE.instagramLabel} on Instagram`}
           >
             <span className="text-gradient-farm font-['BaskervvilleSC'] text-[16px] font-semibold sm:text-[18px]">
-              @resetlife
+              {SITE.instagramHandle}
             </span>
-          </button>
+          </a>
         </div>
 
         <div className="-mx-5 flex gap-4 overflow-x-auto px-5 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:mx-0 xl:px-0 [&::-webkit-scrollbar]:hidden">
