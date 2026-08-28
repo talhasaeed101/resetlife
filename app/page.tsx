@@ -1,9 +1,25 @@
+import About from "@/components/About";
+import CTA from "@/components/CTA";
+import Events from "@/components/Events";
+import FAQ from "@/components/FAQ";
+import Footer from "@/components/Footer";
+import Gallery from "@/components/Gallery";
 import Hero from "@/components/Hero";
+import Testimonial from "@/components/Testimonial";
+import Villa from "@/components/Villa";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen overflow-x-hidden bg-[#050b08]">
       <Hero />
+      <About />
+      <Villa />
+      <Events />
+      <Gallery />
+      <Testimonial />
+      <FAQ />
+      <CTA />
+      <Footer />
     </main>
   );
 }
