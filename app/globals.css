@@ -741,7 +741,8 @@ html {
   overflow-x: auto;
   padding: 0.5rem 0 1rem;
   cursor: grab;
-  touch-action: pan-x;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -806,6 +807,17 @@ html {
     transform: none;
     opacity: 1;
     transition: none;
+  }
+}
+
+.auto-scroll-carousel {
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auto-scroll-carousel {
+    scroll-behavior: auto;
   }
 }
 

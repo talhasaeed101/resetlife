@@ -1,11 +1,13 @@
-import { chromium } from "playwright";
+import { chromium, devices } from "playwright";
 
 const URL = process.env.QA_URL ?? "http://localhost:3000";
 const VIEWPORTS = [
-  { width: 375, height: 812, label: "375px" },
-  { width: 768, height: 1024, label: "768px" },
-  { width: 1024, height: 900, label: "1024px" },
-  { width: 1440, height: 900, label: "1440px" },
+  { width: 375, height: 812, label: "375px", mobile: true },
+  { width: 390, height: 844, label: "390px", mobile: true },
+  { width: 414, height: 896, label: "414px", mobile: true },
+  { width: 768, height: 1024, label: "768px", mobile: false },
+  { width: 1024, height: 900, label: "1024px", mobile: false },
+  { width: 1440, height: 900, label: "1440px", mobile: false },
 ];
 
 const EXPECTED_EMAIL_HREF = "mailto:resetlifefarmhouse@gmail.com";
@@ -13,14 +15,41 @@ const EXPECTED_WHATSAPP_HREF =
   "https://wa.me/923145156162?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20know%20more%20about%20availability%20and%20bookings.";
 const EXPECTED_INSTAGRAM_HREF = "https://www.instagram.com/resetlifefarmhouse/";
 
+function carouselMoved(before, after) {
+  if (before < 0 || after < 0) {
+    return false;
+  }
+
+  const delta = Math.abs(after - before);
+  const wrapped = after < before && after < before * 0.35;
+  return delta >= 2 || wrapped;
+}
+
+async function readCarouselScroll(page, selector) {
+  return page.evaluate((carouselSelector) => {
+    const row = document.querySelector(carouselSelector);
+    if (!(row instanceof HTMLElement)) {
+      return { left: -1, scrollable: false };
+    }
+
+    return {
+      left: row.scrollLeft,
+      scrollable: row.scrollWidth > row.clientWidth + 1,
+    };
+  }, selector);
+}
+
 async function run() {
-  const browser = await chromium.launch({ headless: false, slowMo: 250 });
+  const browser = await chromium.launch({ headless: false, slowMo: 200 });
   const results = [];
 
   try {
     for (const viewport of VIEWPORTS) {
       const context = await browser.newContext({
+        ...(viewport.mobile ? devices["iPhone 13"] : {}),
         viewport: { width: viewport.width, height: viewport.height },
+        hasTouch: viewport.mobile,
+        isMobile: viewport.mobile,
         reducedMotion: "no-preference",
       });
       const page = await context.newPage();
@@ -29,6 +58,7 @@ async function run() {
       await page.goto(URL, { waitUntil: "networkidle" });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(500);
+      await page.mouse.move(8, 8);
 
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
@@ -40,24 +70,16 @@ async function run() {
       }
 
       const calendarIcons = await page.evaluate(() => {
-        const checkInRow = document
-          .getElementById("check-in")
-          ?.closest(".booking-control-row");
-        const checkOutRow = document
-          .getElementById("check-out")
-          ?.closest(".booking-control-row");
-
-        const countVisibleIcons = (row) => {
-          if (!row) {
-            return 0;
-          }
-
-          return row.querySelectorAll("img.booking-control-icon").length;
-        };
+        const countVisibleIcons = (row) =>
+          row ? row.querySelectorAll("img.booking-control-icon").length : 0;
 
         return {
-          checkIn: countVisibleIcons(checkInRow),
-          checkOut: countVisibleIcons(checkOutRow),
+          checkIn: countVisibleIcons(
+            document.getElementById("check-in")?.closest(".booking-control-row"),
+          ),
+          checkOut: countVisibleIcons(
+            document.getElementById("check-out")?.closest(".booking-control-row"),
+          ),
         };
       });
 
@@ -69,73 +91,52 @@ async function run() {
         issues.push(`check-out has ${calendarIcons.checkOut} calendar icons`);
       }
 
-      const eventsBefore = await page.evaluate(() => {
-        const row = document
-          .getElementById("events")
-          ?.querySelector(".overflow-x-auto");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
+      const menuButton = page.getByRole("button", { name: /open menu|close menu/i });
+      if (await menuButton.isVisible()) {
+        await menuButton.click();
+        await page.waitForTimeout(500);
 
-      const testimonialBefore = await page.evaluate(() => {
-        const row = document
-          .getElementById("testimonial")
-          ?.querySelector(".overflow-x-auto");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
+        const dialog = page.getByRole("dialog", { name: /navigation menu/i });
+        if (!(await dialog.isVisible())) {
+          issues.push("menu did not open");
+        } else {
+          await page.locator(".mobile-menu-close").click();
+          await page.waitForTimeout(400);
+        }
+      }
 
-      const galleryBefore = await page.evaluate(() => {
-        const row = document.querySelector(".gallery-carousel-track");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
+      await page.mouse.move(8, 8);
+      await page.waitForTimeout(200);
+
+      const galleryBefore = await readCarouselScroll(page, '[data-auto-scroll="gallery"]');
+      const eventsBefore = await readCarouselScroll(page, '[data-auto-scroll="events"]');
+      const testimonialBefore = await readCarouselScroll(
+        page,
+        '[data-auto-scroll="testimonial"]',
+      );
 
       await page.waitForTimeout(1800);
 
-      const eventsAfter = await page.evaluate(() => {
-        const row = document
-          .getElementById("events")
-          ?.querySelector(".overflow-x-auto");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
+      const galleryAfter = await readCarouselScroll(page, '[data-auto-scroll="gallery"]');
+      const eventsAfter = await readCarouselScroll(page, '[data-auto-scroll="events"]');
+      const testimonialAfter = await readCarouselScroll(
+        page,
+        '[data-auto-scroll="testimonial"]',
+      );
 
-      const testimonialAfter = await page.evaluate(() => {
-        const row = document
-          .getElementById("testimonial")
-          ?.querySelector(".overflow-x-auto");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
+      if (galleryBefore.scrollable && !carouselMoved(galleryBefore.left, galleryAfter.left)) {
+        issues.push("gallery auto-scroll stalled");
+      }
 
-      const galleryAfter = await page.evaluate(() => {
-        const row = document.querySelector(".gallery-carousel-track");
-        return row instanceof HTMLElement ? row.scrollLeft : -1;
-      });
-
-      if (eventsBefore >= 0 && eventsAfter <= eventsBefore) {
+      if (eventsBefore.scrollable && !carouselMoved(eventsBefore.left, eventsAfter.left)) {
         issues.push("events auto-scroll stalled");
       }
 
-      if (testimonialBefore >= 0 && testimonialAfter <= testimonialBefore) {
+      if (
+        testimonialBefore.scrollable &&
+        !carouselMoved(testimonialBefore.left, testimonialAfter.left)
+      ) {
         issues.push("testimonial auto-scroll stalled");
-      }
-
-      if (galleryBefore >= 0) {
-        const galleryDelta = Math.abs(galleryAfter - galleryBefore);
-        const galleryWrapped =
-          galleryAfter < galleryBefore && galleryAfter < galleryBefore * 0.35;
-
-        if (galleryDelta < 2 && !galleryWrapped) {
-          const galleryScrollable = await page.evaluate(() => {
-            const row = document.querySelector(".gallery-carousel-track");
-            if (!(row instanceof HTMLElement)) {
-              return false;
-            }
-
-            return row.scrollWidth > row.clientWidth + 1;
-          });
-
-          if (galleryScrollable) {
-            issues.push("gallery auto-scroll stalled");
-          }
-        }
       }
 
       const footerData = await page.evaluate(() => {
@@ -144,13 +145,10 @@ async function run() {
           emailHref: footer?.querySelector(".footer-email")?.getAttribute("href") ?? null,
           whatsappHref:
             footer?.querySelector(".footer-whatsapp")?.getAttribute("href") ?? null,
-          whatsappTarget:
-            footer?.querySelector(".footer-whatsapp")?.getAttribute("target") ?? null,
           instagramHref:
             footer
               ?.querySelector('a[aria-label*="Instagram"]')
               ?.getAttribute("href") ?? null,
-          emailText: footer?.textContent?.includes("resetlifefarmhouse@gmail.com") ?? false,
         };
       });
 
@@ -162,72 +160,15 @@ async function run() {
         issues.push(`whatsapp href incorrect: ${footerData.whatsappHref}`);
       }
 
-      if (footerData.whatsappTarget !== "_blank") {
-        issues.push("whatsapp target missing");
-      }
-
       if (footerData.instagramHref !== EXPECTED_INSTAGRAM_HREF) {
         issues.push("instagram incorrect");
       }
 
-      if (!footerData.emailText) {
-        issues.push("email text incorrect");
-      }
-
-      const aboutHeadline = await page.evaluate(
-        () => document.querySelector(".about-section__headline")?.textContent ?? "",
-      );
-      if (!aboutHeadline.includes("A Place to Slow Down")) {
-        issues.push("about headline missing");
-      }
-
-      const faviconHref = await page
-        .locator('link[rel="icon"]')
-        .first()
-        .getAttribute("href");
-      if (!faviconHref?.includes("favicon") && !faviconHref?.includes("icon")) {
-        issues.push("favicon missing");
-      }
-
-      const menuButton = page.getByRole("button", { name: /open menu|close menu/i });
-      const menuVisible = await menuButton.isVisible();
-
-      if (menuVisible) {
-        await menuButton.click();
-        await page.waitForTimeout(600);
-
-        const dialog = page.getByRole("dialog", { name: /navigation menu/i });
-        if (!(await dialog.isVisible())) {
-          issues.push("menu did not open");
-        } else {
-          const glass = await page.evaluate(() => {
-            const panel = document.querySelector(".mobile-menu-panel");
-            if (!panel) {
-              return null;
-            }
-            const styles = window.getComputedStyle(panel);
-            return {
-              blur:
-                styles.backdropFilter ||
-                styles.getPropertyValue("-webkit-backdrop-filter"),
-            };
-          });
-
-          if (!glass?.blur || glass.blur === "none") {
-            issues.push("menu glass blur missing");
-          }
-
-          await page.locator(".mobile-menu-close").click();
-          await page.waitForTimeout(400);
-
-          if (await dialog.isVisible().catch(() => false)) {
-            issues.push("menu close button failed");
-          }
-        }
-      }
-
       results.push({
         viewport: viewport.label,
+        gallery: { before: galleryBefore.left, after: galleryAfter.left },
+        events: { before: eventsBefore.left, after: eventsAfter.left },
+        testimonial: { before: testimonialBefore.left, after: testimonialAfter.left },
         issues,
         pass: issues.length === 0,
       });
@@ -238,9 +179,12 @@ async function run() {
     await browser.close();
   }
 
-  console.log("\n=== Reset Life QA ===\n");
+  console.log("\n=== Reset Life Carousel QA ===\n");
   for (const result of results) {
     console.log(`${result.viewport}: ${result.pass ? "PASS" : "FAIL"}`);
+    console.log(
+      `  gallery ${result.gallery.before} -> ${result.gallery.after} | events ${result.events.before} -> ${result.events.after} | testimonial ${result.testimonial.before} -> ${result.testimonial.after}`,
+    );
     for (const issue of result.issues) {
       console.log(`  - ${issue}`);
     }

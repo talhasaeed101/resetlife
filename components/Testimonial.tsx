@@ -54,7 +54,10 @@ function TestimonialCard({
 }
 
 export default function Testimonial() {
-  const { ref, handlers } = useAutoScrollCarousel({ speed: 0.5 });
+  const { ref, handlers } = useAutoScrollCarousel({
+    speed: 0.5,
+    loopAtHalf: true,
+  });
   const slides = [...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
@@ -66,7 +69,8 @@ export default function Testimonial() {
         <div
           ref={ref}
           {...handlers}
-          className="flex w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          data-auto-scroll="testimonial"
+          className="auto-scroll-carousel flex w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {slides.map((item, index) => (
             <div key={`${item.id}-${index}`} className="w-full shrink-0 grow-0 basis-full">
