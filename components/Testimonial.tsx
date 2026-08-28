@@ -12,6 +12,7 @@ function StarIcon() {
   );
 }
 
+
 export default function Testimonial() {
   return (
     <section className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[452px] xl:px-20 xl:py-0">
