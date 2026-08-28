@@ -143,20 +143,23 @@ export default function Hero() {
     <section
       id="hero"
       className="relative flex min-h-[100svh] w-full flex-col overflow-hidden xl:block xl:h-[1024px] xl:min-h-0"
+      style={{ position: "relative", isolation: "isolate" }}
     >
-      <Image
-        src={assets.hero.background}
-        alt=""
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={assets.hero.background}
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
+      <div className="absolute inset-0 z-[1] bg-black/60" aria-hidden />
 
       <header
-        className={`relative flex w-full max-w-[1440px] items-start justify-between self-center px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:left-0 xl:right-0 xl:top-10 xl:mx-auto xl:px-20 xl:py-0 ${
-          menuOpen ? "z-[10001]" : "z-[100]"
+        className={`site-header-layer flex w-full max-w-[1440px] items-start justify-between self-center px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:left-0 xl:right-0 xl:top-10 xl:mx-auto xl:px-20 xl:py-0 ${
+          menuOpen ? "site-header-layer--menu-open" : ""
         }`}
       >
         <SiteLogoLink />

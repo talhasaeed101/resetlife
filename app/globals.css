@@ -107,8 +107,45 @@ html {
 }
 
 .glass-panel {
-  background: rgba(5, 11, 8, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: rgba(5, 11, 8, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.mobile-menu-root {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+}
+
+.mobile-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.mobile-menu-panel {
+  position: relative;
+  z-index: 1;
+  background: rgba(5, 11, 8, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+}
+
+.site-header-layer {
+  position: relative;
+  z-index: 99980;
+  pointer-events: auto;
+}
+
+.site-header-layer--menu-open {
+  z-index: 99995;
 }

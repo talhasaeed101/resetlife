@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
-import { assets } from "@/lib/assets";
+import { TESTIMONIALS } from "@/lib/testimonials";
+import { useAutoScrollCarousel } from "@/lib/useAutoScrollCarousel";
 
 function StarIcon() {
   return (
@@ -12,40 +15,69 @@ function StarIcon() {
   );
 }
 
+function TestimonialCard({
+  name,
+  quote,
+  avatar,
+}: {
+  name: string;
+  quote: string;
+  avatar: string;
+}) {
+  return (
+    <div className="flex w-full flex-col items-center gap-5 px-5 text-center sm:gap-6">
+      <div className="relative h-16 w-16 overflow-hidden rounded-full sm:h-20 sm:w-20">
+        <Image
+          src={avatar}
+          alt={name}
+          fill
+          className="object-cover"
+          sizes="80px"
+        />
+      </div>
+
+      <p className="font-['Raleway'] text-[15px] font-medium leading-none text-white sm:text-[16px]">
+        {name}
+      </p>
+
+      <div className="flex items-center gap-1">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <StarIcon key={index} />
+        ))}
+      </div>
+
+      <blockquote className="max-w-[900px] font-['dtnightingale'] text-[20px] font-light italic leading-[1.4] text-white sm:text-[24px] md:text-[26px] xl:text-[28px]">
+        &ldquo;{quote}&rdquo;
+      </blockquote>
+    </div>
+  );
+}
 
 export default function Testimonial() {
+  const { ref, handlers } = useAutoScrollCarousel({ speed: 0.5 });
+  const slides = [...TESTIMONIALS, ...TESTIMONIALS];
+
   return (
     <section
       id="testimonial"
-      className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[452px] xl:px-20 xl:py-0"
+      className="flex w-full items-center justify-center overflow-hidden bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[452px] xl:px-20 xl:py-0"
     >
-      <div className="flex w-full max-w-[900px] flex-col items-center gap-5 text-center sm:gap-6">
-        <div className="relative h-16 w-16 overflow-hidden rounded-full sm:h-20 sm:w-20">
-          <Image
-            src={assets.testimonial.avatar}
-            alt="Jane Oliver"
-            fill
-            className="object-cover"
-            sizes="80px"
-          />
-        </div>
-
-        <p className="font-['Raleway'] text-[15px] font-medium leading-none text-white sm:text-[16px]">
-          Jane Oliver
-        </p>
-
-        <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <StarIcon key={index} />
+      <div className="w-full max-w-[900px] overflow-hidden">
+        <div
+          ref={ref}
+          {...handlers}
+          className="flex w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {slides.map((item, index) => (
+            <div key={`${item.id}-${index}`} className="w-full shrink-0 grow-0 basis-full">
+              <TestimonialCard
+                name={item.name}
+                quote={item.quote}
+                avatar={item.avatar}
+              />
+            </div>
           ))}
         </div>
-
-        <blockquote className="font-['dtnightingale'] text-[20px] font-light italic leading-[1.4] text-white sm:text-[24px] md:text-[26px] xl:text-[28px]">
-          &ldquo;It was a dream stay for us, the resort is such a beautiful place
-          with the best services. The environment is so peaceful and luxury from
-          the moment we arrived at this resort. Everything was just amazing
-          &amp; perfect.&rdquo;
-        </blockquote>
       </div>
     </section>
   );

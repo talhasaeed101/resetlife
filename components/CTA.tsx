@@ -242,16 +242,22 @@ export default function CTA() {
     <section
       id="contact"
       className="relative w-full overflow-hidden bg-[#050b08]"
+      style={{ position: "relative" }}
     >
-      <div className="relative min-h-[640px] w-full sm:min-h-[700px] xl:h-[777px] xl:min-h-0">
-        <Image
-          src={assets.cta.background}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/50" aria-hidden />
+      <div
+        className="relative min-h-[640px] w-full sm:min-h-[700px] xl:h-[777px] xl:min-h-0"
+        style={{ position: "relative", isolation: "isolate" }}
+      >
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={assets.cta.background}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+        <div className="absolute inset-0 z-[1] bg-black/50" aria-hidden />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col items-start justify-center gap-10 px-5 py-16 sm:gap-12 sm:px-8 md:px-10 lg:px-16 xl:hidden">
           <h2 className="max-w-[480px] font-['dtnightingale'] text-[32px] font-light leading-[1.15] text-white sm:text-[40px] md:text-[48px]">

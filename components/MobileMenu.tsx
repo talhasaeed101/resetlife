@@ -50,21 +50,21 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9998] xl:hidden"
+      className="mobile-menu-root xl:hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
     >
       <button
         type="button"
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="mobile-menu-backdrop"
         aria-label="Close menu"
         onClick={onClose}
       />
 
       <div className="pointer-events-none absolute inset-0 flex justify-end px-5 pt-6 sm:px-8">
         <div className="pointer-events-auto w-[min(320px,calc(100vw-2.5rem))]">
-          <div className="glass-surface glass-panel rounded-[16px] p-6 shadow-[0_16px_48px_rgba(0,0,0,0.45)]">
+          <div className="mobile-menu-panel rounded-[16px] p-6">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-end gap-[9px]">
                 <Image
