@@ -5,12 +5,13 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/assets";
-import { NAV_LINKS, type SectionId } from "@/lib/site";
+import { NAV_LINKS, PAGE_NAV_LINKS, ROUTES, type SectionId } from "@/lib/site";
 import { scrollToSection } from "@/lib/scroll";
 
 type MobileMenuProps = {
   isOpen: boolean;
   onClose: () => void;
+  mode?: "home" | "page";
 };
 
 function useIsClient() {
@@ -21,7 +22,7 @@ function useIsClient() {
   );
 }
 
-export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) {
   const mounted = useIsClient();
 
   useEffect(() => {
@@ -89,16 +90,36 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </div>
 
             <nav className="flex flex-col gap-4">
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link.label}
-                  type="button"
-                  onClick={() => handleNavClick(link.sectionId)}
+              {mode === "page"
+                ? PAGE_NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={onClose}
+                      className="mobile-menu-link"
+                    >
+                      {link.label}
+                    </Link>
+                  ))
+                : NAV_LINKS.map((link) => (
+                    <button
+                      key={link.label}
+                      type="button"
+                      onClick={() => handleNavClick(link.sectionId)}
+                      className="mobile-menu-link"
+                    >
+                      {link.label}
+                    </button>
+                  ))}
+              {mode === "page" ? (
+                <Link
+                  href={ROUTES.reservation}
+                  onClick={onClose}
                   className="mobile-menu-link"
                 >
-                  {link.label}
-                </button>
-              ))}
+                  Book Now
+                </Link>
+              ) : null}
             </nav>
           </div>
         </div>

@@ -1039,3 +1039,632 @@ html {
     animation: none !important;
   }
 }
+
+.site-header-page {
+  position: sticky;
+  top: 0;
+  z-index: 99980;
+  background: rgba(5, 11, 8, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.villa-detail-hero {
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 1.25rem 4rem;
+}
+
+@media (min-width: 768px) {
+  .villa-detail-hero {
+    min-height: 520px;
+    padding-top: 8rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .villa-detail-hero {
+    min-height: 620px;
+  }
+}
+
+.villa-detail-hero__media {
+  position: absolute;
+  inset: 0;
+}
+
+.villa-detail-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 11, 8, 0.45) 0%,
+    rgba(5, 11, 8, 0.72) 100%
+  );
+}
+
+.villa-detail-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 52rem;
+  text-align: center;
+}
+
+.villa-detail-hero__eyebrow {
+  font-family: "BaskervvilleSC", serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--gradient-farm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (min-width: 640px) {
+  .villa-detail-hero__eyebrow {
+    font-size: 1rem;
+  }
+}
+
+.villa-detail-hero__title {
+  margin-top: 1rem;
+  font-family: "dtnightingale", serif;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.villa-detail-hero__gallery-btn {
+  margin-top: 1.75rem;
+  border: 1px solid rgba(223, 203, 162, 0.45);
+  border-radius: 0.75rem;
+  background: transparent;
+  padding: 0.875rem 1.5rem;
+  font-family: "BaskervvilleSC", serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.villa-detail-hero__gallery-btn:hover {
+  border-color: rgba(223, 203, 162, 0.8);
+  background: rgba(223, 203, 162, 0.08);
+}
+
+.villa-detail-body {
+  margin: 0 auto;
+  max-width: 90rem;
+  padding: 2rem 1.25rem 4rem;
+}
+
+@media (min-width: 640px) {
+  .villa-detail-body {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .villa-detail-body {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-body {
+    padding-inline: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .villa-detail-body {
+    padding-inline: 5rem;
+    padding-bottom: 5.5rem;
+  }
+}
+
+.villa-detail-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  color: #8e8e8e;
+}
+
+.villa-detail-breadcrumbs a {
+  color: #8e8e8e;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.villa-detail-breadcrumbs a:hover {
+  color: #ffffff;
+}
+
+.villa-detail-breadcrumbs span:last-child {
+  color: #ffffff;
+}
+
+.villa-detail-layout {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-layout {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
+.villa-detail-section + .villa-detail-section {
+  margin-top: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-section + .villa-detail-section {
+    margin-top: 4rem;
+  }
+}
+
+.villa-detail-section__title {
+  font-family: "BaskervvilleSC", serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--gradient-farm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.villa-detail-section__copy {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .villa-detail-section__copy {
+    font-size: 1.0625rem;
+  }
+}
+
+.villa-detail-amenities {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .villa-detail-amenities {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.villa-detail-amenity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 6.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+}
+
+.villa-detail-amenity__icon {
+  display: inline-flex;
+  color: #dfcba2;
+}
+
+.villa-detail-amenity__label {
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  color: #ffffff;
+}
+
+.villa-detail-gallery {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .villa-detail-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.villa-detail-gallery__item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.villa-detail-gallery__item:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-gallery__item:first-child {
+    grid-column: span 2;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.villa-detail-rules {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.villa-detail-rules li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.875rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 640px) {
+  .villa-detail-rules li {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+.villa-detail-rules li span:first-child {
+  color: #8e8e8e;
+}
+
+.villa-detail-rules li span:last-child {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.villa-detail-sidebar {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .villa-detail-sidebar {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+.villa-detail-booking-card {
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.villa-detail-booking-card__price {
+  font-family: "dtnightingale", serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.villa-detail-booking-card__fields {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.villa-detail-field .booking-field-label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.villa-detail-field__control {
+  position: relative;
+}
+
+.villa-detail-field__input {
+  width: 100%;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.75rem;
+  background: rgba(5, 11, 8, 0.55);
+  padding: 0.875rem 2.75rem 0.875rem 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #ffffff;
+  outline: none;
+  color-scheme: dark;
+}
+
+.villa-detail-field__input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 2.75rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.villa-detail-field__input.is-placeholder {
+  color: #8e8e8e;
+}
+
+.villa-detail-field__icon {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.villa-detail-field__icon-btn {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  display: inline-flex;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.villa-detail-booking-card__whatsapp {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9375rem;
+  color: #dfcba2;
+  text-decoration: none;
+}
+
+.villa-detail-booking-card__whatsapp:hover {
+  color: #ffffff;
+}
+
+.reservation-page {
+  padding: 2rem 1.25rem 4rem;
+}
+
+@media (min-width: 640px) {
+  .reservation-page {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .reservation-page {
+    padding-inline: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.reservation-page__inner {
+  margin: 0 auto;
+  max-width: 72rem;
+}
+
+.reservation-page__back {
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  color: #8e8e8e;
+  text-decoration: none;
+}
+
+.reservation-page__back:hover {
+  color: #ffffff;
+}
+
+.reservation-page__header {
+  margin-top: 2rem;
+  max-width: 40rem;
+}
+
+.reservation-page__eyebrow {
+  font-family: "BaskervvilleSC", serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.18em;
+  color: #dfcba2;
+}
+
+.reservation-page__title {
+  margin-top: 0.75rem;
+  font-family: "dtnightingale", serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.reservation-page__subtitle {
+  margin-top: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #8e8e8e;
+}
+
+.reservation-page__layout {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .reservation-page__layout {
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 2.5rem;
+    align-items: start;
+  }
+}
+
+.reservation-form {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .reservation-form {
+    padding: 2rem;
+  }
+}
+
+.reservation-form__grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .reservation-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.reservation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reservation-field label {
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.reservation-field input,
+.reservation-field select {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.75rem;
+  background: rgba(5, 11, 8, 0.55);
+  padding: 0.875rem 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9375rem;
+  color: #ffffff;
+  outline: none;
+}
+
+.reservation-field__control {
+  position: relative;
+}
+
+.reservation-field__control input {
+  padding-right: 2.75rem;
+}
+
+.reservation-field__control input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 2.75rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.reservation-field__control select {
+  appearance: none;
+  padding-right: 2.75rem;
+}
+
+.reservation-field__control select.is-placeholder {
+  color: #8e8e8e;
+}
+
+.reservation-field__icon,
+.reservation-field__icon-btn {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+}
+
+.reservation-field__icon-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.reservation-field__error {
+  font-family: "Raleway", sans-serif;
+  font-size: 0.75rem;
+  color: #dfcba2;
+}
+
+.reservation-summary {
+  border: 1px solid rgba(223, 203, 162, 0.22);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+}
+
+.reservation-summary__label {
+  font-family: "BaskervvilleSC", serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #dfcba2;
+}
+
+.reservation-summary__price {
+  margin-top: 0.75rem;
+  font-family: "dtnightingale", serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.reservation-summary__copy {
+  margin-top: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #8e8e8e;
+}

@@ -29,6 +29,21 @@ export const SECTION_IDS = {
   contact: "contact",
 } as const;
 
+export const ROUTES = {
+  home: "/",
+  villa: "/villa",
+  reservation: "/reservation",
+  privacy: "/privacy",
+  terms: "/terms",
+} as const;
+
+export const PAGE_NAV_LINKS = [
+  { label: "Home", href: ROUTES.home },
+  { label: "Villa", href: ROUTES.villa },
+  { label: "Events", href: `${ROUTES.home}#${SECTION_IDS.events}` },
+  { label: "Contact", href: `${ROUTES.home}#${SECTION_IDS.contact}` },
+] as const;
+
 export type SectionId = (typeof SECTION_IDS)[keyof typeof SECTION_IDS];
 
 export const NAV_LINKS = [

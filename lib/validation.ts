@@ -80,3 +80,46 @@ export function validateBookingForm(values: {
 
   return errors;
 }
+
+export function validateReservationForm(values: {
+  fullName: string;
+  phone: string;
+  guests: string;
+  checkIn: string;
+  checkOut: string;
+}): FieldErrors {
+  const errors: FieldErrors = {};
+
+  if (!values.fullName.trim()) {
+    errors.fullName = "Full name is required.";
+  }
+
+  if (!values.phone.trim()) {
+    errors.phone = "Phone number is required.";
+  } else if (!isValidPhone(values.phone)) {
+    errors.phone = "Enter a valid phone number.";
+  }
+
+  if (!values.guests) {
+    errors.guests = "Please choose the number of guests.";
+  }
+
+  if (!values.checkIn) {
+    errors.checkIn = "Check-in date is required.";
+  }
+
+  if (!values.checkOut) {
+    errors.checkOut = "Check-out date is required.";
+  }
+
+  if (values.checkIn && values.checkOut) {
+    const checkInDate = new Date(values.checkIn);
+    const checkOutDate = new Date(values.checkOut);
+
+    if (checkOutDate <= checkInDate) {
+      errors.checkOut = "Check-out must be after check-in.";
+    }
+  }
+
+  return errors;
+}
