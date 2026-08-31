@@ -6,8 +6,7 @@ import { assets } from "@/lib/assets";
 import { ROUTES } from "@/lib/site";
 
 const goldButtonClassName =
-  "gold-button-luxury inline-flex items-center justify-center rounded-[12px] px-6 py-4 font-['BaskervvilleSC'] text-[16px] font-semibold leading-none text-[#050b08]";
-
+  "gold-button-luxury inline-flex items-center justify-center rounded-[12px] px-[24px] py-[16px] font-['BaskervvilleSC'] text-[16px] font-semibold leading-none text-[#050b08] h-[43px]";
 const villaThumbs = [
   assets.villa.thumb1,
   assets.villa.thumb2,
@@ -67,7 +66,12 @@ export default function Villa() {
         {/* Desktop — unchanged */}
         <div className="hidden xl:block">
           <div className="absolute left-[60px] top-[60px] flex w-[438px] flex-col gap-10">
-            <div className="glass-surface flex w-fit items-center rounded-[100px] p-[10px]">
+            <div
+  className="flex w-fit items-center rounded-[100px] p-[10px] bg-cover bg-center bg-no-repeat"
+  style={{
+    backgroundImage: "url('/Images/villa/glass.png')",
+  }}
+>
               {villaThumbs.map((thumb, index) => (
                 <div
                   key={thumb}
