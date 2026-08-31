@@ -63,7 +63,7 @@ async function run() {
           issues.push("glass-panel missing backdrop-filter");
         }
 
-        await page.getByRole("dialog").getByRole("button", { name: /^about$/i }).click();
+        await page.getByRole("dialog").getByRole("button", { name: /about/i }).click();
         await page.waitForTimeout(900);
 
         const aboutInView = await page.evaluate(() => {

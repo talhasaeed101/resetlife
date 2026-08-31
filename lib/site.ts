@@ -53,6 +53,14 @@ export const NAV_LINKS = [
   { label: "Gallery", sectionId: SECTION_IDS.gallery },
 ] as const;
 
+export const DROPDOWN_NAV_LINKS = [
+  { label: "About Us", sectionId: SECTION_IDS.about },
+  { label: "Our Villa", sectionId: SECTION_IDS.villa },
+  { label: "Events", sectionId: SECTION_IDS.events },
+  { label: "Gallery", sectionId: SECTION_IDS.gallery },
+  { label: "Contact Us", sectionId: SECTION_IDS.contact },
+] as const;
+
 export const EVENT_LINKS = [
   { label: "Nikkah", eventType: "Nikkah" },
   { label: "Photography", eventType: "Photography" },

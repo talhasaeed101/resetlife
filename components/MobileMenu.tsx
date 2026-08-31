@@ -5,7 +5,12 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/assets";
-import { NAV_LINKS, PAGE_NAV_LINKS, ROUTES, type SectionId } from "@/lib/site";
+import {
+  DROPDOWN_NAV_LINKS,
+  PAGE_NAV_LINKS,
+  ROUTES,
+  type SectionId,
+} from "@/lib/site";
 import { scrollToSection } from "@/lib/scroll";
 
 type MobileMenuProps = {
@@ -49,83 +54,75 @@ export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) 
     return null;
   }
 
-  return createPortal(
-    <div
-      className="mobile-menu-root"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Navigation menu"
-    >
-      <button
-        type="button"
-        className="mobile-menu-backdrop"
-        aria-label="Close menu"
-        onClick={onClose}
-      />
+  return (
+    <>
+      {createPortal(
+        <button
+          type="button"
+          className="mobile-menu-backdrop"
+          aria-label="Close menu"
+          onClick={onClose}
+        />,
+        document.body,
+      )}
 
-      <div className="pointer-events-none absolute inset-0 flex justify-end px-5 pt-6 sm:px-8 xl:px-20 xl:pt-10">
-        <div className="pointer-events-auto w-[min(320px,calc(100vw-2.5rem))]">
-          <div className="mobile-menu-panel rounded-[16px] p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex items-end gap-[9px]">
-                <Image
-                  src={assets.hero.logoIcon}
-                  alt="Reset Life"
-                  width={28}
-                  height={40}
-                  className="h-8 w-[22px]"
-                />
-                <span className="text-gradient-farm font-['BaskervvilleSC'] text-[18px] uppercase tracking-[2px]">
-                  Reset life
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="mobile-menu-close"
-                aria-label="Close menu"
-              >
-                Close
-              </button>
-            </div>
+      <div
+        id="site-navigation-menu"
+        className="mobile-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+      >
+        <img
+          src={assets.hero.dropdownBg}
+          alt=""
+          className="mobile-menu-panel__bg"
+          aria-hidden
+        />
 
-            <nav className="flex flex-col gap-4">
-              {mode === "page"
-                ? PAGE_NAV_LINKS.map((link) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={onClose}
-                      className="mobile-menu-link"
-                    >
-                      {link.label}
-                    </Link>
-                  ))
-                : NAV_LINKS.map((link) => (
-                    <button
-                      key={link.label}
-                      type="button"
-                      onClick={() => handleNavClick(link.sectionId)}
-                      className="mobile-menu-link"
-                    >
-                      {link.label}
-                    </button>
-                  ))}
-              {mode === "page" ? (
+        <button
+          type="button"
+          onClick={onClose}
+          className="sr-only mobile-menu-close"
+          aria-label="Close menu"
+        >
+          Close
+        </button>
+
+        <nav className="mobile-menu-panel__nav">
+          {mode === "page"
+            ? PAGE_NAV_LINKS.map((link) => (
                 <Link
-                  href={ROUTES.reservation}
+                  key={link.label}
+                  href={link.href}
                   onClick={onClose}
                   className="mobile-menu-link"
                 >
-                  Book Now
+                  {link.label}
                 </Link>
-              ) : null}
-            </nav>
-          </div>
-        </div>
+              ))
+            : DROPDOWN_NAV_LINKS.map((link) => (
+                <button
+                  key={link.label}
+                  type="button"
+                  onClick={() => handleNavClick(link.sectionId)}
+                  className="mobile-menu-link"
+                >
+                  {link.label}
+                </button>
+              ))}
+          {mode === "page" ? (
+            <Link
+              href={ROUTES.reservation}
+              onClick={onClose}
+              className="mobile-menu-link"
+            >
+              Book Now
+            </Link>
+          ) : null}
+        </nav>
       </div>
-    </div>,
-    document.body,
+    </>
   );
 }
 

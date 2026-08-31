@@ -83,29 +83,36 @@ export function SiteHeader({ variant = "page" }: SiteHeaderProps) {
               Book Now
             </Link>
 
-            <button
-              type="button"
-              className="glass-surface flex items-center gap-[6px] rounded-[12px] px-3 py-2 xl:hidden"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
-            >
-              <span className="font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
-                Menu
-              </span>
-              <Image
-                src={assets.hero.menuIcon}
-                alt=""
-                width={28}
-                height={28}
-                className="h-6 w-6 sm:h-7 sm:w-7"
+            <div className="relative xl:hidden">
+              <button
+                type="button"
+                className="glass-surface flex items-center gap-[6px] rounded-[12px] px-3 py-2"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
+                aria-controls="site-navigation-menu"
+                aria-haspopup="dialog"
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                <span className="font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
+                  Menu
+                </span>
+                <Image
+                  src={assets.hero.menuIcon}
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="h-6 w-6 sm:h-7 sm:w-7"
+                />
+              </button>
+              <MobileMenu
+                isOpen={menuOpen}
+                onClose={() => setMenuOpen(false)}
+                mode="page"
               />
-            </button>
+            </div>
           </div>
         </header>
       </div>
-
-      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} mode="page" />
     </>
   );
 }

@@ -3,6 +3,8 @@ export const assets = {
     background: "/Images/homePage/hero-bg.png",
     logoIcon: "/Images/homePage/logo-icon.svg",
     menuIcon: "/Images/homePage/menu-hamburger.svg",
+    menuButtonBg: "/Images/homePage/Frame 2147239969.png",
+    dropdownBg: "/Images/homePage/dropdown.png",
     arrowDown: "/Images/homePage/arrow-down.svg",
     calendar: "/Images/homePage/calendar.svg",
   },
