@@ -23,12 +23,11 @@ export default function Events() {
           title="Unforgettable Moments, Beautifully Celebrated"
         />
 
-        <div
-          ref={ref}
-          {...handlers}
-          data-auto-scroll="events"
-          className="auto-scroll-carousel -mx-5 flex gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:mx-0 xl:px-0 xl:pb-4 [&::-webkit-scrollbar]:hidden"
-        >
+      <div
+  // ref={ref}
+  // {...handlers}
+  className="flex gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 md:-mx-10 md:px-10 lg:-mx-16 lg:px-16 xl:mx-0 xl:px-0 xl:pb-4 [&::-webkit-scrollbar]:hidden"
+>
           <div className="relative h-[420px] w-[280px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[300px] xl:h-[500px] xl:w-[313px] xl:rounded-[30px]">
             <Image
               src={assets.events.photography}

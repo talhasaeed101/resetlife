@@ -161,6 +161,12 @@ html {
   color: #ffffff;
   letter-spacing: 0.02em;
 }
+.about-text-main
+{
+  background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
+   background-clip: text;
+   color:transparent
+}
 
 @media (min-width: 640px) {
   .booking-field-label {
@@ -263,21 +269,7 @@ html {
 }
 
 .gold-button-luxury {
-  background: linear-gradient(
-    135deg,
-    #6f4f2f 0%,
-    #c9ae84 38%,
-    #dfcba2 52%,
-    #a88452 100%
-  );
-  border: 1px solid rgba(223, 203, 162, 0.34);
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    filter 0.22s ease;
+background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
 }
 
 .gold-button-luxury:hover:not(:disabled) {
