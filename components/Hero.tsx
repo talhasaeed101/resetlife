@@ -429,10 +429,8 @@ export default function Hero() {
       <div className="h-[76px] w-full shrink-0 xl:hidden" aria-hidden />
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-6 self-center px-5 py-8 text-center sm:gap-8 sm:px-8 md:px-10 xl:w-[671px] xl:gap-11 xl:px-0 xl:py-10">
-        <h1 className="font-['dtnightingale'] text-[36px] font-light leading-[1.05] tracking-[0.01em] text-white sm:text-[44px] md:text-[64px] lg:text-[72px] xl:text-[86px] xl:leading-[84px]">
-          Escape to Nature.
-          <br />
-          Stay in Luxury.
+        <h1 className="font-['dtnightingale'] text-[36px] font-light leading-[1.05] tracking-[0.01em] text-white sm:text-[44px] md:text-[64px] lg:text-[72px] xl:text-[80px] xl:leading-[84px]">
+          Escape to Nature. Stay in Luxury.
         </h1>
         <p className="max-w-[540px] font-['Raleway'] text-[24px] font-medium leading-snug text-[#8e8e8e] sm:text-[18px] md:text-[20px] xl:max-w-none xl:text-[24px] xl:leading-none">
           Relax, reconnect, and create unforgettable moments surrounded by

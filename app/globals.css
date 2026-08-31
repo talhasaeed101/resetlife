@@ -1055,6 +1055,126 @@ display:none
   gap: 1.5rem;
 }
 
+/* Testimonial */
+.testimonial-section {
+  position: relative;
+  width: 100%;
+  background: #050b08;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28rem;
+  padding: 5rem 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .testimonial-section {
+    padding: 6rem 2rem;
+    min-height: 30rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .testimonial-section {
+    min-height: 34rem;
+    padding: 7rem 5rem;
+  }
+}
+
+.testimonial-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 56rem;
+}
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  text-align: center;
+  width: 100%;
+  animation: testimonial-fade-in 0.5s ease;
+}
+
+@keyframes testimonial-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.testimonial-avatar {
+  position: relative;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid rgba(223, 203, 162, 0.35);
+}
+
+.testimonial-author-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+}
+
+.testimonial-name {
+  font-family: "dtnightingale", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.testimonial-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.testimonial-quote {
+  max-width: 900px;
+  font-family: "Raleway", serif;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #838383;
+}
+
+/* Dot indicators */
+.testimonial-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.testimonial-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.testimonial-dot--active {
+  background: #dfcba2;
+  transform: scale(1.35);
+}
+
 /* Gallery */
 .gallery-section {
   width: 100%;
