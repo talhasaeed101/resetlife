@@ -133,10 +133,10 @@ html {
   .booking-field {
     flex: 1 1 0%;
     gap: 1rem;
-    padding: 0 1rem;
+    padding: 0 24px;
   }
 
-  .booking-field:not(:last-child)::after {
+  /* .booking-field:not(:last-child)::after {
     content: "";
     position: absolute;
     top: 0.25rem;
@@ -150,7 +150,7 @@ html {
       rgba(223, 203, 162, 0.14) 80%,
       transparent 100%
     );
-  }
+  } */
 }
 
 .booking-field-label {
@@ -171,7 +171,6 @@ html {
 .booking-control-row {
   position: relative;
   display: flex;
-  min-height: 2.5rem;
   align-items: center;
   gap: 0.75rem;
 }
@@ -319,7 +318,7 @@ html {
   right: 0;
   z-index: 1;
   width: max-content;
-  min-width: 148px;
+  min-width: 167px;
   overflow: hidden;
   isolation: isolate;
   border-radius: 16px;
@@ -374,7 +373,7 @@ html {
   font-weight: 300;
   line-height: 1.15;
   letter-spacing: 0.01em;
-  color: #f4f1ea;
+  color: #fff;
   white-space: nowrap;
   transition: color 0.2s ease;
 }

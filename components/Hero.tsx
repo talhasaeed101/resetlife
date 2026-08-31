@@ -30,6 +30,78 @@ const initialBookingState: BookingState = {
   checkOut: "",
 };
 
+function CustomDropdown({
+  value,
+  onChange,
+  options,
+  placeholder = "Choose",
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <div
+        className="booking-control-row cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className={`booking-control-input ${!value ? "is-placeholder" : ""} flex items-center min-h-[20px]`}>
+          {value || placeholder}
+        </div>
+        <Image
+          src={assets.hero.arrowDown}
+          alt=""
+          width={20}
+          height={20}
+          className={`booking-control-icon transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
+      </div>
+
+      {isOpen && (
+        <div className="mobile-menu-panel !top-[calc(100%+8px)] !right-auto !left-0 w-full min-w-[220px] !p-3 z-[9999] !rounded-[12px]">
+          <img
+            src={assets.hero.dropdownBg}
+            alt=""
+            className="mobile-menu-panel__bg"
+            aria-hidden
+          />
+          <div className="relative z-10 flex flex-col gap-1 w-full">
+            {options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  onChange(option);
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 font-['Raleway'] text-[15px] text-[#8e8e8e] hover:text-[#dfcba2] transition-colors rounded-lg hover:bg-white/5"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [booking, setBooking] = useState<BookingState>(initialBookingState);
@@ -227,7 +299,7 @@ export default function Hero() {
           <br />
           Stay in Luxury.
         </h1>
-        <p className="max-w-[540px] font-['Raleway'] text-[16px] font-medium leading-snug text-[#8e8e8e] sm:text-[18px] md:text-[20px] xl:max-w-none xl:text-[24px] xl:leading-none">
+        <p className="max-w-[540px] font-['Raleway'] text-[24px] font-medium leading-snug text-[#8e8e8e] sm:text-[18px] md:text-[20px] xl:max-w-none xl:text-[24px] xl:leading-none">
           Relax, reconnect, and create unforgettable moments surrounded by
           nature and tranquility.
         </p>
@@ -236,39 +308,30 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-[1280px] self-center px-5 pb-8 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:bottom-[63px] xl:left-1/2 xl:-translate-x-1/2 xl:px-0 xl:pb-0">
         <form
           onSubmit={handleBookingSubmit}
-          className="booking-card overflow-hidden rounded-[16px] p-4 sm:p-5 xl:p-6"
+          className="booking-card relative overflow-hidden rounded-[16px] p-4 sm:p-5 xl:p-6 bg-transparent border-0 shadow-none"
+        
           noValidate
         >
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:gap-0">
+          <Image
+            src={assets.hero.searchFilterBg}
+            alt=""
+            fill
+            sizes="1280px"
+            className="pointer-events-none object-fill"
+            aria-hidden
+          />
+          <div className="relative z-10">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:gap-0">
               <div className="booking-field">
                 <label htmlFor="event-type" className="booking-field-label">
                   Event Type
                 </label>
-                <div className="booking-control-row">
-                  <select
-                    id="event-type"
-                    value={booking.eventType}
-                    onChange={(event) =>
-                      updateBooking("eventType", event.target.value)
-                    }
-                    className={`${selectClassName} ${!booking.eventType ? "is-placeholder" : ""}`}
-                  >
-                    <option value="">Choose</option>
-                    {EVENT_TYPES.map((option) => (
-                      <option key={option} value={option} className="text-black">
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <Image
-                    src={assets.hero.arrowDown}
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="booking-control-icon"
-                  />
-                </div>
+                <CustomDropdown
+                  value={booking.eventType}
+                  onChange={(val) => updateBooking("eventType", val)}
+                  options={EVENT_TYPES}
+                />
                 {errors.eventType ? (
                   <p className="booking-field-error">{errors.eventType}</p>
                 ) : null}
@@ -278,30 +341,11 @@ export default function Hero() {
                 <label htmlFor="guests" className="booking-field-label">
                   Guest(s)
                 </label>
-                <div className="booking-control-row">
-                  <select
-                    id="guests"
-                    value={booking.guests}
-                    onChange={(event) =>
-                      updateBooking("guests", event.target.value)
-                    }
-                    className={`${selectClassName} ${!booking.guests ? "is-placeholder" : ""}`}
-                  >
-                    <option value="">Choose</option>
-                    {GUEST_OPTIONS.map((option) => (
-                      <option key={option} value={option} className="text-black">
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <Image
-                    src={assets.hero.arrowDown}
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="booking-control-icon"
-                  />
-                </div>
+                <CustomDropdown
+                  value={booking.guests}
+                  onChange={(val) => updateBooking("guests", val)}
+                  options={GUEST_OPTIONS}
+                />
                 {errors.guests ? (
                   <p className="booking-field-error">{errors.guests}</p>
                 ) : null}
@@ -396,16 +440,17 @@ export default function Hero() {
             </div>
           </div>
 
-          {statusMessage ? (
-            <p
-              className={`mt-4 font-['Raleway'] text-[13px] leading-normal sm:text-[14px] ${
-                status === "error" ? "text-[#dfcba2]" : "text-white"
-              }`}
-              role="status"
-            >
-              {statusMessage}
-            </p>
-          ) : null}
+            {statusMessage ? (
+              <p
+                className={`mt-4 font-['Raleway'] text-[13px] leading-normal sm:text-[14px] ${
+                  status === "error" ? "text-[#dfcba2]" : "text-white"
+                }`}
+                role="status"
+              >
+                {statusMessage}
+              </p>
+            ) : null}
+          </div>
         </form>
       </div>
     </section>
