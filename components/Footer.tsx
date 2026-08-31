@@ -10,42 +10,8 @@ import {
   SITE,
 } from "@/lib/site";
 import { scrollToSection } from "@/lib/scroll";
-import type { ReactNode } from "react";
 
-function WhatsAppIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.35 3.45 16.84L2 22L7.3 20.59C8.73 21.38 10.36 21.81 12.04 21.81C17.5 21.81 21.95 17.36 21.95 11.9C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.03L7.55 18.83L4.43 19.65L5.26 16.61L5.05 16.29C4.24 14.98 3.8 13.45 3.8 11.89C3.81 7.35 7.5 3.67 12.05 3.67ZM8.53 7.33C8.37 7.33 8.1 7.39 7.87 7.64C7.65 7.89 7 8.5 7 9.71C7 10.93 7.89 12.1 8 12.27C8.14 12.44 9.76 14.94 12.25 16C12.84 16.27 13.3 16.42 13.66 16.53C14.25 16.72 14.79 16.69 15.22 16.63C15.7 16.56 16.68 16.03 16.89 15.45C17.1 14.87 17.1 14.38 17.04 14.27C16.97 14.17 16.81 14.11 16.56 14C16.31 13.86 15.09 13.26 14.87 13.18C14.64 13.1 14.5 13.06 14.31 13.3C14.15 13.55 13.67 14.11 13.53 14.27C13.38 14.44 13.24 14.46 12.99 14.34C12.74 14.21 11.94 13.95 11 13.11C10.26 12.45 9.77 11.64 9.62 11.39C9.5 11.14 9.61 11.02 9.73 10.9C9.84 10.79 10.01 10.58 10.13 10.44C10.25 10.31 10.31 10.24 10.39 10.08C10.47 9.91 10.43 9.78 10.37 9.65C10.31 9.53 9.77 8.26 9.56 7.77C9.36 7.29 9.16 7.35 9 7.35C8.86 7.35 8.7 7.33 8.53 7.33Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
 
-function InstagramIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="3"
-        width="18"
-        height="18"
-        rx="5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function FooterColumnHeading({ children }: { children: ReactNode }) {
-  return (
-    <h3 className="footer-column-heading">{children}</h3>
-  );
-}
 
 function SectionLink({
   label,
@@ -69,7 +35,8 @@ export default function Footer() {
   return (
     <footer className="footer-premium">
       <div className="footer-premium__inner">
-        <div className="footer-premium__brand-row">
+        {/* Brand / Logo */}
+        <div className="footer-brand-row">
           <Link
             href="#hero"
             onClick={(event) => {
@@ -90,31 +57,36 @@ export default function Footer() {
               Reset life
             </span>
           </Link>
+        </div>
 
-          <div className="footer-contact-actions">
-            <a
-              href={SITE.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-whatsapp"
-              aria-label="Chat with Reset Life Farmhouse on WhatsApp"
-            >
-              <WhatsAppIcon />
-              <span>{SITE.whatsappDisplay}</span>
+        <div className="footer-premium__divider" aria-hidden />
+
+        {/* Info Row: Location | Contact | Email */}
+        <div className="footer-info-row">
+          <div className="footer-info-col">
+            <h3 className="footer-column-heading">Location</h3>
+            <p className="footer-copy">{SITE.address}</p>
+          </div>
+          <div className="footer-info-col">
+            <h3 className="footer-column-heading">Contact</h3>
+            <a href={`tel:${SITE.phone}`} className="footer-copy footer-copy--link">
+              {SITE.phoneDisplay}
+            </a>
+          </div>
+          <div className="footer-info-col">
+            <h3 className="footer-column-heading">Email</h3>
+            <a href={SITE.emailMailto} className="footer-copy footer-copy--link footer-email">
+              {SITE.email}
             </a>
           </div>
         </div>
 
         <div className="footer-premium__divider" aria-hidden />
 
-        <div className="footer-premium__grid">
-          <div className="footer-premium__column">
-            <FooterColumnHeading>Location</FooterColumnHeading>
-            <p className="footer-copy">{SITE.address}</p>
-          </div>
-
-          <div className="footer-premium__column">
-            <FooterColumnHeading>Navigation</FooterColumnHeading>
+        {/* Nav Row: Navigation | Events | Follow Us On */}
+        <div className="footer-nav-row">
+          <div className="footer-nav-col">
+            <h3 className="footer-column-heading">Navigation</h3>
             <nav className="footer-nav">
               {NAV_LINKS.map((link) => (
                 <SectionLink
@@ -126,29 +98,8 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="footer-premium__column">
-            <FooterColumnHeading>Contact</FooterColumnHeading>
-            <div className="footer-contact-stack">
-              <a href={SITE.emailMailto} className="footer-link footer-email">
-                {SITE.email}
-              </a>
-              <a
-                href={SITE.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-link footer-whatsapp-inline"
-                aria-label="Chat with Reset Life Farmhouse on WhatsApp"
-              >
-                WhatsApp: {SITE.whatsappDisplay}
-              </a>
-              <a href={`tel:${SITE.phone}`} className="footer-link">
-                {SITE.phoneDisplay}
-              </a>
-            </div>
-          </div>
-
-          <div className="footer-premium__column">
-            <FooterColumnHeading>Events</FooterColumnHeading>
+          <div className="footer-nav-col">
+            <h3 className="footer-column-heading">Events</h3>
             <nav className="footer-nav">
               {EVENT_LINKS.map((link) => (
                 <SectionLink
@@ -160,19 +111,35 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="footer-premium__column">
-            <FooterColumnHeading>Follow Us</FooterColumnHeading>
-            <div className="footer-social">
+          <div className="footer-nav-col footer-nav-col--social">
+            <h3 className="footer-column-heading">Follow Us On</h3>
+            <div className="footer-social-icons">
               <a
-                href={SITE.instagram}
+                href="https://www.instagram.com/resetlifefarmhouse?igsi=MXVkbWVqYmJha2Jmcg%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-social-link"
-                aria-label={`${SITE.instagramLabel} on Instagram`}
-                title={SITE.instagramHandle}
+                className="footer-social-icon-btn11"
+                aria-label="Instagram"
               >
-                <InstagramIcon />
-                <span>{SITE.instagramHandle}</span>
+                <Image src="/Images/Footer/insta.svg" alt="Instagram" width={20} height={20} />
+              </a>
+              <a
+                href="https://www.tiktok.com/@reset.life.farmhouse?_r=1&_t=ZS-99LBwlkt6e2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon-btn11"
+                aria-label="TikTok"
+              >
+                <Image src="/Images/Footer/tiktok.svg" alt="TikTok" width={20} height={20} />
+              </a>
+              <a
+                href="https://www.facebook.com/share/1BiFF4Abwz/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon-btn11"
+                aria-label="Facebook"
+              >
+                <Image src="/Images/Footer/facebook.svg" alt="Facebook" width={20} height={20} />
               </a>
             </div>
           </div>
@@ -180,6 +147,7 @@ export default function Footer() {
 
         <div className="footer-premium__divider footer-premium__divider--subtle" aria-hidden />
 
+        {/* Legal bar */}
         <div className="footer-premium__legal">
           <p className="footer-copy">
             &copy;2025 Reset Life. All rights reserved.
