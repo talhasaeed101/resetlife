@@ -1976,8 +1976,112 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   filter: brightness(1.05);
 }
 
+.reservation-hero {
+  position: relative;
+  display: flex;
+  min-height: 32rem;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .reservation-hero {
+    min-height: 38rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .reservation-hero {
+    min-height: 42rem;
+  }
+}
+
+.reservation-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.reservation-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+}
+
+.reservation-hero__spacer {
+  height: 76px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1280px) {
+  .reservation-hero__spacer {
+    height: 5.5rem;
+  }
+}
+
+.reservation-hero__content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2rem 1.25rem 3.5rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .reservation-hero__content {
+    gap: 1.5rem;
+    padding-inline: 2rem;
+    padding-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .reservation-hero__content {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding-bottom: 5rem;
+  }
+}
+
+.reservation-hero__title {
+  font-family: "dtnightingale", serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.reservation-hero__subtitle {
+  max-width: 40rem;
+  font-family: "Raleway", sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.reservation-divider {
+  height: 1px;
+  border: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(130, 94, 55, 0.75) 0,
+    rgba(130, 94, 55, 0.75) 3px,
+    transparent 3px,
+    transparent 7px
+  );
+}
+
 .reservation-page {
-  padding: 2rem 1.25rem 4rem;
+  padding: 3rem 1.25rem 4rem;
+  background: #000000;
 }
 
 @media (min-width: 640px) {
@@ -1988,194 +2092,157 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
 
 @media (min-width: 1280px) {
   .reservation-page {
-    padding-inline: 5rem;
-    padding-bottom: 5rem;
+    padding: 4rem 5rem 5rem;
   }
 }
 
 .reservation-page__inner {
   margin: 0 auto;
-  max-width: 72rem;
+  max-width: 80rem;
 }
 
-.reservation-page__back {
-  font-family: "Raleway", sans-serif;
-  font-size: 0.875rem;
-  color: #8e8e8e;
-  text-decoration: none;
-}
-
-.reservation-page__back:hover {
-  color: #ffffff;
-}
-
-.reservation-page__header {
-  margin-top: 2rem;
-  max-width: 40rem;
-}
-
-.reservation-page__eyebrow {
-  font-family: "BaskervvilleSC", serif;
-  font-size: 0.875rem;
-  letter-spacing: 0.18em;
-  color: #dfcba2;
-}
-
-.reservation-page__title {
-  margin-top: 0.75rem;
+.reservation-page__heading {
+  margin-bottom: 2rem;
   font-family: "dtnightingale", serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 300;
+  line-height: 1.1;
   color: #ffffff;
-}
-
-.reservation-page__subtitle {
-  margin-top: 1rem;
-  font-family: "Raleway", sans-serif;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #8e8e8e;
-}
-
-.reservation-page__layout {
-  display: grid;
-  gap: 2rem;
-  margin-top: 2.5rem;
-}
-
-@media (min-width: 1024px) {
-  .reservation-page__layout {
-    grid-template-columns: minmax(0, 1fr) 18rem;
-    gap: 2.5rem;
-    align-items: start;
-  }
 }
 
 .reservation-form {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: visible;
 }
 
-@media (min-width: 768px) {
-  .reservation-form {
-    padding: 2rem;
-  }
+.reservation-form__events {
+  width: 100%;
 }
 
-.reservation-form__grid {
+.reservation-form__row {
   display: grid;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+}
+
+.reservation-form__row--dates {
+  grid-template-columns: 1fr;
 }
 
 @media (min-width: 768px) {
-  .reservation-form__grid {
+  .reservation-form__row--dates {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.reservation-form__row--name {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .reservation-form__row--name {
+    grid-template-columns: minmax(7rem, 0.65fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.reservation-form__row--contact {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .reservation-form__row--contact {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.reservation-form__submit {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+}
+
+.reservation-form__book-btn {
+  min-width: 9rem;
+  max-width: none;
 }
 
 .reservation-field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
-.reservation-field label {
-  font-family: "Raleway", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #ffffff;
+.reservation-field:focus-within {
+  z-index: 5;
 }
 
 .reservation-field input,
 .reservation-field select {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 0.75rem;
-  background: rgba(5, 11, 8, 0.55);
-  padding: 0.875rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem 1.125rem;
   font-family: "Raleway", sans-serif;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  font-weight: 400;
   color: #ffffff;
   outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.reservation-field input::placeholder {
+  color: #8e8e8e;
+}
+
+.reservation-field input:focus,
+.reservation-field select:focus {
+  border-color: rgba(223, 203, 162, 0.45);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .reservation-field__control {
   position: relative;
 }
 
-.reservation-field__control input {
-  padding-right: 2.75rem;
+.reservation-field__control--booking {
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem 1.125rem;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.reservation-field__control input::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  position: absolute;
+.reservation-field__control--booking:focus-within {
+  border-color: rgba(223, 203, 162, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.reservation-field__control--booking .booking-control-row {
+  width: 100%;
+}
+
+.reservation-field__control--booking .booking-control-icon {
   right: 0;
-  width: 2.75rem;
-  height: 100%;
-  cursor: pointer;
 }
 
-.reservation-field__control select {
-  appearance: none;
-  padding-right: 2.75rem;
-}
-
-.reservation-field__control select.is-placeholder {
+.reservation-field__hint {
+  font-family: "Raleway", sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.4;
   color: #8e8e8e;
-}
-
-.reservation-field__icon,
-.reservation-field__icon-btn {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-}
-
-.reservation-field__icon-btn {
-  border: 0;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
 }
 
 .reservation-field__error {
   font-family: "Raleway", sans-serif;
   font-size: 0.75rem;
   color: #dfcba2;
-}
-
-.reservation-summary {
-  border: 1px solid rgba(223, 203, 162, 0.22);
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 1.5rem;
-}
-
-.reservation-summary__label {
-  font-family: "BaskervvilleSC", serif;
-  font-size: 0.875rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #dfcba2;
-}
-
-.reservation-summary__price {
-  margin-top: 0.75rem;
-  font-family: "dtnightingale", serif;
-  font-size: 2rem;
-  font-weight: 300;
-  color: #ffffff;
-}
-
-.reservation-summary__copy {
-  margin-top: 1rem;
-  font-family: "Raleway", sans-serif;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: #8e8e8e;
 }

@@ -19,6 +19,7 @@ export const assets = {
     thumb1: "/Images/villa/villa-thumb-1.png",
     thumb2: "/Images/villa/villa-thumb-2.png",
     thumb3: "/Images/villa/villa-thumb-3.png",
+    carReservationHero: "/Images/villadetail/Hero Section.png",
   },
   events: {
     photography: "/Images/events/photography.png",

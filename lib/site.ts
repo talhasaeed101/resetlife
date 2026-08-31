@@ -33,6 +33,7 @@ export const ROUTES = {
   home: "/",
   villa: "/villa",
   reservation: "/reservation",
+  carReservation: "/car-reservation",
   privacy: "/privacy",
   terms: "/terms",
 } as const;
@@ -84,6 +85,21 @@ export const GUEST_OPTIONS = [
   "4 Guests",
   "5 Guests",
   "6+ Guests",
+] as const;
+
+export const PREFIX_OPTIONS = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."] as const;
+
+export const CAR_OPTIONS = [
+  "Toyota Land Cruiser V8",
+  "Premium Hatchback",
+] as const;
+
+export const PERSON_OPTIONS = [
+  "1 Person",
+  "2 Persons",
+  "3 Persons",
+  "4 Persons",
+  "5+ Persons",
 ] as const;
 
 export type EventType = (typeof EVENT_TYPES)[number];

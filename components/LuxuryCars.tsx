@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { ROUTES } from "@/lib/site";
 
 const EASE = "cubic-bezier(0.22,1,0.36,1)";
 const DURATION = "900ms";
@@ -159,9 +161,11 @@ export default function LuxuryCars() {
 
           {/* CTA */}
           <div style={inlineAnim(show, 440, "up")}>
-            <GoldButton type="button" className="w-full sm:w-auto">
-              BOOK NOW
-            </GoldButton>
+            <Link href={ROUTES.carReservation}>
+              <GoldButton type="button" className="w-full sm:w-auto">
+                BOOK NOW
+              </GoldButton>
+            </Link>
           </div>
         </div>
       </div>

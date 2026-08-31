@@ -1,26 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import {
-  buildVillaWhatsAppUrl,
-  clearReservationPrefill,
-  readReservationPrefill,
-  type VillaReservationDetails,
-} from "@/lib/reservation";
-import { EVENT_TYPES, GUEST_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
+  buildCarReservationWhatsAppUrl,
+  type CarReservationDetails,
+} from "@/lib/car-reservation";
+import { CAR_OPTIONS, PERSON_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import { validateReservationForm, type FieldErrors } from "@/lib/validation";
+import { validateCarReservationForm, type FieldErrors } from "@/lib/validation";
 
-type ReservationState = {
-  eventType: string;
-  checkIn: string;
-  checkOut: string;
-  guests: string;
+type CarReservationState = {
+  carSelection: string;
+  fromDate: string;
+  toDate: string;
+  persons: string;
   prefix: string;
   firstName: string;
   lastName: string;
@@ -28,11 +26,11 @@ type ReservationState = {
   email: string;
 };
 
-const initialState: ReservationState = {
-  eventType: "",
-  checkIn: "",
-  checkOut: "",
-  guests: "",
+const initialState: CarReservationState = {
+  carSelection: "",
+  fromDate: "",
+  toDate: "",
+  persons: "",
   prefix: "",
   firstName: "",
   lastName: "",
@@ -40,27 +38,11 @@ const initialState: ReservationState = {
   email: "",
 };
 
-export default function ReservationContent() {
-  const [values, setValues] = useState<ReservationState>(initialState);
+export default function CarReservationContent() {
+  const [values, setValues] = useState<CarReservationState>(initialState);
   const [errors, setErrors] = useState<FieldErrors>({});
 
-  useEffect(() => {
-    const prefill = readReservationPrefill();
-    if (!prefill) {
-      return;
-    }
-
-    setValues((current) => ({
-      ...current,
-      eventType: prefill.eventType ?? current.eventType,
-      guests: prefill.guests ?? current.guests,
-      checkIn: prefill.checkIn ?? current.checkIn,
-      checkOut: prefill.checkOut ?? current.checkOut,
-    }));
-    clearReservationPrefill();
-  }, []);
-
-  const updateValue = (field: keyof ReservationState, value: string) => {
+  const updateValue = (field: keyof CarReservationState, value: string) => {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => {
       const next = { ...current };
@@ -72,14 +54,14 @@ export default function ReservationContent() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const validationErrors = validateReservationForm(values);
+    const validationErrors = validateCarReservationForm(values);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    const details: VillaReservationDetails = values;
-    const whatsappUrl = buildVillaWhatsAppUrl(details);
+    const details: CarReservationDetails = values;
+    const whatsappUrl = buildCarReservationWhatsAppUrl(details);
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -88,7 +70,7 @@ export default function ReservationContent() {
       <section className="reservation-hero">
         <div className="reservation-hero__media" aria-hidden>
           <Image
-            src={assets.hero.background}
+            src={assets.villa.carReservationHero}
             alt=""
             fill
             priority
@@ -103,10 +85,10 @@ export default function ReservationContent() {
         <div className="reservation-hero__spacer" aria-hidden />
 
         <div className="reservation-hero__content">
-          <h1 className="reservation-hero__title">Book Your Stay.</h1>
+          <h1 className="reservation-hero__title">Luxury Beyond the Stay</h1>
           <p className="reservation-hero__subtitle">
-            Book directly with us for the best available rate and enjoy a seamless stay.
-            Every inquiry is reviewed with care for a personal Reset Life experience.
+            Make every moment memorable with a premium chauffeur-driven car reserved
+            exclusively for your stay.
           </p>
         </div>
       </section>
@@ -122,15 +104,15 @@ export default function ReservationContent() {
               <div className="reservation-field">
                 <div className="reservation-field__control reservation-field__control--booking">
                   <CustomDropdown
-                    id="reservation-events"
-                    value={values.eventType}
-                    onChange={(value) => updateValue("eventType", value)}
-                    options={EVENT_TYPES}
-                    placeholder="Events"
+                    id="car-selection"
+                    value={values.carSelection}
+                    onChange={(value) => updateValue("carSelection", value)}
+                    options={CAR_OPTIONS}
+                    placeholder="Car Selection"
                   />
                 </div>
-                {errors.eventType ? (
-                  <p className="reservation-field__error">{errors.eventType}</p>
+                {errors.carSelection ? (
+                  <p className="reservation-field__error">{errors.carSelection}</p>
                 ) : null}
               </div>
             </div>
@@ -139,45 +121,45 @@ export default function ReservationContent() {
               <div className="reservation-field">
                 <div className="reservation-field__control reservation-field__control--booking">
                   <BookingDatePicker
-                    id="reservation-check-in"
-                    value={values.checkIn}
-                    placeholder="Check-in"
-                    onChange={(value) => updateValue("checkIn", value)}
+                    id="car-from-date"
+                    value={values.fromDate}
+                    placeholder="From"
+                    onChange={(value) => updateValue("fromDate", value)}
                   />
                 </div>
-                {errors.checkIn ? (
-                  <p className="reservation-field__error">{errors.checkIn}</p>
+                {errors.fromDate ? (
+                  <p className="reservation-field__error">{errors.fromDate}</p>
                 ) : null}
               </div>
 
               <div className="reservation-field">
                 <div className="reservation-field__control reservation-field__control--booking">
                   <BookingDatePicker
-                    id="reservation-check-out"
-                    value={values.checkOut}
-                    min={values.checkIn || undefined}
+                    id="car-to-date"
+                    value={values.toDate}
+                    min={values.fromDate || undefined}
                     align="end"
-                    placeholder="Check-out"
-                    onChange={(value) => updateValue("checkOut", value)}
+                    placeholder="To"
+                    onChange={(value) => updateValue("toDate", value)}
                   />
                 </div>
-                {errors.checkOut ? (
-                  <p className="reservation-field__error">{errors.checkOut}</p>
+                {errors.toDate ? (
+                  <p className="reservation-field__error">{errors.toDate}</p>
                 ) : null}
               </div>
 
               <div className="reservation-field">
                 <div className="reservation-field__control reservation-field__control--booking">
                   <CustomDropdown
-                    id="reservation-guests"
-                    value={values.guests}
-                    onChange={(value) => updateValue("guests", value)}
-                    options={GUEST_OPTIONS}
-                    placeholder="Guest(s)"
+                    id="car-persons"
+                    value={values.persons}
+                    onChange={(value) => updateValue("persons", value)}
+                    options={PERSON_OPTIONS}
+                    placeholder="Persons"
                   />
                 </div>
-                {errors.guests ? (
-                  <p className="reservation-field__error">{errors.guests}</p>
+                {errors.persons ? (
+                  <p className="reservation-field__error">{errors.persons}</p>
                 ) : null}
               </div>
             </div>
@@ -186,7 +168,7 @@ export default function ReservationContent() {
               <div className="reservation-field reservation-field--prefix">
                 <div className="reservation-field__control reservation-field__control--booking">
                   <CustomDropdown
-                    id="reservation-prefix"
+                    id="car-prefix"
                     value={values.prefix}
                     onChange={(value) => updateValue("prefix", value)}
                     options={PREFIX_OPTIONS}
@@ -197,7 +179,7 @@ export default function ReservationContent() {
 
               <div className="reservation-field">
                 <input
-                  id="reservation-first-name"
+                  id="car-first-name"
                   type="text"
                   placeholder="First Name"
                   value={values.firstName}
@@ -211,7 +193,7 @@ export default function ReservationContent() {
 
               <div className="reservation-field">
                 <input
-                  id="reservation-last-name"
+                  id="car-last-name"
                   type="text"
                   placeholder="Last Name"
                   value={values.lastName}
@@ -227,7 +209,7 @@ export default function ReservationContent() {
             <div className="reservation-form__row reservation-form__row--contact">
               <div className="reservation-field">
                 <input
-                  id="reservation-phone"
+                  id="car-phone"
                   type="tel"
                   placeholder="Phone Number"
                   value={values.phone}
@@ -241,7 +223,7 @@ export default function ReservationContent() {
 
               <div className="reservation-field">
                 <input
-                  id="reservation-email"
+                  id="car-email"
                   type="email"
                   placeholder="Email Address"
                   value={values.email}

@@ -3,17 +3,22 @@ import { SITE } from "@/lib/site";
 export const RESERVATION_PREFILL_KEY = "resetlife-reservation-prefill";
 
 export type ReservationPrefill = {
+  eventType?: string;
   guests?: string;
   checkIn?: string;
   checkOut?: string;
 };
 
 export type VillaReservationDetails = {
-  fullName: string;
-  phone: string;
+  eventType: string;
   guests: string;
   checkIn: string;
   checkOut: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
 };
 
 export function storeReservationPrefill(prefill: ReservationPrefill): void {
@@ -38,10 +43,17 @@ export function clearReservationPrefill(): void {
 }
 
 export function buildVillaWhatsAppUrl(details: VillaReservationDetails): string {
+  const fullName = [details.prefix, details.firstName, details.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
   const message = [
-    "Hello Reset Life Farmhouse, I would like to reserve the villa.",
-    `Name: ${details.fullName}`,
+    "Hello Reset Life Farmhouse, I would like to make a reservation.",
+    `Event: ${details.eventType}`,
+    `Name: ${fullName}`,
     `Phone: ${details.phone}`,
+    `Email: ${details.email}`,
     `Guests: ${details.guests}`,
     `Check-in: ${details.checkIn}`,
     `Check-out: ${details.checkOut}`,

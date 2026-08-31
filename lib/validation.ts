@@ -82,22 +82,20 @@ export function validateBookingForm(values: {
 }
 
 export function validateReservationForm(values: {
-  fullName: string;
-  phone: string;
+  eventType: string;
   guests: string;
   checkIn: string;
   checkOut: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
 }): FieldErrors {
   const errors: FieldErrors = {};
 
-  if (!values.fullName.trim()) {
-    errors.fullName = "Full name is required.";
-  }
-
-  if (!values.phone.trim()) {
-    errors.phone = "Phone number is required.";
-  } else if (!isValidPhone(values.phone)) {
-    errors.phone = "Enter a valid phone number.";
+  if (!values.eventType) {
+    errors.eventType = "Please choose an event type.";
   }
 
   if (!values.guests) {
@@ -119,6 +117,87 @@ export function validateReservationForm(values: {
     if (checkOutDate <= checkInDate) {
       errors.checkOut = "Check-out must be after check-in.";
     }
+  }
+
+  if (!values.firstName.trim()) {
+    errors.firstName = "First name is required.";
+  }
+
+  if (!values.lastName.trim()) {
+    errors.lastName = "Last name is required.";
+  }
+
+  if (!values.phone.trim()) {
+    errors.phone = "Phone number is required.";
+  } else if (!isValidPhone(values.phone)) {
+    errors.phone = "Enter a valid phone number.";
+  }
+
+  if (!values.email.trim()) {
+    errors.email = "Email address is required.";
+  } else if (!isValidEmail(values.email)) {
+    errors.email = "Enter a valid email address.";
+  }
+
+  return errors;
+}
+
+export function validateCarReservationForm(values: {
+  carSelection: string;
+  fromDate: string;
+  toDate: string;
+  persons: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+}): FieldErrors {
+  const errors: FieldErrors = {};
+
+  if (!values.carSelection) {
+    errors.carSelection = "Please choose a car.";
+  }
+
+  if (!values.fromDate) {
+    errors.fromDate = "From date is required.";
+  }
+
+  if (!values.toDate) {
+    errors.toDate = "To date is required.";
+  }
+
+  if (values.fromDate && values.toDate) {
+    const fromDate = new Date(values.fromDate);
+    const toDate = new Date(values.toDate);
+
+    if (toDate <= fromDate) {
+      errors.toDate = "To date must be after from date.";
+    }
+  }
+
+  if (!values.persons) {
+    errors.persons = "Please choose the number of persons.";
+  }
+
+  if (!values.firstName.trim()) {
+    errors.firstName = "First name is required.";
+  }
+
+  if (!values.lastName.trim()) {
+    errors.lastName = "Last name is required.";
+  }
+
+  if (!values.phone.trim()) {
+    errors.phone = "Phone number is required.";
+  } else if (!isValidPhone(values.phone)) {
+    errors.phone = "Enter a valid phone number.";
+  }
+
+  if (!values.email.trim()) {
+    errors.email = "Email address is required.";
+  } else if (!isValidEmail(values.email)) {
+    errors.email = "Enter a valid email address.";
   }
 
   return errors;
