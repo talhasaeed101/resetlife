@@ -1812,7 +1812,7 @@ display:none
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  background-image: url('/Images/villadetail/g1.png');
+  background-image: url('/Images/villadetail/bg22.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -1866,7 +1866,7 @@ display:none
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  background-image: url('/Images/villadetail/g2.png');
+  background-image: url('/Images/villadetail/bg33.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -1907,7 +1907,7 @@ display:none
 /* Benefits */
 .vd-benefits-box {
   padding: 2rem;
-  background-image: url('/Images/villadetail/g3.png');
+  background-image: url('/Images/villadetail/bg44.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
