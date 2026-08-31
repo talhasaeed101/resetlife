@@ -18,12 +18,12 @@ export function SectionHeading({
   return (
     <div className={`flex flex-col gap-5 ${alignClass}`}>
       <p
-        className={`text-gradient-farm font-['BaskervvilleSC'] font-semibold leading-none ${labelClassName}`}
+        className={`text-gradient-farm font-['BaskervvilleSC'] font-semibold leading-none tracking-[0.08em] ${labelClassName}`}
       >
         {label}
       </p>
       <h2
-        className={`font-['dtnightingale'] font-light leading-none text-white ${titleClassName}`}
+        className={`font-['dtnightingale'] font-light leading-none tracking-[0.01em] text-white ${titleClassName}`}
       >
         {title}
       </h2>

@@ -9,13 +9,6 @@ import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
 import { scrollToSection, storeBookingPrefill, readBookingPrefill, clearBookingPrefill, BOOKING_PREFILL_EVENT, dispatchBookingPrefill } from "@/lib/scroll";
 import { validateBookingForm, type FieldErrors } from "@/lib/validation";
 
-const fieldClassName =
-  "booking-control-input";
-
-const selectClassName = `${fieldClassName} booking-select`;
-
-const dateClassName = `${fieldClassName} booking-date-input`;
-
 type BookingState = {
   eventType: string;
   guests: string;
@@ -38,7 +31,7 @@ function CustomDropdown({
 }: {
   value: string;
   onChange: (value: string) => void;
-  options: string[];
+  options: readonly string[];
   placeholder?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,12 +43,21 @@ function CustomDropdown({
         setIsOpen(false);
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative z-[1] w-full" ref={containerRef}>
       <div
         className="booking-control-row cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
@@ -72,31 +74,184 @@ function CustomDropdown({
         />
       </div>
 
-      {isOpen && (
-        <div className="mobile-menu-panel !top-[calc(100%+8px)] !right-auto !left-0 w-full min-w-[220px] !p-3 z-[9999] !rounded-[12px]">
-          <img
-            src={assets.hero.dropdownBg}
-            alt=""
-            className="mobile-menu-panel__bg"
-            aria-hidden
-          />
-          <div className="relative z-10 flex flex-col gap-1 w-full">
-            {options.map((option) => (
+      {isOpen ? (
+        <div className="booking-dropdown" role="listbox">
+          {options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              role="option"
+              aria-selected={value === option}
+              onClick={() => {
+                onChange(option);
+                setIsOpen(false);
+              }}
+              className="booking-dropdown-option"
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
+
+function toISODate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDisplayDate(iso: string) {
+  if (!iso) {
+    return "";
+  }
+  const [year, month, day] = iso.split("-");
+  return `${month}/${day}/${year}`;
+}
+
+function BookingDatePicker({
+  id,
+  value,
+  min,
+  align = "start",
+  onChange,
+}: {
+  id: string;
+  value: string;
+  min?: string;
+  align?: "start" | "end";
+  onChange: (value: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [visibleMonth, setVisibleMonth] = useState(() => {
+    if (value) {
+      const [year, month] = value.split("-").map(Number);
+      return new Date(year, month - 1, 1);
+    }
+    return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const year = visibleMonth.getFullYear();
+  const month = visibleMonth.getMonth();
+  const firstWeekday = new Date(year, month, 1).getDay();
+  const daysCount = new Date(year, month + 1, 0).getDate();
+  const todayIso = toISODate(new Date());
+  const monthLabel = visibleMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const days = Array.from({ length: daysCount }, (_, index) => {
+    const iso = toISODate(new Date(year, month, index + 1));
+    return {
+      day: index + 1,
+      iso,
+      disabled: Boolean(min && iso < min),
+      selected: iso === value,
+      today: iso === todayIso,
+    };
+  });
+
+  return (
+    <div className="relative z-[1] w-full" ref={containerRef}>
+      <button
+        type="button"
+        id={id}
+        className="booking-control-row w-full cursor-pointer border-0 bg-transparent p-0 text-left"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span className={`booking-control-input ${!value ? "is-placeholder" : ""} flex items-center min-h-[20px]`}>
+          {value ? formatDisplayDate(value) : "mm/dd/yyyy"}
+        </span>
+        <Image
+          src={assets.hero.calendar}
+          alt=""
+          width={20}
+          height={20}
+          className="booking-control-icon"
+        />
+      </button>
+
+      {isOpen ? (
+        <div
+          className={`booking-calendar ${align === "end" ? "booking-calendar--end" : ""}`}
+          role="dialog"
+          aria-label="Choose date"
+        >
+          <div className="booking-calendar__header">
+            <button
+              type="button"
+              className="booking-calendar__nav"
+              aria-label="Previous month"
+              onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+            >
+              ‹
+            </button>
+            <p className="booking-calendar__month">{monthLabel}</p>
+            <button
+              type="button"
+              className="booking-calendar__nav"
+              aria-label="Next month"
+              onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
+            >
+              ›
+            </button>
+          </div>
+          <div className="booking-calendar__weekdays">
+            {WEEKDAYS.map((weekday) => (
+              <span key={weekday} className="booking-calendar__weekday">
+                {weekday}
+              </span>
+            ))}
+          </div>
+          <div className="booking-calendar__grid">
+            {Array.from({ length: firstWeekday }, (_, index) => (
+              <span key={`empty-${index}`} className="booking-calendar__empty" />
+            ))}
+            {days.map((item) => (
               <button
-                key={option}
+                key={item.iso}
                 type="button"
+                disabled={item.disabled}
+                className={`booking-calendar__day${item.selected ? " is-selected" : ""}${item.today ? " is-today" : ""}`}
                 onClick={() => {
-                  onChange(option);
+                  onChange(item.iso);
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 font-['Raleway'] text-[15px] text-[#8e8e8e] hover:text-[#dfcba2] transition-colors rounded-lg hover:bg-white/5"
               >
-                {option}
+                {item.day}
               </button>
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -147,25 +302,6 @@ export default function Hero() {
       delete next[field];
       return next;
     });
-  };
-
-  const checkInRef = useRef<HTMLInputElement>(null);
-  const checkOutRef = useRef<HTMLInputElement>(null);
-
-  const openDatePicker = (input: HTMLInputElement | null) => {
-    if (!input) {
-      return;
-    }
-
-    input.focus();
-
-    if (typeof input.showPicker === "function") {
-      try {
-        input.showPicker();
-      } catch {
-        input.click();
-      }
-    }
   };
 
   const handleBookingSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -236,8 +372,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] w-full flex-col overflow-hidden xl:block xl:h-[1024px] xl:min-h-0"
-      style={{ position: "relative", isolation: "isolate" }}
+      className="relative flex min-h-[100svh] w-full flex-col"
     >
       <div className="absolute inset-0 z-0">
         <Image
@@ -293,8 +428,8 @@ export default function Hero() {
 
       <div className="h-[76px] w-full shrink-0 xl:hidden" aria-hidden />
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 self-center px-5 py-8 text-center sm:gap-8 sm:px-8 md:px-10 xl:absolute xl:left-1/2 xl:top-[293px] xl:w-[671px] xl:-translate-x-1/2 xl:gap-11 xl:px-0 xl:py-0">
-        <h1 className="font-['dtnightingale'] text-[36px] font-light leading-[1.05] text-white sm:text-[44px] md:text-[64px] lg:text-[72px] xl:text-[86px] xl:leading-[84px]">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-6 self-center px-5 py-8 text-center sm:gap-8 sm:px-8 md:px-10 xl:w-[671px] xl:gap-11 xl:px-0 xl:py-10">
+        <h1 className="font-['dtnightingale'] text-[36px] font-light leading-[1.05] tracking-[0.01em] text-white sm:text-[44px] md:text-[64px] lg:text-[72px] xl:text-[86px] xl:leading-[84px]">
           Escape to Nature.
           <br />
           Stay in Luxury.
@@ -305,140 +440,84 @@ export default function Hero() {
         </p>
       </div>
 
-      <div className="relative z-10 w-full max-w-[1280px] self-center px-5 pb-8 sm:px-8 md:px-10 lg:px-16 xl:absolute xl:bottom-[63px] xl:left-1/2 xl:-translate-x-1/2 xl:px-0 xl:pb-0">
+      <div className="relative z-30 mx-auto w-full max-w-[1280px] shrink-0 px-5 pb-8 pt-2 sm:px-8 md:px-10 lg:px-16 xl:px-0 xl:pb-[63px]">
         <form
           onSubmit={handleBookingSubmit}
-          className="booking-card relative overflow-hidden rounded-[16px] p-4 sm:p-5 xl:p-6 bg-transparent border-0 shadow-none"
-        
+          className="booking-card relative overflow-visible rounded-[16px] p-4 sm:p-5 xl:p-6"
           noValidate
         >
-          <Image
-            src={assets.hero.searchFilterBg}
-            alt=""
-            fill
-            sizes="1280px"
-            className="pointer-events-none object-fill"
-            aria-hidden
-          />
           <div className="relative z-10">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:gap-0">
-              <div className="booking-field">
-                <label htmlFor="event-type" className="booking-field-label">
-                  Event Type
-                </label>
-                <CustomDropdown
-                  value={booking.eventType}
-                  onChange={(val) => updateBooking("eventType", val)}
-                  options={EVENT_TYPES}
-                />
-                {errors.eventType ? (
-                  <p className="booking-field-error">{errors.eventType}</p>
-                ) : null}
-              </div>
-
-              <div className="booking-field">
-                <label htmlFor="guests" className="booking-field-label">
-                  Guest(s)
-                </label>
-                <CustomDropdown
-                  value={booking.guests}
-                  onChange={(val) => updateBooking("guests", val)}
-                  options={GUEST_OPTIONS}
-                />
-                {errors.guests ? (
-                  <p className="booking-field-error">{errors.guests}</p>
-                ) : null}
-              </div>
-
-              <div className="booking-field">
-                <label htmlFor="check-in" className="booking-field-label">
-                  Check-In Date
-                </label>
-                <div
-                  className="booking-control-row"
-                  onClick={() => openDatePicker(checkInRef.current)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      openDatePicker(checkInRef.current);
-                    }
-                  }}
-                  role="presentation"
-                >
-                  <input
-                    ref={checkInRef}
-                    id="check-in"
-                    type="date"
-                    value={booking.checkIn}
-                    onChange={(event) =>
-                      updateBooking("checkIn", event.target.value)
-                    }
-                    className={`${dateClassName} ${!booking.checkIn ? "is-placeholder" : ""}`}
+                <div className="booking-field">
+                  <label htmlFor="event-type" className="booking-field-label">
+                    Event Type
+                  </label>
+                  <CustomDropdown
+                    value={booking.eventType}
+                    onChange={(val) => updateBooking("eventType", val)}
+                    options={EVENT_TYPES}
                   />
-                  <Image
-                    src={assets.hero.calendar}
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="booking-control-icon"
-                  />
+                  {errors.eventType ? (
+                    <p className="booking-field-error">{errors.eventType}</p>
+                  ) : null}
                 </div>
-                {errors.checkIn ? (
-                  <p className="booking-field-error">{errors.checkIn}</p>
-                ) : null}
-              </div>
 
-              <div className="booking-field">
-                <label htmlFor="check-out" className="booking-field-label">
-                  Check-Out Date
-                </label>
-                <div
-                  className="booking-control-row"
-                  onClick={() => openDatePicker(checkOutRef.current)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      openDatePicker(checkOutRef.current);
-                    }
-                  }}
-                  role="presentation"
-                >
-                  <input
-                    ref={checkOutRef}
+                <div className="booking-field">
+                  <label htmlFor="guests" className="booking-field-label">
+                    Guest(s)
+                  </label>
+                  <CustomDropdown
+                    value={booking.guests}
+                    onChange={(val) => updateBooking("guests", val)}
+                    options={GUEST_OPTIONS}
+                  />
+                  {errors.guests ? (
+                    <p className="booking-field-error">{errors.guests}</p>
+                  ) : null}
+                </div>
+
+                <div className="booking-field">
+                  <label htmlFor="check-in" className="booking-field-label">
+                    Check-In Date
+                  </label>
+                  <BookingDatePicker
+                    id="check-in"
+                    value={booking.checkIn}
+                    onChange={(val) => updateBooking("checkIn", val)}
+                  />
+                  {errors.checkIn ? (
+                    <p className="booking-field-error">{errors.checkIn}</p>
+                  ) : null}
+                </div>
+
+                <div className="booking-field">
+                  <label htmlFor="check-out" className="booking-field-label">
+                    Check-Out Date
+                  </label>
+                  <BookingDatePicker
                     id="check-out"
-                    type="date"
                     value={booking.checkOut}
                     min={booking.checkIn || undefined}
-                    onChange={(event) =>
-                      updateBooking("checkOut", event.target.value)
-                    }
-                    className={`${dateClassName} ${!booking.checkOut ? "is-placeholder" : ""}`}
+                    align="end"
+                    onChange={(val) => updateBooking("checkOut", val)}
                   />
-                  <Image
-                    src={assets.hero.calendar}
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="booking-control-icon"
-                  />
+                  {errors.checkOut ? (
+                    <p className="booking-field-error">{errors.checkOut}</p>
+                  ) : null}
                 </div>
-                {errors.checkOut ? (
-                  <p className="booking-field-error">{errors.checkOut}</p>
-                ) : null}
+              </div>
+
+              <div className="shrink-0 lg:self-center">
+                <GoldButton
+                  type="submit"
+                  className="w-full lg:w-auto"
+                  disabled={status === "submitting"}
+                >
+                  {status === "submitting" ? "SENDING..." : "BOOK NOW"}
+                </GoldButton>
               </div>
             </div>
-
-            <div className="shrink-0 lg:self-center">
-              <GoldButton
-                type="submit"
-                className="w-full lg:w-auto"
-                disabled={status === "submitting"}
-              >
-                {status === "submitting" ? "SENDING..." : "BOOK NOW"}
-              </GoldButton>
-            </div>
-          </div>
 
             {statusMessage ? (
               <p
