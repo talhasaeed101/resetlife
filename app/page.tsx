@@ -1,6 +1,7 @@
 import About from "@/components/About";
 import CTA from "@/components/CTA";
 import Events from "@/components/Events";
+import LuxuryCars from "@/components/LuxuryCars";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
@@ -15,6 +16,7 @@ export default function Home() {
       <About />
       <Villa />
       <Events />
+      <LuxuryCars />
       <Gallery />
       <Testimonial />
       <FAQ />
