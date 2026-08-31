@@ -1265,9 +1265,26 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   width: 100%;
   max-width: 35.875rem;
   flex-direction: column;
-  gap: 0.75rem;
   border-bottom: 1px solid rgba(223, 203, 162, 0.2);
   padding: 1rem 0;
+}
+
+.faq-item__answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  transition:
+    grid-template-rows 0.28s ease,
+    margin-top 0.28s ease;
+}
+
+.faq-item__answer-wrap.is-open {
+  grid-template-rows: 1fr;
+  margin-top: 0.75rem;
+}
+
+.faq-item__answer-inner {
+  overflow: hidden;
 }
 
 .faq-item__trigger {

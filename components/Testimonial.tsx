@@ -17,10 +17,12 @@ function StarIcon() {
 
 function TestimonialCard({
   name,
+  location,
   quote,
   avatar,
 }: {
   name: string;
+  location: string;
   quote: string;
   avatar: string;
 }) {
@@ -37,7 +39,7 @@ function TestimonialCard({
       </div>
 
       <p className="font-['Raleway'] text-[15px] font-medium leading-none text-white sm:text-[16px]">
-        {name}
+        {name} — {location}
       </p>
 
       <div className="flex items-center gap-1">
@@ -56,9 +58,8 @@ function TestimonialCard({
 export default function Testimonial() {
   const { ref, handlers } = useAutoScrollCarousel({
     speed: 0.5,
-    loopAtHalf: true,
+    loopAtHalf: false,
   });
-  const slides = [...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
     <section
@@ -72,10 +73,11 @@ export default function Testimonial() {
           data-auto-scroll="testimonial"
           className="auto-scroll-carousel flex w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {slides.map((item, index) => (
-            <div key={`${item.id}-${index}`} className="w-full shrink-0 grow-0 basis-full">
+          {TESTIMONIALS.map((item) => (
+            <div key={item.id} className="w-full shrink-0 grow-0 basis-full">
               <TestimonialCard
                 name={item.name}
+                location={item.location}
                 quote={item.quote}
                 avatar={item.avatar}
               />
