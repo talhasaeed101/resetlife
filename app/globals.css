@@ -490,6 +490,202 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   backdrop-filter: blur(20px);
 }
 
+/* CTA / Contact */
+.cta-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #050b08;
+}
+
+.cta-section__media {
+  position: absolute;
+  inset: 0;
+}
+
+.cta-section__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.cta-section__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 90rem;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.5rem;
+  min-height: 40rem;
+  padding: 4rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .cta-section__content {
+    padding: 4rem 2rem;
+    gap: 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .cta-section__content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 48.5625rem;
+    padding: 6.25rem 5rem;
+  }
+}
+
+.cta-section__copy {
+  display: flex;
+  width: 100%;
+  max-width: 27.5rem;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cta-section__label {
+  font-family: "BaskervvilleSC", serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  background: var(--gradient-farm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cta-section__heading {
+  max-width: 27.5rem;
+  font-family: "dtnightingale", serif;
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #ffffff;
+}
+
+@media (min-width: 1280px) {
+  .cta-section__heading {
+    font-size: 3.75rem;
+  }
+}
+
+.cta-form-card {
+  width: 100%;
+  max-width: 32.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(5, 11, 8, 0.38);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+}
+
+@media (min-width: 640px) {
+  .cta-form-card {
+    padding: 2.5rem;
+  }
+}
+
+.cta-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta-form__field {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+}
+
+.cta-form__field--message {
+  padding-bottom: 1.25rem;
+}
+
+.cta-form__input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  color: #ffffff;
+  outline: none;
+}
+
+.cta-form__input::placeholder {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.cta-form__textarea {
+  min-height: 4.5rem;
+  resize: none;
+}
+
+.cta-form__error {
+  margin-top: 0.5rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: #dfcba2;
+}
+
+.cta-form__submit {
+  margin-top: 1.5rem;
+  width: 100%;
+  height: 2.6875rem;
+  border: 1px solid rgba(223, 203, 162, 0.34);
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, #825e37 0%, #dfcba2 50%, #825e37 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-family: "BaskervvilleSC", serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: #050b08;
+  cursor: pointer;
+  transition:
+    filter 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.cta-form__submit:hover:not(:disabled) {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+.cta-form__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cta-form__status {
+  margin-top: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #dfcba2;
+}
+
+.cta-form__status--success {
+  color: #ffffff;
+}
+
 .mobile-menu-backdrop {
   position: fixed;
   inset: 0;
@@ -997,6 +1193,127 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   .auto-scroll-carousel {
     scroll-behavior: auto;
   }
+}
+
+/* FAQ */
+.faq-section {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #050b08;
+  padding: 4rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .faq-section {
+    padding: 4rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .faq-section {
+    padding: 4rem 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .faq-section {
+    min-height: 781px;
+    padding: 0 5rem;
+  }
+}
+
+.faq-section__inner {
+  display: flex;
+  width: 100%;
+  max-width: 80rem;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .faq-section__inner {
+    gap: 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .faq-section__inner {
+    gap: 4rem;
+    padding: 5.5rem 0;
+  }
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 35.875rem));
+    justify-content: space-between;
+    column-gap: 2rem;
+  }
+}
+
+.faq-item {
+  display: flex;
+  width: 100%;
+  max-width: 35.875rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(223, 203, 162, 0.2);
+  padding: 1rem 0;
+}
+
+.faq-item__trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 0;
+  background: transparent;
+  padding: 0 1rem 0 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq-item__question {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-family: "BaskervvilleSC", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4375rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.faq-item__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #ffffff;
+}
+
+.faq-item__answer {
+  max-width: 34.875rem;
+  padding: 0 1rem 0 0;
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #8e8e8e;
 }
 
 /* About */
