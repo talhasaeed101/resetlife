@@ -1816,6 +1816,7 @@ display:none
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+  justify-content: space-between;
 }
 
 .vd-info-tile__icon {
@@ -1826,17 +1827,18 @@ display:none
 }
 
 .vd-info-tile__label {
-  font-family: "BaskervvilleSC", serif;
-  font-size: 0.9375rem;
-  color: #8e8e8e;
+  font-family: "dtnightingale", serif;
+  font-size: 18px;
+  color: #FFFFFF;
   width: 8rem;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .vd-info-tile__value {
   font-family: "Raleway", sans-serif;
-  font-size: 0.9375rem;
-  color: #ffffff;
+  font-size: 16px;
+  color: #8e8e8e;
   font-weight: 500;
 }
 
@@ -1891,9 +1893,9 @@ display:none
 .vd-amenities-col li {
   position: relative;
   padding-left: 1.25rem;
-  font-family: "Raleway", sans-serif;
+  font-family: "dtnightingale", sans-serif;
   font-size: 0.9375rem;
-  color: #eceae4;
+  color: #fff;
   line-height: 1.5;
 }
 
@@ -1901,7 +1903,7 @@ display:none
   content: "•";
   position: absolute;
   left: 0;
-  color: #dfcba2;
+  color: #fff;
 }
 
 /* Benefits */
@@ -1933,7 +1935,7 @@ display:none
   padding-left: 1.25rem;
   font-family: "Raleway", sans-serif;
   font-size: 0.9375rem;
-  color: #eceae4;
+  color: #8e8e8e;
   line-height: 1.6;
 }
 
@@ -1941,7 +1943,7 @@ display:none
   content: "•";
   position: absolute;
   left: 0;
-  color: #dfcba2;
+  color: #8e8e8e;
 }
 
 /* Reservation button */
@@ -1955,16 +1957,18 @@ display:none
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, #825e37 0%, #dfcba2 50%, #825e37 100%);
+background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
+
   color: #050b08;
   font-family: "BaskervvilleSC", serif;
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.05em;
   padding: 1rem 2.5rem;
-  border-radius: 100px;
+  border-radius: 12px;
   text-decoration: none;
   transition: transform 0.2s ease, filter 0.2s ease;
+  height:43px
 }
 
 .vd-reserve-btn:hover {

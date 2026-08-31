@@ -10,155 +10,46 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
 /* ── Info tile icons ─────────────────────────────────────── */
-function SizeIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="3"
-        width="18"
-        height="18"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M9 9H15M9 12H15M9 15H12"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-function OccupancyIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="9" cy="7" r="3" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M3 20C3 17 5.686 15 9 15"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <circle cx="16" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M11 20C11 17.8 13.1 16 16 16C18.9 16 21 17.8 21 20"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-function BedIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M3 9V18M21 9V18M3 14H21M3 9C3 7.343 4.343 6 6 6H18C19.657 6 21 7.343 21 9"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M7 9V10M17 9V10"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-function BathIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M5 12H19V16C19 18.761 16.761 21 14 21H10C7.239 21 5 18.761 5 16V12ZM5 12V9C5 7.343 6.343 6 8 6H9"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-function FeatureIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M3 9L12 3L21 9V20C21 20.552 20.552 21 20 21H4C3.448 21 3 20.552 3 20V9Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9 21V12H15V21"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-function ViewIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M1 12C1 12 5 5 12 5C19 5 23 12 23 12C23 12 19 19 12 19C5 19 1 12 1 12Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
 const INFO_TILES = [
-  { icon: <SizeIcon />, label: "Size", value: "4,500 sq ft" },
-  { icon: <OccupancyIcon />, label: "Occupancy", value: "Up to 15 guests" },
-  { icon: <BedIcon />, label: "Beds", value: "4 King-size bedrooms" },
-  { icon: <BathIcon />, label: "Bathrooms", value: "4 full bathrooms" },
+  { icon: <Image src="/Images/villadetail/i1.svg" width={35} height={35} alt="Size" />, label: "Size", value: "70 sqm (750 sq ft)" },
+  { icon: <Image src="/Images/villadetail/i2.svg" width={35} height={35} alt="Occupancy" />, label: "Occupancy", value: "Up to three adults and two children under 12 years" },
+  { icon: <Image src="/Images/villadetail/i3.svg" width={35} height={35} alt="Beds" />, label: "Beds", value: "King bed or two twin beds" },
+  { icon: <Image src="/Images/villadetail/i4.svg" width={35} height={35} alt="Bathrooms" />, label: "Bathrooms", value: "Double vanities, rain shower, separate marble tub" },
   {
-    icon: <FeatureIcon />,
+    icon: <Image src="/Images/villadetail/i5.svg" width={35} height={35} alt="Unique Features" />,
     label: "Unique Features",
-    value: "Private pool & outdoor lounge",
+    value: "Terrace with outdoor seating",
   },
-  { icon: <ViewIcon />, label: "View", value: "Gardens & open sky" },
+  { icon: <Image src="/Images/villadetail/i6.svg" width={35} height={35} alt="View" />, label: "View", value: "Sea and gardens" },
 ] as const;
 
 const AMENITIES_COLS = [
   [
-    "Private swimming pool",
-    "Lush green lawns",
-    "Outdoor lounge area",
-    "Secure boundary & gate",
-    "Ample parking space",
+    "Ocean views",
+    "Private pool",
+    "Timber sun deck",
+    "King-size bed",
   ],
   [
-    "Fully equipped kitchen",
-    "Living & dining spaces",
-    "Air-conditioned rooms",
-    "Hot & cold water supply",
-    "BBQ / outdoor cooking area",
+    "Living area with sofa, writing desk",
+    "Bathroom with bathtub, twin vanities",
+    "Separate shower/toilet",
+    "Sun deck with sun loungers",
   ],
   [
-    "High-speed WiFi",
-    "LED TV in all rooms",
-    "24 / 7 caretaker on-site",
-    "Backup generator",
-    "Event decor setup (on request)",
+    "WiFi, TV, Netflix, Bose sound system, safe",
+    "Personal bar",
   ],
 ] as const;
 
 const BENEFITS = [
-  "As a guest at Reset Life Farmhouse, you'll enjoy exclusive access to the private pool and all outdoor areas throughout your stay.",
-  "The farmhouse is ideal for family retreats, birthday celebrations, Nikkah ceremonies, photography shoots, and corporate off-sites.",
-  "A dedicated on-site caretaker is available around the clock to assist with any requirements during your stay.",
-  "Children can play freely in the secured lawn spaces, while adults relax in the lounge or by the poolside.",
-  "The fully equipped kitchen lets you prepare your own meals, or you may arrange outside catering for events.",
-  "Complimentary high-speed WiFi and a backup generator ensure a connected, uninterrupted stay at all times.",
-  "Event setup assistance and decor coordination are available on request for weddings, birthdays, and corporate gatherings.",
+  "As a guest staying in a Classic Room at Hidden Oasis Resort, you will enjoy exclusive access to our stunning beach and all of its associated amenities, including exciting beach games.",
+  "In addition, there are plenty of recreational activities available for you to participate in, such as non-motorized water sports (such as kayaking, sailing, and stand-up paddleboarding), as well as tennis courts, beach games, and daily yoga and tai chi classes.",
+  "For those who want to stay fit and healthy during their stay, our state-of-the-art Soar Gym fitness center is available to use at any time.",
+  "Children under the age of six can enjoy complimentary meals from the Kid's Menu, while adults can relax and unwind with a game of billiards or table tennis at Long Bar.",
+  "There's also something for animal lovers with our one-hour Wildlife Workshop, led by our resident zoologist.",
+  "Movie enthusiasts can indulge in scheduled film screenings at our Cinema, and parents can relax knowing that their children are in good hands at our Planet Trekkers Kids Club.",
+  "Guests who need to stay connected can take advantage of the business services available throughout the resort at our Business Center.",
 ] as const;
 
 export default function VillaDetailContent() {
@@ -181,7 +72,7 @@ export default function VillaDetailContent() {
       <div
         className={`site-header-fixed ${menuOpen ? "site-header-layer--menu-open" : ""}`}
       >
-        <header className="site-header-inner site-header-layer mx-auto flex w-full max-w-[1440px] items-start justify-between px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-0">
+        <header className="site-header-inner site-header-layer mx-auto flex w-full max-w-[1435px] items-start justify-between px-5 py-6 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-0">
           <SiteLogoLink />
 
           <div className="relative">
@@ -257,8 +148,10 @@ export default function VillaDetailContent() {
         <div className="vd-info-grid">
           {INFO_TILES.map((tile) => (
             <div key={tile.label} className="vd-info-tile">
+              <div className="flex gap-[17px] items-center">
               <span className="vd-info-tile__icon">{tile.icon}</span>
               <span className="vd-info-tile__label">{tile.label}</span>
+              </div>
               <span className="vd-info-tile__value">{tile.value}</span>
             </div>
           ))}
