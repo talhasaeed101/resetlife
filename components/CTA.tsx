@@ -253,7 +253,7 @@ export default function CTA() {
     <section id="contact" className="cta-section">
       <div className="cta-section__media">
         <Image
-          src={assets.cta.background}
+          src= "/Images/contact/CTA.png"
           alt=""
           fill
           className="object-cover"
