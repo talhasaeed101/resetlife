@@ -1398,11 +1398,26 @@ display:none
   flex: 1 1 auto;
   font-family: "BaskervvilleSC", serif;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.4375rem;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
   color: #ffffff;
+}
+
+.faq-item__question-text {
+  text-transform: uppercase;
+}
+
+.faq-item__question-mark {
+  display: inline;
+  margin-left: 0.05em;
+  font-family: "Times New Roman", "Georgia", serif;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: baseline;
 }
 
 .faq-item__icon {

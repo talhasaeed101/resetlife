@@ -10,56 +10,68 @@ type FaqItem = {
 
 const faqItems: FaqItem[] = [
   {
-    question: "What events can I host at Reset Life Farmhouse?",
+    question: "What events can I host?",
     answer:
       "You can host a variety of events including birthdays, mehndi, nikkah, photography sessions, corporate events, and private gatherings.",
   },
   {
-    question: "How many guests can the farmhouse accommodate?",
+    question: "How many guests can you accommodate?",
     answer:
       "Our farmhouse can accommodate different group sizes depending on the type of event. Please contact us with your expected number of guests so we can guide you accordingly.",
   },
   {
-    question: "Is the farmhouse available for overnight stays?",
+    question: "Do you offer overnight stays?",
     answer:
       "Yes, Reset Life Farmhouse offers overnight villa stays. The villa is available at Rs. 35,000 per night.",
   },
   {
-    question: "How can I check availability for my event date?",
+    question: "How do I check availability?",
     answer:
       "Select your event type, number of guests, check-in and check-out dates in the booking section and submit your inquiry. Our team will get back to you with availability and further details.",
   },
   {
-    question: "Do I need to pay online to confirm my booking?",
+    question: "Is online payment required?",
     answer:
       "Reset Life Farmhouse does not use an online payment or instant booking system. Once your inquiry is received, our team will contact you to discuss availability, pricing, and booking confirmation.",
   },
   {
-    question: "Can I arrange my own catering and event setup?",
+    question: "Can I arrange my own catering?",
     answer:
       "Event arrangements can vary depending on your requirements. Contact our team to discuss catering, décor, setup, and other arrangements for your event.",
   },
   {
-    question: "Is parking available at the farmhouse?",
+    question: "Is parking available?",
     answer:
       "Yes, parking is available for guests visiting Reset Life Farmhouse.",
   },
   {
-    question: "Where is Reset Life Farmhouse located?",
+    question: "Where are you located?",
     answer:
       "Reset Life Farmhouse is located in Gulberg Greens, Islamabad, offering a private and peaceful setting surrounded by nature.",
   },
   {
-    question: "How can I contact Reset Life Farmhouse for a booking inquiry?",
+    question: "How do I contact you?",
     answer:
       "You can submit an inquiry through our website or contact us directly via WhatsApp or email. Our team will help you with availability and booking details.",
   },
   {
-    question: "Can I visit the farmhouse before booking my event?",
+    question: "Can I visit before booking?",
     answer:
       "Yes, you can contact our team to discuss a visit and check the property before finalizing your event or stay.",
   },
 ];
+
+function FaqQuestion({ text }: { text: string }) {
+  const hasMark = text.endsWith("?");
+  const questionText = hasMark ? text.slice(0, -1) : text;
+
+  return (
+    <span className="faq-item__question">
+      <span className="faq-item__question-text">{questionText}</span>
+      {hasMark ? <span className="faq-item__question-mark">?</span> : null}
+    </span>
+  );
+}
 
 function PlusIcon() {
   return (
@@ -120,7 +132,7 @@ export default function FAQ() {
                   aria-controls={answerId}
                   onClick={() => handleToggle(index)}
                 >
-                  <span className="faq-item__question">{item.question}</span>
+                  <FaqQuestion text={item.question} />
                   <span className="faq-item__icon" aria-hidden>
                     {isOpen ? <CloseIcon /> : <PlusIcon />}
                   </span>
