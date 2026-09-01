@@ -10,9 +10,10 @@ import {
 import { CAR_OPTIONS, PERSON_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { useToast } from "@/components/ui/Toast";
 import { SiteHeader } from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import { validateCarReservationForm, type FieldErrors } from "@/lib/validation";
+import { formatValidationToast, validateCarReservationForm } from "@/lib/validation";
 
 type CarReservationState = {
   carSelection: string;
@@ -39,16 +40,11 @@ const initialState: CarReservationState = {
 };
 
 export default function CarReservationContent() {
+  const toast = useToast();
   const [values, setValues] = useState<CarReservationState>(initialState);
-  const [errors, setErrors] = useState<FieldErrors>({});
 
   const updateValue = (field: keyof CarReservationState, value: string) => {
     setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,11 +52,16 @@ export default function CarReservationContent() {
 
     const validationErrors = validateCarReservationForm(values);
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      const { title, message } = formatValidationToast(validationErrors);
+      toast.error(title, message);
       return;
     }
 
     const details: CarReservationDetails = values;
+    toast.success(
+      "Car reservation ready",
+      "Opening WhatsApp with your reservation details.",
+    );
     submitCarReservation(details);
   };
 
@@ -111,9 +112,6 @@ export default function CarReservationContent() {
                     popoverMode="anchored"
                   />
                 </div>
-                {errors.carSelection ? (
-                  <p className="reservation-field__error">{errors.carSelection}</p>
-                ) : null}
               </div>
             </div>
 
@@ -128,9 +126,6 @@ export default function CarReservationContent() {
                     onChange={(value) => updateValue("fromDate", value)}
                   />
                 </div>
-                {errors.fromDate ? (
-                  <p className="reservation-field__error">{errors.fromDate}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -145,9 +140,6 @@ export default function CarReservationContent() {
                     onChange={(value) => updateValue("toDate", value)}
                   />
                 </div>
-                {errors.toDate ? (
-                  <p className="reservation-field__error">{errors.toDate}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -161,9 +153,6 @@ export default function CarReservationContent() {
                     popoverMode="anchored"
                   />
                 </div>
-                {errors.persons ? (
-                  <p className="reservation-field__error">{errors.persons}</p>
-                ) : null}
               </div>
             </div>
 
@@ -188,11 +177,7 @@ export default function CarReservationContent() {
                   placeholder="First Name"
                   value={values.firstName}
                   onChange={(event) => updateValue("firstName", event.target.value)}
-                  aria-invalid={Boolean(errors.firstName)}
                 />
-                {errors.firstName ? (
-                  <p className="reservation-field__error">{errors.firstName}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -202,11 +187,7 @@ export default function CarReservationContent() {
                   placeholder="Last Name"
                   value={values.lastName}
                   onChange={(event) => updateValue("lastName", event.target.value)}
-                  aria-invalid={Boolean(errors.lastName)}
                 />
-                {errors.lastName ? (
-                  <p className="reservation-field__error">{errors.lastName}</p>
-                ) : null}
               </div>
             </div>
 
@@ -218,11 +199,7 @@ export default function CarReservationContent() {
                   placeholder="Phone Number"
                   value={values.phone}
                   onChange={(event) => updateValue("phone", event.target.value)}
-                  aria-invalid={Boolean(errors.phone)}
                 />
-                {errors.phone ? (
-                  <p className="reservation-field__error">{errors.phone}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -232,14 +209,10 @@ export default function CarReservationContent() {
                   placeholder="Email Address"
                   value={values.email}
                   onChange={(event) => updateValue("email", event.target.value)}
-                  aria-invalid={Boolean(errors.email)}
                 />
                 <p className="reservation-field__hint">
                   This is the email we will send your confirmation to.
                 </p>
-                {errors.email ? (
-                  <p className="reservation-field__error">{errors.email}</p>
-                ) : null}
               </div>
             </div>
 

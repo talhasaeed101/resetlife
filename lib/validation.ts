@@ -1,5 +1,32 @@
 export type FieldErrors = Record<string, string>;
 
+export function formatValidationToast(errors: FieldErrors): {
+  title: string;
+  message: string;
+} {
+  const messages = Object.values(errors).filter(Boolean);
+
+  if (messages.length === 0) {
+    return { title: "", message: "" };
+  }
+
+  if (messages.length === 1) {
+    return {
+      title: "Missing information",
+      message: messages[0],
+    };
+  }
+
+  const listed = messages.slice(0, 3);
+  const extra =
+    messages.length > 3 ? ` (+${messages.length - 3} more fields)` : "";
+
+  return {
+    title: "Please complete all required fields",
+    message: `${listed.join(" · ")}${extra}`,
+  };
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[+]?[\d\s()-]{7,20}$/;
 

@@ -12,9 +12,10 @@ import {
 import { EVENT_TYPES, GUEST_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { useToast } from "@/components/ui/Toast";
 import { SiteHeader } from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import { validateReservationForm, type FieldErrors } from "@/lib/validation";
+import { formatValidationToast, validateReservationForm } from "@/lib/validation";
 
 type ReservationState = {
   eventType: string;
@@ -41,8 +42,8 @@ const initialState: ReservationState = {
 };
 
 export default function ReservationContent() {
+  const toast = useToast();
   const [values, setValues] = useState<ReservationState>(initialState);
-  const [errors, setErrors] = useState<FieldErrors>({});
 
   useEffect(() => {
     const prefill = readReservationPrefill();
@@ -62,11 +63,6 @@ export default function ReservationContent() {
 
   const updateValue = (field: keyof ReservationState, value: string) => {
     setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -74,11 +70,16 @@ export default function ReservationContent() {
 
     const validationErrors = validateReservationForm(values);
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      const { title, message } = formatValidationToast(validationErrors);
+      toast.error(title, message);
       return;
     }
 
     const details: VillaReservationDetails = values;
+    toast.success(
+      "Reservation ready",
+      "Opening WhatsApp with your booking details.",
+    );
     submitVillaReservation(details);
   };
 
@@ -129,9 +130,6 @@ export default function ReservationContent() {
                     popoverMode="anchored"
                   />
                 </div>
-                {errors.eventType ? (
-                  <p className="reservation-field__error">{errors.eventType}</p>
-                ) : null}
               </div>
             </div>
 
@@ -146,9 +144,6 @@ export default function ReservationContent() {
                     onChange={(value) => updateValue("checkIn", value)}
                   />
                 </div>
-                {errors.checkIn ? (
-                  <p className="reservation-field__error">{errors.checkIn}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -163,9 +158,6 @@ export default function ReservationContent() {
                     onChange={(value) => updateValue("checkOut", value)}
                   />
                 </div>
-                {errors.checkOut ? (
-                  <p className="reservation-field__error">{errors.checkOut}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -179,9 +171,6 @@ export default function ReservationContent() {
                     popoverMode="anchored"
                   />
                 </div>
-                {errors.guests ? (
-                  <p className="reservation-field__error">{errors.guests}</p>
-                ) : null}
               </div>
             </div>
 
@@ -206,11 +195,7 @@ export default function ReservationContent() {
                   placeholder="First Name"
                   value={values.firstName}
                   onChange={(event) => updateValue("firstName", event.target.value)}
-                  aria-invalid={Boolean(errors.firstName)}
                 />
-                {errors.firstName ? (
-                  <p className="reservation-field__error">{errors.firstName}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -220,11 +205,7 @@ export default function ReservationContent() {
                   placeholder="Last Name"
                   value={values.lastName}
                   onChange={(event) => updateValue("lastName", event.target.value)}
-                  aria-invalid={Boolean(errors.lastName)}
                 />
-                {errors.lastName ? (
-                  <p className="reservation-field__error">{errors.lastName}</p>
-                ) : null}
               </div>
             </div>
 
@@ -236,11 +217,7 @@ export default function ReservationContent() {
                   placeholder="Phone Number"
                   value={values.phone}
                   onChange={(event) => updateValue("phone", event.target.value)}
-                  aria-invalid={Boolean(errors.phone)}
                 />
-                {errors.phone ? (
-                  <p className="reservation-field__error">{errors.phone}</p>
-                ) : null}
               </div>
 
               <div className="reservation-field">
@@ -250,14 +227,10 @@ export default function ReservationContent() {
                   placeholder="Email Address"
                   value={values.email}
                   onChange={(event) => updateValue("email", event.target.value)}
-                  aria-invalid={Boolean(errors.email)}
                 />
                 <p className="reservation-field__hint">
                   This is the email we will send your confirmation to.
                 </p>
-                {errors.email ? (
-                  <p className="reservation-field__error">{errors.email}</p>
-                ) : null}
               </div>
             </div>
 

@@ -7,10 +7,11 @@ import { assets } from "@/lib/assets";
 import { storeReservationPrefill } from "@/lib/reservation";
 import { EVENT_TYPES, GUEST_OPTIONS, ROUTES } from "@/lib/site";
 import { GoldButton } from "@/components/ui/GoldButton";
+import { useToast } from "@/components/ui/Toast";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
 import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
 import { readBookingPrefill, clearBookingPrefill, BOOKING_PREFILL_EVENT } from "@/lib/scroll";
-import { validateBookingForm, type FieldErrors } from "@/lib/validation";
+import { formatValidationToast, validateBookingForm } from "@/lib/validation";
 
 type BookingState = {
   eventType: string;
@@ -28,9 +29,9 @@ const initialBookingState: BookingState = {
 
 export default function Hero() {
   const router = useRouter();
+  const toast = useToast();
   const [menuOpen, setMenuOpen] = useState(false);
   const [booking, setBooking] = useState<BookingState>(initialBookingState);
-  const [errors, setErrors] = useState<FieldErrors>({});
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -65,11 +66,6 @@ export default function Hero() {
 
   const updateBooking = (field: keyof BookingState, value: string) => {
     setBooking((current) => ({ ...current, [field]: value }));
-    setErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
   };
 
   const handleBookingSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -77,7 +73,8 @@ export default function Hero() {
 
     const validationErrors = validateBookingForm(booking);
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      const { title, message } = formatValidationToast(validationErrors);
+      toast.error(title, message);
       return;
     }
 
@@ -87,6 +84,10 @@ export default function Hero() {
       checkIn: booking.checkIn,
       checkOut: booking.checkOut,
     });
+    toast.success(
+      "Booking details saved",
+      "Taking you to the villa details page.",
+    );
     router.push(ROUTES.villa);
   };
 
@@ -169,9 +170,6 @@ export default function Hero() {
                     onChange={(val) => updateBooking("eventType", val)}
                     options={EVENT_TYPES}
                   />
-                  {errors.eventType ? (
-                    <p className="booking-field-error">{errors.eventType}</p>
-                  ) : null}
                 </div>
 
                 <div className="booking-field">
@@ -183,9 +181,6 @@ export default function Hero() {
                     onChange={(val) => updateBooking("guests", val)}
                     options={GUEST_OPTIONS}
                   />
-                  {errors.guests ? (
-                    <p className="booking-field-error">{errors.guests}</p>
-                  ) : null}
                 </div>
 
                 <div className="booking-field">
@@ -197,9 +192,6 @@ export default function Hero() {
                     value={booking.checkIn}
                     onChange={(val) => updateBooking("checkIn", val)}
                   />
-                  {errors.checkIn ? (
-                    <p className="booking-field-error">{errors.checkIn}</p>
-                  ) : null}
                 </div>
 
                 <div className="booking-field">
@@ -213,9 +205,6 @@ export default function Hero() {
                     align="end"
                     onChange={(val) => updateBooking("checkOut", val)}
                   />
-                  {errors.checkOut ? (
-                    <p className="booking-field-error">{errors.checkOut}</p>
-                  ) : null}
                 </div>
               </div>
 
