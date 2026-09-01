@@ -16,7 +16,7 @@ const villaThumbs = [
 export default function Villa() {
   return (
     <section
-      id="villa" className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:h-[960px] xl:px-20 xl:py-0">
+      id="villa" className="flex w-full items-center justify-center bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-0">
       <div className="relative w-full max-w-[1280px] overflow-hidden rounded-[24px] md:rounded-[32px] xl:h-[760px] xl:rounded-[40px]">
         <div className="relative min-h-[480px] w-full sm:min-h-[560px] md:min-h-[640px] xl:absolute xl:inset-0 xl:min-h-0">
           <Image
@@ -67,7 +67,7 @@ export default function Villa() {
         <div className="hidden xl:block">
           <div className="absolute left-[60px] top-[60px] flex w-[438px] flex-col gap-10">
             <div
-  className="flex w-fit items-center rounded-[100px] p-[10px] bg-cover bg-center bg-no-repeat"
+  className="flex w-fit items-center rounded-[100px] p-[10px] bg-cover bg-center bg-no-repeat h-[70px]"
   style={{
     backgroundImage: "url('/Images/villa/glass.png')",
   }}
@@ -75,7 +75,7 @@ export default function Villa() {
               {villaThumbs.map((thumb, index) => (
                 <div
                   key={thumb}
-                  className={`relative h-[74px] w-[74px] overflow-hidden rounded-[110px] ${index < villaThumbs.length - 1 ? "-mr-[29px]" : ""}`}
+                  className={`relative h-[55px] w-[55px] overflow-hidden rounded-[110px] ${index < villaThumbs.length - 1 ? "-mr-[29px]" : ""}`}
                 >
                   <Image
                     src={thumb}
@@ -92,14 +92,15 @@ export default function Villa() {
               relaxation together for a truly refreshing stay.
             </p>
           </div>
+          <div className="absolute bottom-[60px] left-[60px] right-[60px] flex items-center justify-between gap-8">
+            <h2 className="max-w-[632px] font-['dtnightingale'] text-[60px] font-light leading-none text-white">
+              Luxurious & Opulent Ambiance.
+            </h2>
 
-          <h2 className="absolute bottom-[124px] left-[60px] w-[632px] font-['dtnightingale'] text-[60px] font-light leading-none text-white">
-            Luxurious & Opulent Ambiance.
-          </h2>
-
-          <Link href={ROUTES.villa} className={`${goldButtonClassName} absolute bottom-[60px] right-[60px]`}>
-            EXPLORE
-          </Link>
+            <Link href={ROUTES.villa} className={`${goldButtonClassName} shrink-0`}>
+              EXPLORE
+            </Link>
+          </div>
         </div>
       </div>
     </section>

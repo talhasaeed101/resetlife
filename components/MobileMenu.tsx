@@ -68,18 +68,11 @@ export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) 
 
       <div
         id="site-navigation-menu"
-        className="mobile-menu-panel"
+        className="mobile-menu-panel glass-effect"
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
       >
-        <img
-          src={assets.hero.dropdownBg}
-          alt=""
-          className="mobile-menu-panel__bg"
-          aria-hidden
-        />
-
         <button
           type="button"
           onClick={onClose}
@@ -147,6 +140,8 @@ export function SiteLogoLink({ className = "" }: { className?: string }) {
       <span className="text-gradient-farm font-['BaskervvilleSC'] text-[18px] uppercase tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
         Reset life
       </span>
+
+
     </Link>
   );
 }

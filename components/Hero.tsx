@@ -116,21 +116,13 @@ export default function Hero() {
           <div className="relative">
             <button
               type="button"
-              className="relative flex items-center gap-[6px] rounded-full px-4 py-2 sm:px-5 sm:py-2.5"
+              className="glass-effect relative flex items-center gap-[6px] px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="site-navigation-menu"
               aria-haspopup="dialog"
               onClick={() => setMenuOpen((open) => !open)}
             >
-              <Image
-                src={assets.hero.menuButtonBg}
-                alt=""
-                fill
-                sizes="160px"
-                className="pointer-events-none object-fill"
-                aria-hidden
-              />
               <span className="relative z-10 font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
                 Menu
               </span>
@@ -149,7 +141,7 @@ export default function Hero() {
 
       <div className="h-[76px] w-full shrink-0 xl:hidden" aria-hidden />
 
-      <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-6 self-center px-5 py-8 text-center sm:gap-8 sm:px-8 md:px-10 xl:w-[671px] xl:gap-11 xl:px-0 xl:py-10">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-[20px] lg:gap-[25px] self-center px-5 py-8 text-center sm:px-8 md:px-10 xl:w-[671px]  xl:px-0 xl:py-10">
         <h1 className="font-['dtnightingale'] text-[36px] font-light leading-[1.05] tracking-[0.01em] text-white sm:text-[44px] md:text-[64px] lg:text-[72px] xl:text-[80px] xl:leading-[84px]">
           Escape to Nature. Stay in Luxury.
         </h1>
@@ -162,7 +154,7 @@ export default function Hero() {
       <div className="relative z-30 mx-auto w-full max-w-[1280px] shrink-0 px-5 pb-8 pt-2 sm:px-8 md:px-10 lg:px-16 xl:px-0 xl:pb-[63px]">
         <form
           onSubmit={handleBookingSubmit}
-          className="booking-card relative overflow-visible rounded-[16px] p-4 sm:p-5 xl:p-6"
+          className="booking-card glass-effect glass-effect--container relative overflow-visible p-4 sm:p-5 xl:p-6"
           noValidate
         >
           <div className="relative z-10">

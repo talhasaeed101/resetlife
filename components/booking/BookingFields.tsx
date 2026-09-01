@@ -1,10 +1,74 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
+const CALENDAR_WIDTH = 280;
+
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
+type PopoverPosition = {
+  top: number;
+  left: number;
+  width: number;
+};
+
+function usePopoverPosition(
+  triggerRef: React.RefObject<HTMLElement | null>,
+  isOpen: boolean,
+  align: "start" | "end" = "start",
+) {
+  const [position, setPosition] = useState<PopoverPosition>({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
+
+  useEffect(() => {
+    if (!isOpen || !triggerRef.current) {
+      return;
+    }
+
+    const updatePosition = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) {
+        return;
+      }
+
+      const rect = trigger.getBoundingClientRect();
+      const calendarLeft =
+        align === "end"
+          ? rect.right
+          : rect.left;
+
+      setPosition({
+        top: rect.bottom + 10,
+        left: calendarLeft,
+        width: rect.width,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [align, isOpen, triggerRef]);
+
+  return position;
+}
 
 function toISODate(date: Date) {
   const year = date.getFullYear();
@@ -34,14 +98,23 @@ export function CustomDropdown({
   placeholder?: string;
   id?: string;
 }) {
+  const mounted = useIsClient();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const position = usePopoverPosition(triggerRef, isOpen);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      const target = event.target as Node;
+      if (
+        containerRef.current?.contains(target) ||
+        popoverRef.current?.contains(target)
+      ) {
+        return;
       }
+      setIsOpen(false);
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -57,9 +130,13 @@ export function CustomDropdown({
   }, []);
 
   return (
-    <div className="relative z-[1] w-full" ref={containerRef}>
+    <div
+      className={`relative w-full ${isOpen ? "is-open" : ""}`}
+      ref={containerRef}
+    >
       <div
         id={id}
+        ref={triggerRef}
         className="booking-control-row cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         role="combobox"
@@ -76,29 +153,41 @@ export function CustomDropdown({
           alt=""
           width={20}
           height={20}
-          className={`booking-control-icon transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`booking-control-icon ${isOpen ? "is-open" : ""}`}
         />
       </div>
 
-      {isOpen ? (
-        <div className="booking-dropdown" role="listbox">
-          {options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              role="option"
-              aria-selected={value === option}
-              onClick={() => {
-                onChange(option);
-                setIsOpen(false);
+      {isOpen && mounted
+        ? createPortal(
+            <div
+              ref={popoverRef}
+              className="booking-dropdown glass-effect glass-effect--popover"
+              role="listbox"
+              style={{
+                top: position.top,
+                left: position.left,
+                minWidth: Math.max(position.width, 192),
               }}
-              className="booking-dropdown-option"
             >
-              {option}
-            </button>
-          ))}
-        </div>
-      ) : null}
+              {options.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  role="option"
+                  aria-selected={value === option}
+                  onClick={() => {
+                    onChange(option);
+                    setIsOpen(false);
+                  }}
+                  className="booking-dropdown-option"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
@@ -118,6 +207,7 @@ export function BookingDatePicker({
   placeholder?: string;
   onChange: (value: string) => void;
 }) {
+  const mounted = useIsClient();
   const [isOpen, setIsOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(() => {
     if (value) {
@@ -127,12 +217,20 @@ export function BookingDatePicker({
     return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   });
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const position = usePopoverPosition(triggerRef, isOpen, align);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      const target = event.target as Node;
+      if (
+        containerRef.current?.contains(target) ||
+        popoverRef.current?.contains(target)
+      ) {
+        return;
       }
+      setIsOpen(false);
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -168,11 +266,28 @@ export function BookingDatePicker({
     };
   });
 
+  const calendarWidth =
+    typeof window !== "undefined"
+      ? Math.min(CALENDAR_WIDTH, window.innerWidth - 40)
+      : CALENDAR_WIDTH;
+  const calendarLeft =
+    align === "end"
+      ? position.left - calendarWidth
+      : position.left;
+  const calendarStyleLeft =
+    typeof window !== "undefined"
+      ? Math.max(12, Math.min(calendarLeft, window.innerWidth - calendarWidth - 12))
+      : calendarLeft;
+
   return (
-    <div className="relative z-[1] w-full" ref={containerRef}>
+    <div
+      className={`relative w-full ${isOpen ? "is-open" : ""}`}
+      ref={containerRef}
+    >
       <button
         type="button"
         id={id}
+        ref={triggerRef}
         className="booking-control-row w-full cursor-pointer border-0 bg-transparent p-0 text-left"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
@@ -192,59 +307,68 @@ export function BookingDatePicker({
         />
       </button>
 
-      {isOpen ? (
-        <div
-          className={`booking-calendar ${align === "end" ? "booking-calendar--end" : ""}`}
-          role="dialog"
-          aria-label="Choose date"
-        >
-          <div className="booking-calendar__header">
-            <button
-              type="button"
-              className="booking-calendar__nav"
-              aria-label="Previous month"
-              onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+      {isOpen && mounted
+        ? createPortal(
+            <div
+              ref={popoverRef}
+              className="booking-calendar glass-effect glass-effect--popover"
+              role="dialog"
+              aria-label="Choose date"
+              style={{
+                top: position.top,
+                left: calendarStyleLeft,
+                width: calendarWidth,
+              }}
             >
-              ‹
-            </button>
-            <p className="booking-calendar__month">{monthLabel}</p>
-            <button
-              type="button"
-              className="booking-calendar__nav"
-              aria-label="Next month"
-              onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
-            >
-              ›
-            </button>
-          </div>
-          <div className="booking-calendar__weekdays">
-            {WEEKDAYS.map((weekday) => (
-              <span key={weekday} className="booking-calendar__weekday">
-                {weekday}
-              </span>
-            ))}
-          </div>
-          <div className="booking-calendar__grid">
-            {Array.from({ length: firstWeekday }, (_, index) => (
-              <span key={`empty-${index}`} className="booking-calendar__empty" />
-            ))}
-            {days.map((item) => (
-              <button
-                key={item.iso}
-                type="button"
-                disabled={item.disabled}
-                className={`booking-calendar__day${item.selected ? " is-selected" : ""}${item.today ? " is-today" : ""}`}
-                onClick={() => {
-                  onChange(item.iso);
-                  setIsOpen(false);
-                }}
-              >
-                {item.day}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : null}
+              <div className="booking-calendar__header">
+                <button
+                  type="button"
+                  className="booking-calendar__nav"
+                  aria-label="Previous month"
+                  onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+                >
+                  ‹
+                </button>
+                <p className="booking-calendar__month">{monthLabel}</p>
+                <button
+                  type="button"
+                  className="booking-calendar__nav"
+                  aria-label="Next month"
+                  onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
+                >
+                  ›
+                </button>
+              </div>
+              <div className="booking-calendar__weekdays">
+                {WEEKDAYS.map((weekday) => (
+                  <span key={weekday} className="booking-calendar__weekday">
+                    {weekday}
+                  </span>
+                ))}
+              </div>
+              <div className="booking-calendar__grid">
+                {Array.from({ length: firstWeekday }, (_, index) => (
+                  <span key={`empty-${index}`} className="booking-calendar__empty" />
+                ))}
+                {days.map((item) => (
+                  <button
+                    key={item.iso}
+                    type="button"
+                    disabled={item.disabled}
+                    className={`booking-calendar__day${item.selected ? " is-selected" : ""}${item.today ? " is-today" : ""}`}
+                    onClick={() => {
+                      onChange(item.iso);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {item.day}
+                  </button>
+                ))}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

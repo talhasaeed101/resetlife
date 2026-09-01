@@ -54,7 +54,7 @@ export default function Events() {
     >
       {/* ── Heading – slides up ── */}
       <div
-        className="mx-auto mb-10 w-full max-w-[1280px] px-5 sm:mb-12 sm:px-8 md:px-10 lg:px-16 xl:mb-[70px] xl:px-20"
+        className="mx-auto mb-10 w-full px-5 sm:mb-12 sm:px-8 md:px-10 lg:px-16 xl:mb-[70px] xl:px-20"
         style={animStyle(show, 0, headingHidden)}
       >
         <SectionHeading

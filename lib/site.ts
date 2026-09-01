@@ -72,12 +72,11 @@ export const EVENT_LINKS = [
 ] as const;
 
 export const EVENT_TYPES = [
+   "Villa",
   "Photography",
   "Nikkah",
   "Birthday",
-  "Corporate Events",
-  "Villa Stay",
-  "Other",
+  "Corporate Event",
 ] as const;
 
 export const GUEST_OPTIONS = [
