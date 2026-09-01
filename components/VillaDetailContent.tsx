@@ -178,7 +178,7 @@ export default function VillaDetailContent() {
         {/* CTA button */}
         <div className="vd-reserve-row">
           <a
-            href={SITE.whatsappUrl}
+            href={SITE.villaDetailWhatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="vd-reserve-btn"

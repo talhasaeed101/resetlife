@@ -12,7 +12,7 @@ const VIEWPORTS = [
 
 const EXPECTED_EMAIL_HREF = "mailto:resetlifefarmhouse@gmail.com";
 const EXPECTED_WHATSAPP_HREF =
-  "https://wa.me/923145156162?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20know%20more%20about%20availability%20and%20bookings.";
+  "https://wa.me/923710525188?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20know%20more%20about%20availability%20and%20bookings.";
 const EXPECTED_INSTAGRAM_HREF = "https://www.instagram.com/resetlifefarmhouse/";
 
 function carouselMoved(before, after) {
