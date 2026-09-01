@@ -1039,7 +1039,7 @@ display:none
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 28rem;
+  /* min-height: 28rem; */
   padding: 5rem 1.25rem;
   overflow: hidden;
 }
@@ -1047,13 +1047,13 @@ display:none
 @media (min-width: 640px) {
   .testimonial-section {
     padding: 6rem 2rem;
-    min-height: 30rem;
+    /* min-height: 30rem; */
   }
 }
 
 @media (min-width: 1280px) {
   .testimonial-section {
-    min-height: 34rem;
+    /* min-height: 34rem; */
     padding: 7rem 5rem;
   }
 }
@@ -1161,7 +1161,7 @@ display:none
 
 @media (min-width: 1280px) {
   .gallery-section {
-    padding: 5.5rem 0 6rem;
+    padding: 12.5rem 0 6rem;
   }
 }
 
@@ -1172,19 +1172,19 @@ display:none
   max-width: 80rem;
   flex-direction: column;
   gap: 2.5rem;
-  padding: 0 1.25rem;
+  /* padding: 0 1.25rem; */
 }
 
 @media (min-width: 640px) {
   .gallery-section__inner {
-    padding: 0 2rem;
+    /* padding: 0 2rem; */
     gap: 3rem;
   }
 }
 
 @media (min-width: 1280px) {
   .gallery-section__inner {
-    padding: 0 5rem;
+    /* padding: 0 5rem; */
     gap: 4.375rem;
   }
 }
@@ -1205,25 +1205,19 @@ display:none
 }
 
 .gallery-instagram-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.75rem;
-  background: rgba(5, 11, 8, 0.42);
-  padding: 0.75rem 1.25rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  min-height: 43px;
+  min-width: 160px;
+  padding: 0 1.25rem;
   text-decoration: none;
-  transition:
-    border-color 0.22s ease,
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
 }
 
-.gallery-instagram-cta:hover {
-  transform: translateY(-1px);
-  border-color: rgba(223, 203, 162, 0.28);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+.gallery-instagram-cta span {
+  line-height: 2;
+  margin-bottom: 4px;
 }
 
 .gallery-carousel-viewport {
@@ -1261,6 +1255,9 @@ display:none
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
+  width:100%;
+  max-height: 240px;
+  max-width: 240px;
   border-radius: 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:

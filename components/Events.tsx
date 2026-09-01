@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { assets } from "@/lib/assets";
 import { BookNowButton } from "@/components/BookNowButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -11,6 +12,9 @@ const eventDescription =
 
 const EASE = "cubic-bezier(0.22,1,0.36,1)";
 const DURATION = "900ms";
+const REVEAL_DELAY_MS = 120;
+
+type TrackAnimPhase = "hidden" | "displayed" | "animated";
 
 /** Shared transition style applied to every animated element */
 const transitionStyle = {
@@ -21,30 +25,109 @@ const transitionStyle = {
 /** Visible vs hidden inline style */
 const visible = { transform: "translateX(0)", opacity: 1 } as const;
 const hidden = { transform: "translateX(80px)", opacity: 0 } as const;
+const displayed = { transform: "translateX(80px)", opacity: 1 } as const;
 
 /** heading hidden goes upward */
 const headingVisible = { transform: "translateY(0)", opacity: 1 } as const;
 const headingHidden = { transform: "translateY(40px)", opacity: 0 } as const;
+const headingDisplayed = { transform: "translateY(40px)", opacity: 1 } as const;
 
-function animStyle(
-  isVisible: boolean,
-  delayMs: number,
-  fromState: typeof hidden | typeof headingHidden = hidden,
-) {
+function trackAnimStyle(phase: TrackAnimPhase, delayMs: number) {
+  if (phase === "hidden") {
+    return {
+      ...transitionStyle,
+      transitionDelay: "0ms",
+      ...hidden,
+    } as React.CSSProperties;
+  }
+
+  if (phase === "displayed") {
+    return {
+      transition: `opacity 280ms ${EASE}`,
+      transitionDelay: "0ms",
+      ...displayed,
+    } as React.CSSProperties;
+  }
+
   return {
     ...transitionStyle,
-    transitionDelay: isVisible ? `${delayMs}ms` : "0ms",
-    ...(isVisible ? visible : fromState),
+    transitionDelay: `${delayMs}ms`,
+    ...visible,
+  } as React.CSSProperties;
+}
+
+function headingAnimStyle(
+  phase: TrackAnimPhase,
+  delayMs: number,
+) {
+  if (phase === "hidden") {
+    return {
+      ...transitionStyle,
+      transitionDelay: "0ms",
+      ...headingHidden,
+    } as React.CSSProperties;
+  }
+
+  if (phase === "displayed") {
+    return {
+      transition: `opacity 280ms ${EASE}`,
+      transitionDelay: "0ms",
+      ...headingDisplayed,
+    } as React.CSSProperties;
+  }
+
+  return {
+    ...transitionStyle,
+    transitionDelay: `${delayMs}ms`,
+    ...headingVisible,
   } as React.CSSProperties;
 }
 
 export default function Events() {
-  const { sectionRef, trackRef, animState } = useScrollDrivenCarousel({
+  const { sectionRef, trackRef } = useScrollDrivenCarousel({
     sensitivity: 1.4,
     friction: 0.88,
   });
+  const [trackAnimPhase, setTrackAnimPhase] = useState<TrackAnimPhase>("hidden");
+  const revealTimerRef = useRef<number | null>(null);
 
-  const show = animState === "visible";
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTrackAnimPhase("displayed");
+          if (revealTimerRef.current !== null) {
+            window.clearTimeout(revealTimerRef.current);
+          }
+          revealTimerRef.current = window.setTimeout(() => {
+            setTrackAnimPhase("animated");
+          }, REVEAL_DELAY_MS);
+          return;
+        }
+
+        if (revealTimerRef.current !== null) {
+          window.clearTimeout(revealTimerRef.current);
+          revealTimerRef.current = null;
+        }
+        setTrackAnimPhase("hidden");
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(track);
+
+    return () => {
+      observer.disconnect();
+      if (revealTimerRef.current !== null) {
+        window.clearTimeout(revealTimerRef.current);
+      }
+    };
+  }, [trackRef]);
 
   return (
     <section
@@ -55,7 +138,7 @@ export default function Events() {
       {/* ── Heading – slides up ── */}
       <div
         className="mx-auto mb-10 w-full px-5 sm:mb-12 sm:px-8 md:px-10 lg:px-16 xl:mb-[70px] xl:px-20"
-        style={animStyle(show, 0, headingHidden)}
+        style={headingAnimStyle(trackAnimPhase, 0)}
       >
         <SectionHeading
           label="EVENTS"
@@ -72,25 +155,25 @@ export default function Events() {
         {/* Photography image */}
         <div
           className="relative h-[420px] w-[78vw] max-w-[380px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[340px] xl:h-[500px] xl:w-[380px] xl:rounded-[30px]"
-          style={animStyle(show, 80)}
+          style={trackAnimStyle(trackAnimPhase, 80)}
         >
           <Image src={assets.events.photography} alt="Photography event" fill className="object-cover" sizes="380px" />
         </div>
 
         {/* Photography text */}
         <div
-          className="flex h-[420px] w-[72vw] max-w-[340px] shrink-0 flex-col justify-end gap-5 sm:h-[460px] sm:w-[300px] sm:gap-6 xl:h-[500px] xl:w-[340px]"
-          style={animStyle(show, 200)}
+          className="flex h-[420px] w-[72vw] max-w-[340px] shrink-0 flex-col justify-end sm:h-[460px] sm:w-[300px] xl:h-[500px] xl:w-[340px] gap-[10px]"
+          style={trackAnimStyle(trackAnimPhase, 200)}
         >
           <h3 className="font-['dtnightingale'] text-[32px] font-light leading-none text-white sm:text-[36px] xl:text-[40px]">Photography</h3>
-          <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">{eventDescription}</p>
+          <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px] pb-[12px]">{eventDescription}</p>
           <BookNowButton eventType="Photography" className="w-full sm:w-auto" />
         </div>
 
         {/* Nikkah image collage */}
         <div
           className="flex h-[380px] w-[72vw] max-w-[340px] shrink-0 flex-col items-end gap-4 sm:w-[300px] xl:h-[420px] xl:w-[340px] xl:gap-5"
-          style={animStyle(show, 320)}
+          style={trackAnimStyle(trackAnimPhase, 320)}
         >
           <div className="flex gap-4 sm:gap-5">
             <div className="relative h-[72px] w-[72px] overflow-hidden rounded-[12px] sm:h-[90px] sm:w-[90px]">
@@ -108,7 +191,7 @@ export default function Events() {
         {/* Nikkah text */}
         <div
           className="flex h-[420px] w-[72vw] max-w-[340px] shrink-0 flex-col gap-5 sm:h-[460px] sm:w-[300px] sm:gap-6 xl:h-[500px] xl:w-[340px]"
-          style={animStyle(show, 440)}
+          style={trackAnimStyle(trackAnimPhase, 440)}
         >
           <h3 className="font-['dtnightingale'] text-[32px] font-light leading-none text-white sm:text-[36px] xl:text-[40px]">Nikkah</h3>
           <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">{eventDescription}</p>
@@ -118,7 +201,7 @@ export default function Events() {
         {/* Birthday text */}
         <div
           className="flex h-[420px] w-[72vw] max-w-[340px] shrink-0 flex-col items-start justify-center gap-5 sm:h-[460px] sm:w-[300px] sm:gap-6 xl:h-[500px] xl:w-[340px] xl:items-end xl:text-right"
-          style={animStyle(show, 560)}
+          style={trackAnimStyle(trackAnimPhase, 560)}
         >
           <h3 className="font-['dtnightingale'] text-[32px] font-light leading-none text-white sm:text-[36px] xl:text-[40px]">Birthday</h3>
           <p className="font-['Raleway'] text-[14px] font-normal leading-normal text-[#8e8e8e] sm:text-[16px]">{eventDescription}</p>
@@ -128,7 +211,7 @@ export default function Events() {
         {/* Birthday image */}
         <div
           className="relative h-[420px] w-[78vw] max-w-[380px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[340px] xl:h-[500px] xl:w-[380px] xl:rounded-[30px]"
-          style={animStyle(show, 680)}
+          style={trackAnimStyle(trackAnimPhase, 680)}
         >
           <Image src={assets.events.birthday} alt="Birthday celebration" fill className="object-cover" sizes="380px" />
         </div>
@@ -136,7 +219,7 @@ export default function Events() {
         {/* Corporate Events text */}
         <div
           className="flex h-[420px] w-[72vw] max-w-[340px] shrink-0 flex-col items-start justify-end gap-5 sm:h-[460px] sm:w-[300px] sm:gap-6 xl:h-[500px] xl:w-[340px] xl:items-end xl:text-right"
-          style={animStyle(show, 800)}
+          style={trackAnimStyle(trackAnimPhase, 800)}
         >
           <h3 className="max-w-[200px] font-['dtnightingale'] text-[32px] font-light leading-[1.15] text-white sm:text-[36px] xl:text-[40px] xl:leading-[48px]">
             Corporate Events
@@ -148,7 +231,7 @@ export default function Events() {
         {/* Corporate Events image */}
         <div
           className="relative h-[420px] w-[78vw] max-w-[380px] shrink-0 overflow-hidden rounded-[24px] sm:h-[460px] sm:w-[340px] xl:h-[500px] xl:w-[380px] xl:rounded-[30px]"
-          style={animStyle(show, 920)}
+          style={trackAnimStyle(trackAnimPhase, 920)}
         >
           <Image src={assets.events.corporate} alt="Corporate event" fill className="object-cover" sizes="380px" />
         </div>

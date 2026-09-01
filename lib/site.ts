@@ -12,8 +12,8 @@ export const SITE = {
   villaDetailWhatsappUrl:
     "https://wa.me/923710525188?text=Hello%20Reset%20Life%20Farmhouse%2C%20I%27d%20like%20to%20make%20a%20reservation.",
   instagram: "https://www.instagram.com/resetlifefarmhouse/",
-  instagramHandle: "@resetlifefarmhouse",
-  instagramLabel: "Reset Life Farmhouse",
+  instagramHandle: "@resetlife",
+  instagramLabel: "resetlife",
   phone: "+921234567890",
   phoneDisplay: "+92 123 4567890",
   address:

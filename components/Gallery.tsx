@@ -24,10 +24,10 @@ export default function Gallery() {
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="gallery-instagram-cta"
+            className="gallery-instagram-cta glass-effect"
             aria-label={`${SITE.instagramLabel} on Instagram`}
           >
-            <span className="text-gradient-farm font-['BaskervvilleSC'] text-[16px] font-semibold sm:text-[18px]">
+            <span className="text-gradient-farm font-['BaskervvilleSC'] text-[16px] font-semibold leading-none sm:text-[18px]">
               {SITE.instagramHandle}
             </span>
           </a>

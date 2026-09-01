@@ -95,7 +95,7 @@ export default function LuxuryCars() {
     <section
       id="luxury-cars"
       ref={sectionRef}
-      className="w-full overflow-hidden bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-[100px]"
+      className="w-full overflow-hidden bg-[#050b08] px-5 py-16 sm:px-8 md:px-10 lg:px-16 xl:px-20 xl:py-[200px]"
     >
       <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-12 lg:flex-row lg:gap-16 xl:gap-20">
 
@@ -120,7 +120,7 @@ export default function LuxuryCars() {
 
           {/* car2 – smaller card, bottom-right, overlapping */}
           <div
-            className="absolute bottom-0 right-0 z-20 h-[200px] w-[170px] overflow-hidden rounded-[20px] shadow-2xl sm:bottom-[-10px] sm:h-[260px] sm:w-[200px] md:h-[260px] md:w-[220px] xl:h-[260px] xl:w-[260px] xl:rounded-[24px]"
+            className="absolute bottom-0 right-0 z-20 h-[200px] w-[170px] overflow-hidden rounded-[20px] shadow-2xl sm:bottom-[-104px] sm:h-[260px] sm:w-[200px] md:h-[260px] md:w-[220px] xl:h-[260px] xl:w-[260px] xl:rounded-[24px]"
             style={inlineAnim(show, 200, "right")}
           >
             <Image
@@ -135,7 +135,7 @@ export default function LuxuryCars() {
         </div>
 
         {/* ── Right: text content ── */}
-        <div className="flex w-full flex-col gap-6 lg:w-[52%] xl:gap-8">
+        <div className="flex w-full flex-col gap-6 lg:w-[52%] xl:gap-5">
           {/* Label */}
           <p
             className="text-gradient-farm font-['BaskervvilleSC'] text-[14px] font-semibold leading-none tracking-[0.08em] sm:text-[16px]"
@@ -146,7 +146,7 @@ export default function LuxuryCars() {
 
           {/* Heading */}
           <h2
-            className="font-['dtnightingale'] text-[40px] font-light leading-none tracking-[0.01em] text-white sm:text-[45px] xl:text-[50px] max-w-[302px] sm:max-w-[400px] lg:max-w-[480px]"
+            className="font-['dtnightingale'] text-[40px] font-light leading-none tracking-[0.01em] text-white sm:text-[45px] xl:text-[50px] max-w-[302px] sm:max-w-[400px] lg:max-w-[350px]"
             style={inlineAnim(show, 220, "up")}
           >
             Your Ride, Your Luxury
