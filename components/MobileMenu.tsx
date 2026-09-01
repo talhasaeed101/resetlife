@@ -1,22 +1,30 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { assets } from "@/lib/assets";
-import {
-  DROPDOWN_NAV_LINKS,
-  PAGE_NAV_LINKS,
-  ROUTES,
-  type SectionId,
-} from "@/lib/site";
-import { scrollToSection } from "@/lib/scroll";
+import { DROPDOWN_NAV_LINKS, ROUTES, type SectionId } from "@/lib/site";
+import { navigateToSection } from "@/lib/scroll";
+
+export const SITE_MENU_TRIGGER_ID = "site-menu-trigger";
 
 type MobileMenuProps = {
   isOpen: boolean;
   onClose: () => void;
-  mode?: "home" | "page";
+};
+
+type MenuPosition = {
+  top: number;
+  right: number;
 };
 
 function useIsClient() {
@@ -27,13 +35,44 @@ function useIsClient() {
   );
 }
 
-export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) {
+function getMenuPosition(): MenuPosition | null {
+  const trigger = document.getElementById(SITE_MENU_TRIGGER_ID);
+  if (!trigger) {
+    return null;
+  }
+
+  const rect = trigger.getBoundingClientRect();
+  return {
+    top: rect.bottom + 8,
+    right: Math.max(12, window.innerWidth - rect.right),
+  };
+}
+
+export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const mounted = useIsClient();
+  const pathname = usePathname();
+  const [position, setPosition] = useState<MenuPosition | null>(null);
+
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      setPosition(null);
+      return;
+    }
+
+    setPosition(getMenuPosition());
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
       return;
     }
+
+    const updatePosition = () => {
+      setPosition(getMenuPosition());
+    };
+
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -42,33 +81,50 @@ export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) 
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   const handleNavClick = (sectionId: SectionId) => {
+    document.body.style.overflow = "";
+    document.documentElement.style.overflowX = "";
+    navigateToSection(sectionId, pathname);
     onClose();
-    window.setTimeout(() => scrollToSection(sectionId), 150);
   };
 
-  if (!isOpen || !mounted) {
+  const handleBookNowClick = () => {
+    document.body.style.overflow = "";
+    document.documentElement.style.overflowX = "";
+    onClose();
+    window.location.href = ROUTES.reservation;
+  };
+
+  if (!isOpen || !mounted || !position) {
     return null;
   }
 
-  return (
+  const panelStyle: CSSProperties = {
+    top: position.top,
+    right: position.right,
+  };
+
+  return createPortal(
     <>
-      {createPortal(
-        <button
-          type="button"
-          className="mobile-menu-backdrop"
-          aria-label="Close menu"
-          onClick={onClose}
-        />,
-        document.body,
-      )}
+      <button
+        type="button"
+        className="mobile-menu-backdrop"
+        aria-label="Close menu"
+        onClick={onClose}
+      />
 
       <div
         id="site-navigation-menu"
-        className="mobile-menu-panel glass-effect"
+        className="mobile-menu-panel mobile-menu-panel--portal glass-effect"
+        style={panelStyle}
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
@@ -83,50 +139,44 @@ export function MobileMenu({ isOpen, onClose, mode = "home" }: MobileMenuProps) 
         </button>
 
         <nav className="mobile-menu-panel__nav">
-          {mode === "page"
-            ? PAGE_NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={onClose}
-                  className="mobile-menu-link"
-                >
-                  {link.label}
-                </Link>
-              ))
-            : DROPDOWN_NAV_LINKS.map((link) => (
-                <button
-                  key={link.label}
-                  type="button"
-                  onClick={() => handleNavClick(link.sectionId)}
-                  className="mobile-menu-link"
-                >
-                  {link.label}
-                </button>
-              ))}
-          {mode === "page" ? (
-            <Link
-              href={ROUTES.reservation}
-              onClick={onClose}
+          {DROPDOWN_NAV_LINKS.map((link) => (
+            <button
+              key={link.label}
+              type="button"
+              onClick={() => handleNavClick(link.sectionId)}
               className="mobile-menu-link"
             >
-              Book Now
-            </Link>
-          ) : null}
+              {link.label}
+            </button>
+          ))}
+          {/* <button
+            type="button"
+            onClick={handleBookNowClick}
+            className="mobile-menu-link"
+          >
+            Book Now
+          </button> */}
         </nav>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }
 
 export function SiteLogoLink({ className = "" }: { className?: string }) {
+  const pathname = usePathname();
+
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    document.body.style.overflow = "";
+    document.documentElement.style.overflowX = "";
+    navigateToSection("hero", pathname);
+  };
+
   return (
     <Link
-      href="#hero"
-      onClick={(event) => {
-        event.preventDefault();
-        scrollToSection("hero");
-      }}
+      href={ROUTES.home}
+      onClick={handleClick}
       className={`flex items-end gap-[9px] ${className}`}
       aria-label="Reset Life home"
     >
@@ -140,8 +190,6 @@ export function SiteLogoLink({ className = "" }: { className?: string }) {
       <span className="text-gradient-farm font-['BaskervvilleSC'] text-[18px] uppercase tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
         Reset life
       </span>
-
-
     </Link>
   );
 }

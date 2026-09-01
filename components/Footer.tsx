@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { assets } from "@/lib/assets";
 import {
   EVENT_LINKS,
   NAV_LINKS,
+  ROUTES,
   SECTION_IDS,
   SITE,
 } from "@/lib/site";
-import { scrollToSection } from "@/lib/scroll";
+import { navigateToSection } from "@/lib/scroll";
 
 
 
@@ -20,10 +22,12 @@ function SectionLink({
   label: string;
   sectionId: (typeof SECTION_IDS)[keyof typeof SECTION_IDS];
 }) {
+  const pathname = usePathname();
+
   return (
     <button
       type="button"
-      onClick={() => scrollToSection(sectionId)}
+      onClick={() => navigateToSection(sectionId, pathname)}
       className="footer-link"
     >
       {label}
@@ -32,16 +36,18 @@ function SectionLink({
 }
 
 export default function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer className="footer-premium">
       <div className="footer-premium__inner">
         {/* Brand / Logo */}
         <div className="footer-brand-row">
           <Link
-            href="#hero"
+            href={ROUTES.home}
             onClick={(event) => {
               event.preventDefault();
-              scrollToSection("hero");
+              navigateToSection("hero", pathname);
             }}
             className="footer-brand"
             aria-label="Reset Life home"

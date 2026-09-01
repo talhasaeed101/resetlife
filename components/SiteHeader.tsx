@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
-import { MobileMenu,SiteLogoLink } from "@/components/MobileMenu";
+import { MobileMenu, SITE_MENU_TRIGGER_ID, SiteLogoLink } from "@/components/MobileMenu";
 type SiteHeaderProps = {
   variant?: "page" | "overlay";
 };
@@ -37,6 +37,7 @@ export function SiteHeader({ variant = "page" }: SiteHeaderProps) {
 
           <div className="relative">
             <button
+              id={SITE_MENU_TRIGGER_ID}
               type="button"
               className="glass-effect relative flex items-center gap-[6px] px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}

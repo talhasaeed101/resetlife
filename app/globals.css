@@ -86,6 +86,17 @@ body {
   overflow-x: hidden;
 }
 
+#hero,
+#about,
+#villa,
+#events,
+#gallery,
+#testimonial,
+#faq,
+#contact {
+  scroll-margin-top: 6rem;
+}
+
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -860,7 +871,7 @@ button.booking-control-row {
 .mobile-menu-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 99990;
+  z-index: 100000;
   border: 0;
   background: transparent;
   cursor: default;
@@ -879,6 +890,12 @@ button.booking-control-row {
   animation: mobile-menu-slide-in 0.28s ease;
 }
 
+.mobile-menu-panel--portal {
+  position: fixed;
+  z-index: 100001;
+  margin: 0;
+}
+
 .mobile-menu-panel__nav {
   position: relative;
   z-index: 3;
@@ -889,6 +906,12 @@ button.booking-control-row {
 }
 
 .mobile-menu-link {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
   text-align: left;
   font-family: 'dtnightingale' !important;
   font-size: 20px !important;

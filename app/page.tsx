@@ -6,12 +6,14 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
 import Hero from "@/components/Hero";
+import { SectionHashHandler } from "@/components/SectionHashHandler";
 import Testimonial from "@/components/Testimonial";
 import Villa from "@/components/Villa";
 
 export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050b08]">
+      <SectionHashHandler />
       <Hero />
       <About />
       <Villa />

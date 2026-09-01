@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/assets";
 import { ROUTES } from "@/lib/site";
-import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
+import { MobileMenu, SITE_MENU_TRIGGER_ID, SiteLogoLink } from "@/components/MobileMenu";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
@@ -77,6 +77,7 @@ export default function VillaDetailContent() {
 
           <div className="relative">
             <button
+              id={SITE_MENU_TRIGGER_ID}
               type="button"
               className="menu-button-glass relative flex items-center gap-[6px] rounded-full px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}

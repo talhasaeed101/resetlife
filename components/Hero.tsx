@@ -9,7 +9,7 @@ import { EVENT_TYPES, GUEST_OPTIONS, ROUTES } from "@/lib/site";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { useToast } from "@/components/ui/Toast";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
-import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
+import { MobileMenu, SITE_MENU_TRIGGER_ID, SiteLogoLink } from "@/components/MobileMenu";
 import { readBookingPrefill, clearBookingPrefill, BOOKING_PREFILL_EVENT } from "@/lib/scroll";
 import { formatValidationToast, validateBookingForm } from "@/lib/validation";
 
@@ -116,6 +116,7 @@ export default function Hero() {
 
           <div className="relative">
             <button
+              id={SITE_MENU_TRIGGER_ID}
               type="button"
               className="glass-effect relative flex items-center gap-[6px] px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
