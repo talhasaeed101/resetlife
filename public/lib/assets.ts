@@ -4,7 +4,6 @@ export const assets = {
     logoIcon: "/Images/homePage/logo-icon.svg",
     menuIcon: "/Images/homePage/menu-hamburger.svg",
     menuButtonBg: "/Images/homePage/Frame 2147239969.png",
-    menuButtonBgPage: "/Images/homePage/bbb.png",
     searchFilterBg: "/Images/homePage/Search Filter.png",
     dropdownBg: "/Images/homePage/dropdown.png",
     arrowDown: "/Images/homePage/arrow-down.svg",

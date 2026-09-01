@@ -78,21 +78,13 @@ export default function VillaDetailContent() {
           <div className="relative">
             <button
               type="button"
-              className="relative flex items-center gap-[6px] rounded-full px-4 py-2 sm:px-5 sm:py-2.5"
+              className="menu-button-glass relative flex items-center gap-[6px] rounded-full px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="site-navigation-menu"
               aria-haspopup="dialog"
               onClick={() => setMenuOpen((open) => !open)}
             >
-              <Image
-                src={assets.hero.menuButtonBgPage}
-                alt=""
-                fill
-                sizes="160px"
-                className="pointer-events-none object-fill"
-                aria-hidden
-              />
               <span className="relative z-10 font-['dtnightingale'] text-[14px] capitalize tracking-[1.6px] text-white sm:text-[16px]">
                 Menu
               </span>

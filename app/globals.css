@@ -1683,6 +1683,39 @@ display:none
   backdrop-filter: blur(12px);
 }
 
+.menu-button-glass {
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 12px;
+}
+
+.menu-button-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.18);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-button-glass::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
 /* ── Villa Details Redesign ──────────────────────────────── */
 .vd-page {
   min-height: 100vh;
