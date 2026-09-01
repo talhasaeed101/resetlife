@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import {
-  buildCarReservationWhatsAppUrl,
+  submitCarReservation,
   type CarReservationDetails,
 } from "@/lib/car-reservation";
 import { CAR_OPTIONS, PERSON_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
@@ -61,8 +61,7 @@ export default function CarReservationContent() {
     }
 
     const details: CarReservationDetails = values;
-    const whatsappUrl = buildCarReservationWhatsAppUrl(details);
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    submitCarReservation(details);
   };
 
   return (

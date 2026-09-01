@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { assets } from "@/lib/assets";
 import {
-  buildVillaWhatsAppUrl,
   clearReservationPrefill,
   readReservationPrefill,
+  submitVillaReservation,
   type VillaReservationDetails,
 } from "@/lib/reservation";
 import { EVENT_TYPES, GUEST_OPTIONS, PREFIX_OPTIONS } from "@/lib/site";
@@ -79,8 +79,7 @@ export default function ReservationContent() {
     }
 
     const details: VillaReservationDetails = values;
-    const whatsappUrl = buildVillaWhatsAppUrl(details);
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    submitVillaReservation(details);
   };
 
   return (

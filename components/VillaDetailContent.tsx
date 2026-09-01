@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/assets";
-import { ROUTES, SITE } from "@/lib/site";
+import { ROUTES } from "@/lib/site";
 import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -177,14 +177,9 @@ export default function VillaDetailContent() {
 
         {/* CTA button */}
         <div className="vd-reserve-row">
-          <a
-            href={SITE.villaDetailWhatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="vd-reserve-btn"
-          >
+          <Link href={ROUTES.reservation} className="vd-reserve-btn">
             MAKE A RESERVATION
-          </a>
+          </Link>
         </div>
       </div>
 
