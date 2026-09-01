@@ -86,7 +86,7 @@ export default function VillaDetailContent() {
               onClick={() => setMenuOpen((open) => !open)}
             >
               <Image
-                src={assets.hero.menuButtonBg}
+                src={assets.hero.menuButtonBgPage}
                 alt=""
                 fill
                 sizes="160px"

@@ -2,17 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { assets } from "@/lib/assets";
-import { PAGE_NAV_LINKS, ROUTES } from "@/lib/site";
 import { MobileMenu,SiteLogoLink } from "@/components/MobileMenu";
 type SiteHeaderProps = {
   variant?: "page" | "overlay";
 };
 
 export function SiteHeader({ variant = "page" }: SiteHeaderProps) {
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -50,7 +46,7 @@ export function SiteHeader({ variant = "page" }: SiteHeaderProps) {
               onClick={() => setMenuOpen((open) => !open)}
             >
               <Image
-                src={assets.hero.menuButtonBg}
+                src={assets.hero.menuButtonBgPage}
                 alt=""
                 fill
                 sizes="160px"
