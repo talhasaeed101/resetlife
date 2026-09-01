@@ -8,6 +8,8 @@ import { assets } from "@/lib/assets";
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
 const CALENDAR_WIDTH = 280;
 
+type PopoverMode = "portal" | "anchored";
+
 function useIsClient() {
   return useSyncExternalStore(
     () => () => {},
@@ -26,6 +28,7 @@ function usePopoverPosition(
   triggerRef: React.RefObject<HTMLElement | null>,
   isOpen: boolean,
   align: "start" | "end" = "start",
+  mode: PopoverMode = "portal",
 ) {
   const [position, setPosition] = useState<PopoverPosition>({
     top: 0,
@@ -34,7 +37,7 @@ function usePopoverPosition(
   });
 
   useEffect(() => {
-    if (!isOpen || !triggerRef.current) {
+    if (!isOpen || !triggerRef.current || mode === "anchored") {
       return;
     }
 
@@ -45,10 +48,7 @@ function usePopoverPosition(
       }
 
       const rect = trigger.getBoundingClientRect();
-      const calendarLeft =
-        align === "end"
-          ? rect.right
-          : rect.left;
+      const calendarLeft = align === "end" ? rect.right : rect.left;
 
       setPosition({
         top: rect.bottom + 10,
@@ -65,7 +65,7 @@ function usePopoverPosition(
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("resize", updatePosition);
     };
-  }, [align, isOpen, triggerRef]);
+  }, [align, isOpen, mode, triggerRef]);
 
   return position;
 }
@@ -91,19 +91,21 @@ export function CustomDropdown({
   options,
   placeholder = "Choose",
   id,
+  popoverMode = "portal",
 }: {
   value: string;
   onChange: (value: string) => void;
   options: readonly string[];
   placeholder?: string;
   id?: string;
+  popoverMode?: PopoverMode;
 }) {
   const mounted = useIsClient();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const position = usePopoverPosition(triggerRef, isOpen);
+  const position = usePopoverPosition(triggerRef, isOpen, "start", popoverMode);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -128,6 +130,41 @@ export function CustomDropdown({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const dropdownPanel = (
+    <div
+      ref={popoverRef}
+      className={`booking-dropdown glass-effect glass-effect--popover${
+        popoverMode === "anchored" ? " booking-dropdown--anchored" : ""
+      }`}
+      role="listbox"
+      style={
+        popoverMode === "portal"
+          ? {
+              top: position.top,
+              left: position.left,
+              width: position.width,
+            }
+          : undefined
+      }
+    >
+      {options.map((option) => (
+        <button
+          key={option}
+          type="button"
+          role="option"
+          aria-selected={value === option}
+          onClick={() => {
+            onChange(option);
+            setIsOpen(false);
+          }}
+          className="booking-dropdown-option"
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <div
@@ -157,36 +194,12 @@ export function CustomDropdown({
         />
       </div>
 
-      {isOpen && mounted
-        ? createPortal(
-            <div
-              ref={popoverRef}
-              className="booking-dropdown glass-effect glass-effect--popover"
-              role="listbox"
-              style={{
-                top: position.top,
-                left: position.left,
-                minWidth: Math.max(position.width, 192),
-              }}
-            >
-              {options.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  role="option"
-                  aria-selected={value === option}
-                  onClick={() => {
-                    onChange(option);
-                    setIsOpen(false);
-                  }}
-                  className="booking-dropdown-option"
-                >
-                  {option}
-                </button>
-              ))}
-            </div>,
-            document.body,
-          )
+      {isOpen
+        ? popoverMode === "anchored"
+          ? dropdownPanel
+          : mounted
+            ? createPortal(dropdownPanel, document.body)
+            : null
         : null}
     </div>
   );
@@ -199,6 +212,7 @@ export function BookingDatePicker({
   align = "start",
   placeholder = "mm/dd/yyyy",
   onChange,
+  popoverMode = "portal",
 }: {
   id: string;
   value: string;
@@ -206,6 +220,7 @@ export function BookingDatePicker({
   align?: "start" | "end";
   placeholder?: string;
   onChange: (value: string) => void;
+  popoverMode?: PopoverMode;
 }) {
   const mounted = useIsClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -219,7 +234,7 @@ export function BookingDatePicker({
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const position = usePopoverPosition(triggerRef, isOpen, align);
+  const position = usePopoverPosition(triggerRef, isOpen, align, popoverMode);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -271,13 +286,81 @@ export function BookingDatePicker({
       ? Math.min(CALENDAR_WIDTH, window.innerWidth - 40)
       : CALENDAR_WIDTH;
   const calendarLeft =
-    align === "end"
-      ? position.left - calendarWidth
-      : position.left;
+    align === "end" ? position.left - calendarWidth : position.left;
   const calendarStyleLeft =
     typeof window !== "undefined"
       ? Math.max(12, Math.min(calendarLeft, window.innerWidth - calendarWidth - 12))
       : calendarLeft;
+
+  const calendarPanel = (
+    <div
+      ref={popoverRef}
+      className={`booking-calendar glass-effect glass-effect--popover${
+        popoverMode === "anchored"
+          ? align === "end"
+            ? " booking-calendar--anchored booking-calendar--anchored-end"
+            : " booking-calendar--anchored"
+          : ""
+      }`}
+      role="dialog"
+      aria-label="Choose date"
+      style={
+        popoverMode === "portal"
+          ? {
+              top: position.top,
+              left: calendarStyleLeft,
+              width: calendarWidth,
+            }
+          : undefined
+      }
+    >
+      <div className="booking-calendar__header">
+        <button
+          type="button"
+          className="booking-calendar__nav"
+          aria-label="Previous month"
+          onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+        >
+          ‹
+        </button>
+        <p className="booking-calendar__month">{monthLabel}</p>
+        <button
+          type="button"
+          className="booking-calendar__nav"
+          aria-label="Next month"
+          onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
+        >
+          ›
+        </button>
+      </div>
+      <div className="booking-calendar__weekdays">
+        {WEEKDAYS.map((weekday) => (
+          <span key={weekday} className="booking-calendar__weekday">
+            {weekday}
+          </span>
+        ))}
+      </div>
+      <div className="booking-calendar__grid">
+        {Array.from({ length: firstWeekday }, (_, index) => (
+          <span key={`empty-${index}`} className="booking-calendar__empty" />
+        ))}
+        {days.map((item) => (
+          <button
+            key={item.iso}
+            type="button"
+            disabled={item.disabled}
+            className={`booking-calendar__day${item.selected ? " is-selected" : ""}${item.today ? " is-today" : ""}`}
+            onClick={() => {
+              onChange(item.iso);
+              setIsOpen(false);
+            }}
+          >
+            {item.day}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div
@@ -307,67 +390,12 @@ export function BookingDatePicker({
         />
       </button>
 
-      {isOpen && mounted
-        ? createPortal(
-            <div
-              ref={popoverRef}
-              className="booking-calendar glass-effect glass-effect--popover"
-              role="dialog"
-              aria-label="Choose date"
-              style={{
-                top: position.top,
-                left: calendarStyleLeft,
-                width: calendarWidth,
-              }}
-            >
-              <div className="booking-calendar__header">
-                <button
-                  type="button"
-                  className="booking-calendar__nav"
-                  aria-label="Previous month"
-                  onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
-                >
-                  ‹
-                </button>
-                <p className="booking-calendar__month">{monthLabel}</p>
-                <button
-                  type="button"
-                  className="booking-calendar__nav"
-                  aria-label="Next month"
-                  onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
-                >
-                  ›
-                </button>
-              </div>
-              <div className="booking-calendar__weekdays">
-                {WEEKDAYS.map((weekday) => (
-                  <span key={weekday} className="booking-calendar__weekday">
-                    {weekday}
-                  </span>
-                ))}
-              </div>
-              <div className="booking-calendar__grid">
-                {Array.from({ length: firstWeekday }, (_, index) => (
-                  <span key={`empty-${index}`} className="booking-calendar__empty" />
-                ))}
-                {days.map((item) => (
-                  <button
-                    key={item.iso}
-                    type="button"
-                    disabled={item.disabled}
-                    className={`booking-calendar__day${item.selected ? " is-selected" : ""}${item.today ? " is-today" : ""}`}
-                    onClick={() => {
-                      onChange(item.iso);
-                      setIsOpen(false);
-                    }}
-                  >
-                    {item.day}
-                  </button>
-                ))}
-              </div>
-            </div>,
-            document.body,
-          )
+      {isOpen
+        ? popoverMode === "anchored"
+          ? calendarPanel
+          : mounted
+            ? createPortal(calendarPanel, document.body)
+            : null
         : null}
     </div>
   );

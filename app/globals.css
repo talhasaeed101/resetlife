@@ -153,8 +153,7 @@ html {
 }
 
 .glass-effect--popover {
-  clip-path: none;
-  border-radius: 12px;
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -336,13 +335,21 @@ button.booking-control-row {
 .booking-dropdown {
   position: fixed;
   z-index: 99995;
-  min-width: 12rem;
   width: max-content;
   max-width: min(18rem, calc(100vw - 2.5rem));
   max-height: min(16rem, calc(100vh - 2.5rem));
   padding: 0.55rem 0.35rem;
   overflow-y: auto;
-  backdrop-filter: blur(46px);
+}
+
+.booking-dropdown--anchored {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
 }
 
 .booking-dropdown-option {
@@ -382,6 +389,21 @@ button.booking-control-row {
   width: min(17.5rem, calc(100vw - 2.5rem));
   padding: 0.9rem 0.85rem 1rem;
   font-family: "Raleway", sans-serif;
+}
+
+.booking-calendar--anchored {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.booking-calendar--anchored-end {
+  left: auto;
+  right: 0;
 }
 
 .booking-calendar__header {
@@ -805,8 +827,8 @@ button.booking-control-row {
 
 /* Footer */
 .footer-premium {
-  border-top: 1px solid rgba(223, 203, 162, 0.14);
-  background: linear-gradient(180deg, #050b08 0%, #040805 100%);
+  /* border-top: 1px solid rgba(223, 203, 162, 0.14); */
+  background: #000;
   padding: 3rem 1.25rem 2rem;
 }
 
@@ -2027,6 +2049,7 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   inset: 0;
   z-index: 1;
 
+
 }
 
 .reservation-hero__spacer {
@@ -2087,17 +2110,7 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   color: #ffffff;
 }
 
-.reservation-divider {
-  height: 1px;
-  border: 0;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(130, 94, 55, 0.75) 0,
-    rgba(130, 94, 55, 0.75) 3px,
-    transparent 3px,
-    transparent 7px
-  );
-}
+
 
 .reservation-page {
   padding: 3rem 1.25rem 4rem;
@@ -2195,8 +2208,9 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
   z-index: 1;
 }
 
-.reservation-field:focus-within {
-  z-index: 5;
+.reservation-field:focus-within,
+.reservation-field:has(.is-open) {
+  z-index: 20;
 }
 
 .reservation-field input,
@@ -2244,6 +2258,17 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
 .reservation-field__control--booking:focus-within {
   border-color: rgba(223, 203, 162, 0.45);
   background: rgba(255, 255, 255, 0.06);
+}
+
+.reservation-field__control--booking .booking-dropdown--anchored,
+.reservation-field__control--booking .booking-calendar--anchored {
+  left: -1.125rem;
+  width: calc(100% + 2.25rem);
+}
+
+.reservation-field__control--booking .booking-calendar--anchored-end {
+  left: auto;
+  right: -1.125rem;
 }
 
 .reservation-field__control--booking .booking-control-row {

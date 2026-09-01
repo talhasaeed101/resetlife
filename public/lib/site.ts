@@ -87,7 +87,7 @@ export const GUEST_OPTIONS = [
   "6+ Guests",
 ] as const;
 
-export const PREFIX_OPTIONS = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."] as const;
+export const PREFIX_OPTIONS = ["Mr.", "Mrs.", "Ms."] as const;
 
 export const CAR_OPTIONS = [
   "Toyota Land Cruiser V8",

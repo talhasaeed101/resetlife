@@ -109,6 +109,7 @@ export default function CarReservationContent() {
                     onChange={(value) => updateValue("carSelection", value)}
                     options={CAR_OPTIONS}
                     placeholder="Car Selection"
+                    popoverMode="anchored"
                   />
                 </div>
                 {errors.carSelection ? (
@@ -124,6 +125,7 @@ export default function CarReservationContent() {
                     id="car-from-date"
                     value={values.fromDate}
                     placeholder="From"
+                    popoverMode="anchored"
                     onChange={(value) => updateValue("fromDate", value)}
                   />
                 </div>
@@ -140,6 +142,7 @@ export default function CarReservationContent() {
                     min={values.fromDate || undefined}
                     align="end"
                     placeholder="To"
+                    popoverMode="anchored"
                     onChange={(value) => updateValue("toDate", value)}
                   />
                 </div>
@@ -156,6 +159,7 @@ export default function CarReservationContent() {
                     onChange={(value) => updateValue("persons", value)}
                     options={PERSON_OPTIONS}
                     placeholder="Persons"
+                    popoverMode="anchored"
                   />
                 </div>
                 {errors.persons ? (
@@ -173,6 +177,7 @@ export default function CarReservationContent() {
                     onChange={(value) => updateValue("prefix", value)}
                     options={PREFIX_OPTIONS}
                     placeholder="Prefix"
+                    popoverMode="anchored"
                   />
                 </div>
               </div>

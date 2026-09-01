@@ -96,7 +96,7 @@ export default function ReservationContent() {
             sizes="100vw"
           />
         </div>
-        <div className="reservation-hero__overlay" aria-hidden />
+        <div className="reservation-hero__overlay bg-[#00000099]" aria-hidden />
 
         <SiteHeader variant="overlay" />
 
@@ -127,6 +127,7 @@ export default function ReservationContent() {
                     onChange={(value) => updateValue("eventType", value)}
                     options={EVENT_TYPES}
                     placeholder="Events"
+                    popoverMode="anchored"
                   />
                 </div>
                 {errors.eventType ? (
@@ -142,6 +143,7 @@ export default function ReservationContent() {
                     id="reservation-check-in"
                     value={values.checkIn}
                     placeholder="Check-in"
+                    popoverMode="anchored"
                     onChange={(value) => updateValue("checkIn", value)}
                   />
                 </div>
@@ -158,6 +160,7 @@ export default function ReservationContent() {
                     min={values.checkIn || undefined}
                     align="end"
                     placeholder="Check-out"
+                    popoverMode="anchored"
                     onChange={(value) => updateValue("checkOut", value)}
                   />
                 </div>
@@ -174,6 +177,7 @@ export default function ReservationContent() {
                     onChange={(value) => updateValue("guests", value)}
                     options={GUEST_OPTIONS}
                     placeholder="Guest(s)"
+                    popoverMode="anchored"
                   />
                 </div>
                 {errors.guests ? (
@@ -191,6 +195,7 @@ export default function ReservationContent() {
                     onChange={(value) => updateValue("prefix", value)}
                     options={PREFIX_OPTIONS}
                     placeholder="Prefix"
+                    popoverMode="anchored"
                   />
                 </div>
               </div>

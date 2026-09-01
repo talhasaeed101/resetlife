@@ -38,7 +38,7 @@ export function SiteHeader({ variant = "page" }: SiteHeaderProps) {
           <div className="relative">
             <button
               type="button"
-              className="menu-button-glass relative flex items-center gap-[6px] rounded-full px-4 py-2 sm:px-5 sm:py-2.5"
+              className="glass-effect relative flex items-center gap-[6px] px-4 py-2 sm:px-5 sm:py-2.5"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="site-navigation-menu"
