@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { GoldButton } from "@/components/ui/GoldButton";
-import { scrollToSection, storeBookingPrefill, dispatchBookingPrefill } from "@/lib/scroll";
+import { storeReservationPrefill } from "@/lib/reservation";
+import { ROUTES } from "@/lib/site";
 
 type BookNowButtonProps = {
   eventType: string;
@@ -9,13 +11,11 @@ type BookNowButtonProps = {
 };
 
 export function BookNowButton({ eventType, className = "" }: BookNowButtonProps) {
+  const router = useRouter();
+
   const handleClick = () => {
-    storeBookingPrefill({
-      eventType,
-      message: `I would like to book ${eventType}.`,
-    });
-    scrollToSection("hero");
-    dispatchBookingPrefill();
+    storeReservationPrefill({ eventType });
+    router.push(ROUTES.reservation);
   };
 
   return (

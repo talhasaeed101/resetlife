@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { assets } from "@/lib/assets";
-import { EVENT_TYPES, GUEST_OPTIONS } from "@/lib/site";
+import { storeReservationPrefill } from "@/lib/reservation";
+import { EVENT_TYPES, GUEST_OPTIONS, ROUTES } from "@/lib/site";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { BookingDatePicker, CustomDropdown } from "@/components/booking/BookingFields";
 import { MobileMenu, SiteLogoLink } from "@/components/MobileMenu";
-import { scrollToSection, storeBookingPrefill, readBookingPrefill, clearBookingPrefill, BOOKING_PREFILL_EVENT, dispatchBookingPrefill } from "@/lib/scroll";
+import { readBookingPrefill, clearBookingPrefill, BOOKING_PREFILL_EVENT } from "@/lib/scroll";
 import { validateBookingForm, type FieldErrors } from "@/lib/validation";
 
 type BookingState = {
@@ -25,11 +27,10 @@ const initialBookingState: BookingState = {
 };
 
 export default function Hero() {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [booking, setBooking] = useState<BookingState>(initialBookingState);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
-  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -71,10 +72,8 @@ export default function Hero() {
     });
   };
 
-  const handleBookingSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleBookingSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("idle");
-    setStatusMessage("");
 
     const validationErrors = validateBookingForm(booking);
     if (Object.keys(validationErrors).length > 0) {
@@ -82,58 +81,13 @@ export default function Hero() {
       return;
     }
 
-    setStatus("submitting");
-
-    try {
-      const response = await fetch("/api/inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "booking",
-          ...booking,
-          message: `Booking request for ${booking.eventType} (${booking.guests}).`,
-        }),
-      });
-
-      const result = (await response.json()) as {
-        ok?: boolean;
-        error?: string;
-        message?: string;
-        fallbackEmail?: string;
-      };
-
-      if (response.ok && result.ok) {
-        setBooking(initialBookingState);
-        setStatusMessage(result.message ?? "Your booking inquiry has been sent.");
-        return;
-      }
-
-      if (result.error === "SERVICE_NOT_CONFIGURED") {
-        storeBookingPrefill({
-          ...booking,
-          message: `I would like to book ${booking.eventType} for ${booking.guests}. Check-in: ${booking.checkIn}. Check-out: ${booking.checkOut}.`,
-        });
-        scrollToSection("contact");
-        dispatchBookingPrefill();
-        setStatusMessage(
-          "Online booking delivery is not configured yet. We opened the contact form with your booking details.",
-        );
-        return;
-      }
-
-      setStatus("error");
-      setStatusMessage(
-        result.message ??
-          "We could not send your booking inquiry. Please use the contact form below.",
-      );
-    } catch {
-      setStatus("error");
-      setStatusMessage(
-        "We could not send your booking inquiry. Please use the contact form below.",
-      );
-    } finally {
-      setStatus((current) => (current === "submitting" ? "idle" : current));
-    }
+    storeReservationPrefill({
+      eventType: booking.eventType,
+      guests: booking.guests,
+      checkIn: booking.checkIn,
+      checkOut: booking.checkOut,
+    });
+    router.push(ROUTES.villa);
   };
 
   return (
@@ -274,26 +228,11 @@ export default function Hero() {
               </div>
 
               <div className="shrink-0 lg:self-center">
-                <GoldButton
-                  type="submit"
-                  className="w-full lg:w-auto"
-                  disabled={status === "submitting"}
-                >
-                  {status === "submitting" ? "SENDING..." : "BOOK NOW"}
+                <GoldButton type="submit" className="w-full lg:w-auto">
+                  BOOK NOW
                 </GoldButton>
               </div>
             </div>
-
-            {statusMessage ? (
-              <p
-                className={`mt-4 font-['Raleway'] text-[13px] leading-normal sm:text-[14px] ${
-                  status === "error" ? "text-[#dfcba2]" : "text-white"
-                }`}
-                role="status"
-              >
-                {statusMessage}
-              </p>
-            ) : null}
           </div>
         </form>
       </div>
