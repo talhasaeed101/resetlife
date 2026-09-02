@@ -85,7 +85,7 @@ export default function About() {
             <div className="z-10 mb-12 flex items-start gap-4 md:absolute md:left-10 md:top-0 md:mb-0 lg:left-16 xl:left-20">
               <div className="relative h-[160px] w-[160px] shrink-0 overflow-hidden rounded-xl md:h-[280px] md:w-[180px] lg:h-[200px] lg:w-[200px] lg:rounded-2xl">
                 <Image
-                  src="/Images/about/img1.svg"
+                  src="/Images/about/i1.svg"
                   alt="Reset Life exterior"
                   className="object-cover"
                   height={200}
@@ -95,7 +95,7 @@ export default function About() {
               </div>
               <div className="relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-lg md:h-[80px] md:w-[80px] lg:h-[90px] lg:w-[90px] lg:rounded-xl">
                 <Image
-                  src="/Images/about/img2.svg"
+                  src="/Images/about/i2.svg"
                   alt="Reset Life detail"
                   fill
                   className="object-cover"
@@ -133,7 +133,7 @@ export default function About() {
                 <div className="mt-[40px] flex w-full justify-center md:justify-end md:mt-[50px] lg:mt-[60px]">
                   <div className="relative h-[320px] w-[240px] overflow-hidden rounded-xl md:h-[360px] md:w-[260px] lg:h-[400px] lg:w-[280px] lg:rounded-2xl">
                     <Image
-                      src="/Images/about/img3.svg"
+                      src="/Images/about/i3.svg"
                       alt="Reset Life gardens"
                       fill
                       className="object-cover"

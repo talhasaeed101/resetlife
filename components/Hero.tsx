@@ -106,7 +106,7 @@ export default function Hero() {
           sizes="100vw"
         />
       </div>
-      <div className="absolute inset-0 z-[1] bg-black/60" aria-hidden />
+      <div className="absolute inset-0 z-[1]" aria-hidden />
 
       <div
         className={`site-header-fixed ${menuOpen ? "site-header-layer--menu-open" : ""}`}

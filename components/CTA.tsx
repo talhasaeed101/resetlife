@@ -253,7 +253,7 @@ export default function CTA() {
     <section id="contact" className="cta-section">
       <div className="cta-section__media">
         <Image
-          src= "/Images/contact/CTA.png"
+          src= "/Images/contact/ctabg.png"
           alt=""
           fill
           className="object-cover"

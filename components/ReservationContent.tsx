@@ -96,7 +96,7 @@ export default function ReservationContent() {
             sizes="100vw"
           />
         </div>
-        <div className="reservation-hero__overlay bg-[#00000099]" aria-hidden />
+        <div className="reservation-hero__overlay" aria-hidden />
 
         <SiteHeader variant="overlay" />
 

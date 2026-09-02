@@ -1938,16 +1938,16 @@ display:none
 .vd-hero__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* aspect-ratio: 16 / 9; */
   border-radius: 24px;
   overflow: hidden;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   .vd-hero__media {
     aspect-ratio: 21 / 9;
   }
-}
+} */
 
 /* Body container */
 .vd-body {
@@ -2268,7 +2268,7 @@ background: linear-gradient(90deg, #825E37 0%, #DFCBA2 50%, #825E37 100%);
 
 @media (min-width: 1280px) {
   .reservation-hero__content {
-    max-width: 52rem;
+    max-width: 58rem;
     margin: 0 auto;
     padding-bottom: 5rem;
   }
