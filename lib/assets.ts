@@ -1,7 +1,7 @@
 export const assets = {
   hero: {
     background: "/Images/homePage/heroBg1.png",
-    logoIcon: "/Images/homePage/logo-icon.svg",
+    logoIcon: "/favicon.png",
     menuIcon: "/Images/homePage/menu-hamburger.svg",
     menuButtonBg: "/Images/homePage/Frame 2147239969.png",
     searchFilterBg: "/Images/homePage/Search Filter.png",

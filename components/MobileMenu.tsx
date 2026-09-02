@@ -183,9 +183,9 @@ export function SiteLogoLink({ className = "" }: { className?: string }) {
       <Image
         src={assets.hero.logoIcon}
         alt=""
-        width={28}
+        width={40}
         height={40}
-        className="h-8 w-[22px] sm:h-10 sm:w-[27.922px]"
+        className="h-8 w-8 sm:h-10 sm:w-10"
       />
       <span className="text-gradient-farm font-['BaskervvilleSC'] text-[18px] uppercase tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
         Reset life

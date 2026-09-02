@@ -9,7 +9,7 @@ function businessSchema() {
     name: SITE.name,
     url: getSiteUrl(),
     image: absoluteUrl("/Images/homePage/heroBg1.png"),
-    logo: absoluteUrl("/Images/homePage/logo-icon.svg"),
+    logo: absoluteUrl("/favicon.png"),
     description: SITE.description,
     email: SITE.email,
     telephone: SITE.phone,
@@ -37,7 +37,7 @@ function websiteSchema() {
     publisher: {
       "@type": "Organization",
       name: SITE.name,
-      logo: absoluteUrl("/Images/homePage/logo-icon.svg"),
+      logo: absoluteUrl("/favicon.png"),
     },
   };
 }

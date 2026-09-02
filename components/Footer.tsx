@@ -55,9 +55,9 @@ export default function Footer() {
             <Image
               src={assets.hero.logoIcon}
               alt=""
-              width={28}
+              width={40}
               height={40}
-              className="h-9 w-[24px] sm:h-10 sm:w-[27.922px]"
+              className="h-9 w-9 sm:h-10 sm:w-10"
             />
             <span className="text-gradient-farm font-['BaskervvilleSC'] text-[20px] uppercase leading-none tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
               {SITE.shortName}
