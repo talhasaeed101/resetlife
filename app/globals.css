@@ -1519,16 +1519,26 @@ display:none
 }
 
 .faq-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  column-gap: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-column {
+  display: contents;
 }
 
 @media (min-width: 1024px) {
   .faq-grid {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 35.875rem));
     justify-content: space-between;
+    align-items: start;
     column-gap: 2rem;
+  }
+
+  .faq-column {
+    display: flex;
+    flex-direction: column;
   }
 }
 

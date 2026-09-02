@@ -105,9 +105,9 @@ export default function About() {
             </div>
 
             {/* Center Text */}
-            <div className="relative z-20 mx-auto flex w-full max-w-[900px] flex-col md:pb-[80px] md:pt-[100px] lg:pb-[120px] lg:pt-[140px]">
+            <div className="relative z-20 mx-auto flex w-full  flex-col md:pb-[80px] md:pt-[100px] lg:pb-[120px] lg:pt-[140px]">
               <div className="mt-[40px] flex flex-col md:mt-[50px] lg:mt-[93px]">
-                <div className="flex w-full flex-col self-center">
+                <div className="flex w-full flex-col self-center max-w-[1000px]">
                   <p className="about-text-main mb-6 w-full text-center font-['BaskervvilleSC'] text-[14px] font-semibold uppercase tracking-[0.2em] sm:text-[18px] md:text-right">
                     About
                   </p>

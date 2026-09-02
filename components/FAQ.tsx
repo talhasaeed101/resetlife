@@ -99,12 +99,71 @@ function CloseIcon() {
   );
 }
 
+type FaqItemCardProps = {
+  item: FaqItem;
+  index: number;
+  isOpen: boolean;
+  onToggle: (index: number) => void;
+};
+
+function FaqItemCard({ item, index, isOpen, onToggle }: FaqItemCardProps) {
+  const triggerId = `faq-trigger-${index}`;
+  const answerId = `faq-answer-${index}`;
+
+  return (
+    <div className="faq-item" style={{ order: index }}>
+      <button
+        type="button"
+        id={triggerId}
+        className="faq-item__trigger"
+        aria-expanded={isOpen}
+        aria-controls={answerId}
+        onClick={() => onToggle(index)}
+      >
+        <FaqQuestion text={item.question} />
+        <span className="faq-item__icon" aria-hidden>
+          {isOpen ? <CloseIcon /> : <PlusIcon />}
+        </span>
+      </button>
+      <div
+        id={answerId}
+        role="region"
+        aria-labelledby={triggerId}
+        aria-hidden={!isOpen}
+        className={`faq-item__answer-wrap${isOpen ? " is-open" : ""}`}
+      >
+        <div className="faq-item__answer-inner">
+          <p className="faq-item__answer">{item.answer}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const leftColumnIndices = faqItems
+  .map((_, index) => index)
+  .filter((index) => index % 2 === 0);
+const rightColumnIndices = faqItems
+  .map((_, index) => index)
+  .filter((index) => index % 2 === 1);
+
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const handleToggle = (index: number) => {
     setOpenIndex((current) => (current === index ? null : index));
   };
+
+  const renderColumn = (indices: number[]) =>
+    indices.map((index) => (
+      <FaqItemCard
+        key={`faq-${index}`}
+        item={faqItems[index]}
+        index={index}
+        isOpen={openIndex === index}
+        onToggle={handleToggle}
+      />
+    ));
 
   return (
     <section id="faq" className="faq-section">
@@ -117,40 +176,8 @@ export default function FAQ() {
         />
 
         <div className="faq-grid">
-          {faqItems.map((item, index) => {
-            const isOpen = openIndex === index;
-            const triggerId = `faq-trigger-${index}`;
-            const answerId = `faq-answer-${index}`;
-
-            return (
-              <div key={triggerId} className="faq-item">
-                <button
-                  type="button"
-                  id={triggerId}
-                  className="faq-item__trigger"
-                  aria-expanded={isOpen}
-                  aria-controls={answerId}
-                  onClick={() => handleToggle(index)}
-                >
-                  <FaqQuestion text={item.question} />
-                  <span className="faq-item__icon" aria-hidden>
-                    {isOpen ? <CloseIcon /> : <PlusIcon />}
-                  </span>
-                </button>
-                <div
-                  id={answerId}
-                  role="region"
-                  aria-labelledby={triggerId}
-                  aria-hidden={!isOpen}
-                  className={`faq-item__answer-wrap${isOpen ? " is-open" : ""}`}
-                >
-                  <div className="faq-item__answer-inner">
-                    <p className="faq-item__answer">{item.answer}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          <div className="faq-column">{renderColumn(leftColumnIndices)}</div>
+          <div className="faq-column">{renderColumn(rightColumnIndices)}</div>
         </div>
       </div>
     </section>
