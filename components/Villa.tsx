@@ -92,7 +92,7 @@ export default function Villa() {
               relaxation together for a truly refreshing stay.
             </p>
           </div>
-          <div className="absolute bottom-[60px] left-[60px] right-[60px] flex items-center justify-between gap-8">
+          <div className="absolute bottom-[60px] left-[60px] right-[60px] flex items-end justify-between gap-8">
             <h2 className="max-w-[632px] font-['dtnightingale'] text-[60px] font-light leading-none text-white">
               Luxurious & Opulent Ambiance.
             </h2>
