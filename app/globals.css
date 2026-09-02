@@ -118,19 +118,19 @@ html {
 }
 
 .glass-effect {
-  background: #ffffff0d;
+     background: linear-gradient(#ffffff1a 0%, #ffffff0a 100%);
   border: 1px solid rgba(207, 207, 207, 0.6);
   border-radius: 12px;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  clip-path: polygon(
+  /* clip-path: polygon(
     0 0,
     calc(100% - 10px) 0,
     100% 10px,
     100% 100%,
     10px 100%,
     0 calc(100% - 10px)
-  );
+  ); */
 }
 
 .glass-effect--container {
@@ -152,14 +152,14 @@ html {
   border-radius: 12px;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  clip-path: polygon(
+  /* clip-path: polygon(
     0 0,
     calc(100% - 10px) 0,
     100% 10px,
     100% 100%,
     10px 100%,
     0 calc(100% - 10px)
-  );
+  ); */
   pointer-events: none;
 }
 
@@ -1395,7 +1395,7 @@ display:none
   justify-content: center;
   flex-shrink: 0;
   min-height: 43px;
-  min-width: 160px;
+  min-width: 139px;
   padding: 0 1.25rem;
   text-decoration: none;
 }
