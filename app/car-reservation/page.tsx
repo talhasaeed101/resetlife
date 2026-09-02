@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import CarReservationContent from "@/components/CarReservationContent";
+import JsonLd from "@/components/seo/JsonLd";
+import { carReservationMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structuredData";
 
-export const metadata: Metadata = {
-  title: "Car Reservation | Reset Life",
-  description:
-    "Reserve a premium chauffeur-driven luxury car for your stay at Reset Life Farmhouse.",
-};
+export const metadata: Metadata = carReservationMetadata;
 
 export default function CarReservationPage() {
-  return <CarReservationContent />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Car Reservation", path: "/car-reservation" },
+        ])}
+      />
+      <CarReservationContent />
+    </>
+  );
 }

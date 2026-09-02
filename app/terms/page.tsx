@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { termsMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | Reset Life",
-  description: "Terms of Service for Reset Life.",
-};
+export const metadata: Metadata = termsMetadata;
 
 export default function TermsPage() {
   return (

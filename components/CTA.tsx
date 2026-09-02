@@ -253,8 +253,8 @@ export default function CTA() {
     <section id="contact" className="cta-section">
       <div className="cta-section__media">
         <Image
-          src= "/Images/contact/ctabg.png"
-          alt=""
+          src="/Images/contact/ctabg.png"
+          alt="Reset Life Farmhouse contact and booking section background"
           fill
           className="object-cover"
           sizes="100vw"

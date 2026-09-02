@@ -99,7 +99,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0">
         <Image
           src={assets.hero.background}
-          alt=""
+          alt="Reset Life Farmhouse luxury villa surrounded by greenery in Islamabad"
           fill
           priority
           className="object-cover"

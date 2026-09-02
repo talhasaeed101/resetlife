@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { privacyMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Reset Life",
-  description: "Privacy Policy for Reset Life.",
-};
+export const metadata: Metadata = privacyMetadata;
 
 export default function PrivacyPage() {
   return (

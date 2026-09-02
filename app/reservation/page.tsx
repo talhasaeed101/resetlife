@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import ReservationContent from "@/components/ReservationContent";
+import JsonLd from "@/components/seo/JsonLd";
+import { reservationMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structuredData";
 
-export const metadata: Metadata = {
-  title: "Reservation | Reset Life",
-  description:
-    "Reserve your stay at Reset Life Farmhouse and confirm your booking on WhatsApp.",
-};
+export const metadata: Metadata = reservationMetadata;
 
 export default function ReservationPage() {
-  return <ReservationContent />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Reservation", path: "/reservation" },
+        ])}
+      />
+      <ReservationContent />
+    </>
+  );
 }

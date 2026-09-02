@@ -9,21 +9,29 @@ import Hero from "@/components/Hero";
 import { SectionHashHandler } from "@/components/SectionHashHandler";
 import Testimonial from "@/components/Testimonial";
 import Villa from "@/components/Villa";
+import JsonLd from "@/components/seo/JsonLd";
+import { homeMetadata } from "@/lib/seo";
+import { homeStructuredData } from "@/lib/structuredData";
+
+export const metadata = homeMetadata;
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#050b08]">
-      <SectionHashHandler />
-      <Hero />
-      <About />
-      <Villa />
-      <Events />
-      <LuxuryCars />
-      <Gallery />
-      <Testimonial />
-      <FAQ />
-      <CTA />
-      <Footer />
-    </main>
+    <>
+      <JsonLd data={homeStructuredData()} />
+      <main className="min-h-screen overflow-x-hidden bg-[#050b08]">
+        <SectionHashHandler />
+        <Hero />
+        <About />
+        <Villa />
+        <Events />
+        <LuxuryCars />
+        <Gallery />
+        <Testimonial />
+        <FAQ />
+        <CTA />
+        <Footer />
+      </main>
+    </>
   );
 }

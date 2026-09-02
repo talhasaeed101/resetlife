@@ -50,7 +50,7 @@ export default function Footer() {
               navigateToSection("hero", pathname);
             }}
             className="footer-brand"
-            aria-label="Reset Life home"
+            aria-label={`${SITE.name} home`}
           >
             <Image
               src={assets.hero.logoIcon}
@@ -60,7 +60,7 @@ export default function Footer() {
               className="h-9 w-[24px] sm:h-10 sm:w-[27.922px]"
             />
             <span className="text-gradient-farm font-['BaskervvilleSC'] text-[20px] uppercase leading-none tracking-[2px] sm:text-[24px] sm:tracking-[2.4px]">
-              Reset life
+              {SITE.shortName}
             </span>
           </Link>
         </div>
@@ -121,7 +121,7 @@ export default function Footer() {
             <h3 className="footer-column-heading">Follow Us On</h3>
             <div className="footer-social-icons">
               <a
-                href="https://www.instagram.com/resetlifefarmhouse?igsi=MXVkbWVqYmJha2Jmcg%3D%3D&utm_source=qr"
+                href={SITE.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-icon-btn11"
@@ -130,7 +130,7 @@ export default function Footer() {
                 <Image src="/Images/Footer/insta.svg" alt="Instagram" width={20} height={20} />
               </a>
               <a
-                href="https://www.tiktok.com/@reset.life.farmhouse?_r=1&_t=ZS-99LBwlkt6e2"
+                href={SITE.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-icon-btn11"
@@ -139,7 +139,7 @@ export default function Footer() {
                 <Image src="/Images/Footer/tiktok.svg" alt="TikTok" width={20} height={20} />
               </a>
               <a
-                href="https://www.facebook.com/share/1BiFF4Abwz/?mibextid=wwXIfr"
+                href={SITE.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-icon-btn11"
@@ -156,7 +156,7 @@ export default function Footer() {
         {/* Legal bar */}
         <div className="footer-premium__legal">
           <p className="footer-copy">
-            &copy;2025 Reset Life. All rights reserved.
+            &copy;2025 {SITE.name}. All rights reserved.
           </p>
           <div className="footer-legal-links">
             <Link href="/privacy" className="footer-link">
