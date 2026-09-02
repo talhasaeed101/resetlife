@@ -111,7 +111,7 @@ export default function About() {
                   <p className="about-text-main mb-6 w-full text-center font-['BaskervvilleSC'] text-[14px] font-semibold uppercase tracking-[0.2em] sm:text-[18px] md:text-right">
                     About
                   </p>
-                  <h2 className="text-right font-['dtnightingale'] text-[38px] font-light leading-[100%] tracking-[0%]">
+                  <h2 className="text-center md:text-right font-['dtnightingale'] text-[29px] md:text-[38px] font-light leading-[100%] tracking-[0%]">
                     {ABOUT_HEADING_CHARS.map((char, index) => (
                       <span
                         key={`${char}-${index}`}
@@ -130,7 +130,7 @@ export default function About() {
                 </div>
 
                 {/* Bottom Right Image */}
-                <div className="mt-[40px] flex w-full justify-end md:mt-[50px] lg:mt-[60px]">
+                <div className="mt-[40px] flex w-full justify-center md:justify-end md:mt-[50px] lg:mt-[60px]">
                   <div className="relative h-[320px] w-[240px] overflow-hidden rounded-xl md:h-[360px] md:w-[260px] lg:h-[400px] lg:w-[280px] lg:rounded-2xl">
                     <Image
                       src="/Images/about/img3.svg"

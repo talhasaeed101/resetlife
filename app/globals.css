@@ -1383,12 +1383,19 @@ display:none
 }
 
 @media (min-width: 640px) {
-  .gallery-section__header {
-    flex-direction: row;
-    align-items: flex-end;
+  .gallery-section
+  {
+      padding: 4rem 20px 4.5rem;
   }
+  
 }
-
+@media (max-width: 640px) {
+  .gallery-section
+  {
+      padding: 4rem 20px 4.5rem;
+  }
+  
+}
 .gallery-instagram-cta {
   display: inline-flex;
   align-items: center;
