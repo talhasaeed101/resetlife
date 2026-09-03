@@ -1943,11 +1943,11 @@ display:none
   overflow: hidden;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   .vd-hero__media {
     aspect-ratio: 21 / 9;
   }
-}
+} */
 
 /* Body container */
 .vd-body {
